@@ -1,5 +1,6 @@
-import 'package:book_app/model/book.dart';
-import 'package:book_app/service/client_http/client_http.dart';
+
+import 'package:book_app/data/model/book.dart';
+import 'package:book_app/data/service/client_http/client_http.dart';
 
 class BookService{
   ClientHttp client;

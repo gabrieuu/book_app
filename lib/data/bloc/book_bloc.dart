@@ -1,9 +1,10 @@
 import 'dart:async';
 
-import 'package:book_app/bloc/book_event.dart';
-import 'package:book_app/bloc/book_state.dart';
-import 'package:book_app/model/book.dart';
-import 'package:book_app/repository/book_repository.dart';
+import 'package:book_app/data/bloc/book_event.dart';
+import 'package:book_app/data/bloc/book_state.dart';
+import 'package:book_app/data/model/book.dart';
+import 'package:book_app/data/repository/book_repository.dart';
+
 
 class BookBloc {
   final _repository = BookRepository();
@@ -21,9 +22,12 @@ class BookBloc {
     List<Book> books = [];
     _outputStreamController.add(LoadingStateBook());
     if(event is GetBooks){
-      books = await _repository.fetchAllBooks(event.book);
+      try {
+        books = await _repository.fetchAllBooks(event.book);
+      } catch (e) {
+        _outputStreamController.add(ErrorStateBook(mensagem: "Nome de Livro inválido!"));
+      }
     }
-    books.map((e) => print(e.volumeInfo.title)).toList();
     if(books.isNotEmpty) _outputStreamController.add(SucessStateBook(books));
   }
 

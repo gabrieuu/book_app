@@ -1,4 +1,4 @@
-import 'package:book_app/model/image_links.dart';
+import 'package:book_app/data/model/image_links.dart';
 
 class VolumeInfo {
   String title;

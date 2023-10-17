@@ -1,8 +1,8 @@
 import 'dart:convert';
 
-import 'package:book_app/model/book.dart';
-import 'package:book_app/service/book_service.dart';
-import 'package:book_app/service/client_http/client_http.dart';
+import 'package:book_app/data/model/book.dart';
+import 'package:book_app/data/service/book_service.dart';
+import 'package:book_app/data/service/client_http/client_http.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 

@@ -1,4 +1,4 @@
-import 'package:book_app/service/client_http/client_http.dart';
+import 'package:book_app/data/service/client_http/client_http.dart';
 import 'package:dio/dio.dart';
 
 class DioClient implements ClientHttp{
