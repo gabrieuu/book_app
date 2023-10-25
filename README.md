@@ -1,16 +1,27 @@
-# book_app
 
-A new Flutter project.
+# 📱 Aplicativo de Livros 
 
-## Getting Started
+O BookApp é um app que permite a pesquisa de um determinado livro, ver sua sinopse, dados importantes e contém um link para a leitura em um site externo.
 
-This project is a starting point for a Flutter application.
+# ⚙️ O que foi utilizado no projeto?:
 
-A few resources to get you started if this is your first Flutter project:
+<ul>
+  <li><b>Google Book API</b> para busca de dados dos livros, contando com um acervo imenso.</li>
+  <li><b>Padrão Bloc</b> para gerenciammento de estado, separando a regra de negocio da Interface do Usuário</li>
+</ul>
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 📸 Layout
+
+![Purple App Phone Mockup Sales Marketing Presentation](https://github.com/gabrieuu/book_app/assets/81256082/a89f9662-c783-4f54-8691-0ab3b0b74510)
+
+
+
+## ✨ Requirements
+* Qualquer sistema operacional (ie. MacOS X, Linux, Windows)
+* Qualquer IDE com o SDK do Flutter instalado (IntelliJ, Android Studio, VSCode etc)
+* Um pequeno conhecimento de Dart e Flutter
+
+
+## 🤓 Author
+**Gabriel Barbosa da silva** 
