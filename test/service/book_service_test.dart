@@ -1,8 +1,9 @@
 import 'dart:convert';
 
-import 'package:book_app/data/model/book.dart';
+import 'package:book_app/data/model/book_model.dart';
 import 'package:book_app/data/service/book_service.dart';
 import 'package:book_app/data/service/client_http/client_http.dart';
+import 'package:book_app/data/service/client_http/dio_client.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
@@ -30,6 +31,14 @@ void main() {
 
 
     expect(listBook[index].volumeInfo.title, "Percy Jackson E Os Ladroes Do Olimpo");
+  });
+  final cliente = DioClient();
+  final services = BookService(cliente);
+
+  test("deve fazer pegar 3 livros", () async{
+    var list = ["lfHo7uMk7r4C", "gHe3wAEACAAJ", "V6A0zgEACAAJ"];
+    var listaa = await services.fetchFavoritesBooks(list);
+    listaa.forEach((e) => print(e.volumeInfo.title));
   });
 }
 

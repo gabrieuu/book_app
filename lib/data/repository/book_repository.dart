@@ -1,4 +1,4 @@
-import 'package:book_app/data/model/book.dart';
+import 'package:book_app/data/model/book_model.dart';
 import 'package:book_app/data/service/book_service.dart';
 import 'package:book_app/data/service/client_http/client_http.dart';
 import 'package:book_app/data/service/client_http/dio_client.dart';
@@ -13,4 +13,5 @@ class BookRepository{
   Future<List<Book>> fetchAllBooks(String book) async{
     return books = await _service.fetchAll(book);
   }
+  
 }

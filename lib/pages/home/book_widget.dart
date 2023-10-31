@@ -1,4 +1,4 @@
-import 'package:book_app/data/model/book.dart';
+import 'package:book_app/data/model/book_model.dart';
 import 'package:flutter/material.dart';
 
 class BookWidget extends StatelessWidget {
@@ -8,7 +8,7 @@ class BookWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Expanded(
       child: Column(
         children: [
           Container(
@@ -20,31 +20,34 @@ class BookWidget extends StatelessWidget {
               border: Border.all(color: Colors.black, width: 0.1),
               image: DecorationImage(
                 fit: BoxFit.cover,
-                image: (book.volumeInfo.imageLinks!.smallThumb != null) ? NetworkImage(book.volumeInfo.imageLinks!.smallThumb!) : NetworkImage("http://via.placeholder.com/140x190"))
+                image: (book.volumeInfo.imageLinks!.smallThumb != null) 
+                ? NetworkImage(book.volumeInfo.imageLinks!.smallThumb!) : NetworkImage("http://via.placeholder.com/140x190"))
             ),
           ),
           Container(
             width: 140,
-            child: Column(            
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(book.volumeInfo.title,
-                      style: const TextStyle(
-                          fontSize: 15, fontWeight: FontWeight.bold),
-                      textAlign: TextAlign.start,
-                      maxLines: 1),
-                  if (book.volumeInfo.authors.isNotEmpty)
-                    Text(
-                      "${book.volumeInfo.authors[0]}",
-                      maxLines: 1,
-                    ),
-                  if (book.volumeInfo.categories.isNotEmpty)
-                    Text(
-                      "${book.volumeInfo.categories[0]}",
-                      style: const TextStyle(fontSize: 11),
-                      maxLines: 1,
-                    ),
-                ]),
+            child: Expanded(
+              child: Column(            
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(book.volumeInfo.title,
+                        style: const TextStyle(
+                            fontSize: 15, fontWeight: FontWeight.bold),
+                        textAlign: TextAlign.start,
+                        maxLines: 1),
+                    if (book.volumeInfo.authors.isNotEmpty)
+                      Text(
+                        "${book.volumeInfo.authors[0]}",
+                        maxLines: 1,
+                      ),
+                    if (book.volumeInfo.categories.isNotEmpty)
+                      Text(
+                        "${book.volumeInfo.categories[0]}",
+                        style: const TextStyle(fontSize: 11),
+                        maxLines: 1,
+                      ),
+                  ]),
+            ),
           ),
         ],
       ),

@@ -1,6 +1,6 @@
 
 
-import 'package:book_app/data/model/volume_info.dart';
+import 'package:book_app/data/model/volume_info_model.dart';
 
 class Book {
   String id;

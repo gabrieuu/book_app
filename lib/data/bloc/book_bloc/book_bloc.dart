@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:book_app/data/bloc/book_event.dart';
-import 'package:book_app/data/bloc/book_state.dart';
-import 'package:book_app/data/model/book.dart';
+import 'package:book_app/data/bloc/book_bloc/book_event.dart';
+import 'package:book_app/data/bloc/book_bloc/book_state.dart';
+import 'package:book_app/data/model/book_model.dart';
 import 'package:book_app/data/repository/book_repository.dart';
 
 

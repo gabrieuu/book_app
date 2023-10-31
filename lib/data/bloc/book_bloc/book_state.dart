@@ -1,5 +1,5 @@
 
-import 'package:book_app/data/model/book.dart';
+import 'package:book_app/data/model/book_model.dart';
 
 abstract class BookState{}
 
