@@ -7,7 +7,10 @@ O BookApp é um app que permite a pesquisa de um determinado livro, ver sua sino
 
 <ul>
   <li><b>Google Book API</b> para busca de dados dos livros, contando com um acervo imenso.</li>
+  <li><b>Getx</b> para gerenciammento de estado global de usuarios logados</li>
   <li><b>Padrão Bloc</b> para gerenciammento de estado, separando a regra de negocio da Interface do Usuário</li>
+  <li><b>Autenticação</b> de usuarios para consultar livros favoritos</li>
+  <li><b>Supabase</b> para banco de dados, contendo duas Tabelas, Usuarios e Favoritos</li>
 </ul>
 
 
