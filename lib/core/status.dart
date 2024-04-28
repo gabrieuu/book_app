@@ -1,0 +1,6 @@
+enum Status{
+  SUCESSO,
+  CARREGANDO,
+  ERRO,
+  NAO_CARREGADO
+}
