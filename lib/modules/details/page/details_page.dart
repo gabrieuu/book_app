@@ -2,87 +2,119 @@ import 'package:book_app/core/model/book_model.dart';
 import 'package:book_app/modules/details/details_controller.dart';
 import 'package:book_app/modules/favoritas/store/favoritas_store.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-class DetailsPage extends StatelessWidget {
+class DetailsPage extends StatefulWidget {
+
   DetailsPage({super.key, required this.book});
 
-  DetailsController detailsController = Modular.get();
   Book book;
+  static String route = '/details';
+  @override
+  State<DetailsPage> createState() => _DetailsPageState();
+}
+
+class _DetailsPageState extends State<DetailsPage> {
+  DetailsController detailsController = Modular.get();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        forceMaterialTransparency: true,
-        actions: [
-          IconButton(onPressed: () async{
-           await detailsController.addFavorite(book);
-          }, icon: const Icon(Icons.bookmark_border))
-        ],
-      ),
-      bottomNavigationBar: ElevatedButton(onPressed: (){}, child: const Text("Ler agora")),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-      
-                children: [
-                  Container(
-                    width: 160,
-                    height: 200,
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: (book.volumeInfo.imageLinks!.smallThumb != null)
-                            ? Image.network(
-                                book.volumeInfo.imageLinks!.smallThumb!,
-                                fit: BoxFit.cover,
-                              )
-                            : Image.network("http://via.placeholder.com/140x190")),
-                  ),
-                  SizedBox(width: 10,),
-                  Expanded(
-                    child: Container(
-                              alignment: Alignment.center,
-                                  width: 140,
-                                  //padding: const EdgeInsets.all(20),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                    Text(book.volumeInfo.title,style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),textAlign: TextAlign.start,maxLines: 3),
-                                    if(book.volumeInfo.authors.isNotEmpty) Text("${book.volumeInfo.authors[0]}", maxLines: 1,),
-                                    if(book.volumeInfo.categories.isNotEmpty) Text("${book.volumeInfo.categories[0]}", style: const TextStyle(fontSize: 11), maxLines: 1,),
-                                    ]
-                                  ),
-                                ),
-                  )
-                ],
-              ),
-              
-            ),
-           
-
-            Container(
-              width: MediaQuery.of(context).size.width*0.8,
-              padding: EdgeInsets.symmetric(vertical: 20),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 20),
-                    child: Text("Sobre o Livro", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                  ),
-                  Text(book.volumeInfo.description, style: TextStyle(fontSize: 12, color: Colors.grey),textAlign: TextAlign.justify,)
-                ],
-              ),
-            )
+        appBar: AppBar(
+          forceMaterialTransparency: true,
+          actions: [
+            IconButton(
+                onPressed: () async {
+                  detailsController.addFavorite(widget.book);     
+                  setState(() {});                                 
+                },
+                icon: Observer(builder: (_) {return (widget.book.isFavorite) ? Icon(Icons.bookmark, color: Colors.red) : Icon(Icons.bookmark_border, color: Colors.black,);}))
           ],
         ),
-      )
-    );
+        bottomNavigationBar:
+            ElevatedButton(onPressed: () {}, child: const Text("Ler agora")),
+        body: SingleChildScrollView(
+          child: Column(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: 160,
+                      height: 200,
+                      child: ClipRRect(
+                          borderRadius: BorderRadius.circular(10),
+                          child:
+                              (widget.book.volumeInfo.imageLinks!.smallThumb != null)
+                                  ? Image.network(
+                                      widget.book.volumeInfo.imageLinks!.smallThumb!,
+                                      fit: BoxFit.cover,
+                                    )
+                                  : Image.network(
+                                      "http://via.placeholder.com/140x190")),
+                    ),
+                    SizedBox(
+                      width: 10,
+                    ),
+                    Expanded(
+                      child: Container(
+                        alignment: Alignment.center,
+                        width: 140,
+                        //padding: const EdgeInsets.all(20),
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(widget.book.volumeInfo.title,
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      fontWeight: FontWeight.bold),
+                                  textAlign: TextAlign.start,
+                                  maxLines: 3),
+                              if (widget.book.volumeInfo.authors.isNotEmpty)
+                                Text(
+                                  "${widget.book.volumeInfo.authors[0]}",
+                                  maxLines: 1,
+                                ),
+                              if (widget.book.volumeInfo.categories.isNotEmpty)
+                                Text(
+                                  "${widget.book.volumeInfo.categories[0]}",
+                                  style: const TextStyle(fontSize: 11),
+                                  maxLines: 1,
+                                ),
+                            ]),
+                      ),
+                    )
+                  ],
+                ),
+              ),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.8,
+                padding: EdgeInsets.symmetric(vertical: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 20),
+                      child: Text(
+                        "Sobre o Livro",
+                        style: TextStyle(
+                            fontSize: 20, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                    Text(
+                      widget.book.volumeInfo.description,
+                      style: TextStyle(fontSize: 12, color: Colors.grey),
+                      textAlign: TextAlign.justify,
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        ));
   }
 }

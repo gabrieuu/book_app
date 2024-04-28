@@ -23,7 +23,9 @@ class BookRepository{
         
         if(response["items"] != null){
           final list = response["items"] as List;
-          listBooks.add(Book.fromMap(list.first));
+          Book book = Book.fromMap(list.first);
+          book.isFavorite = true;
+          listBooks.add(book);
         }
        } catch (e) {
          print(e);

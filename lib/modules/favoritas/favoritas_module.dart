@@ -7,7 +7,7 @@ class FavoritasModule extends Module{
 
   @override
   void exportedBinds(Injector i) {    
-    i.addLazySingleton<FavoritaRepository>(() => FavoritaRepository());
-    i.addLazySingleton<FavoritasStore>(FavoritasStore.new);
+    i.add<FavoritaRepository>(() => FavoritaRepository());
+    i.addSingleton<FavoritasStore>(FavoritasStore.new);
   }
 }

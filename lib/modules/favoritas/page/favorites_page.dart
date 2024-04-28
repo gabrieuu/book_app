@@ -1,12 +1,15 @@
 import 'package:book_app/core/model/book_model.dart';
+import 'package:book_app/core/status.dart';
 import 'package:book_app/modules/favoritas/repository/favorite_repository.dart';
 import 'package:book_app/modules/favoritas/store/favoritas_store.dart';
 import 'package:book_app/modules/details/page/details_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:mobx/mobx.dart';
 
 class FavoritesPage extends StatefulWidget {
-  FavoritesPage({super.key});
+  const FavoritesPage({super.key});
   static String route = '/favoritas';
   @override
   State<FavoritesPage> createState() => _FavoritesPageState();
@@ -17,21 +20,31 @@ class _FavoritesPageState extends State<FavoritesPage> {
   FavoritasStore favoritasStore = Modular.get();
 
   @override
+  void initState() {
+    _init();
+  }
+
+  _init() async{
+    await favoritasStore.getBooksFavorites();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(),
-      body: Padding(
+      body: Observer(builder: (context) {
+        return (favoritasStore.listBooksFavorites.isEmpty) 
+        ? const Center(child: Text("Não possui favoritos")) 
+        : Padding(
               padding: const EdgeInsets.symmetric(horizontal: 10),
               child: ListView.builder(
                 itemCount: favoritasStore.listBooksFavorites.length,
                 itemBuilder: (context, index) {
                   return Padding(
-                    padding: EdgeInsets.only(top: 10),
+                    padding: const EdgeInsets.only(top: 10),
                     child: InkWell(
                       onTap: (){
-                        Navigator.push(context, MaterialPageRoute(builder: (context) {
-                          return DetailsPage(book: favoritasStore.listBooksFavorites[index]);
-                        },));
+                        Modular.to.pushNamed(DetailsPage.route, arguments: favoritasStore.listBooksFavorites[index]);
                       },
                       child: Row(
                         children: [
@@ -66,7 +79,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
                   );
                 },
               ),
-            )
+            );
+      },)
     );
   }
 }

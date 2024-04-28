@@ -1,5 +1,6 @@
 import 'package:book_app/core/model/book_model.dart';
 import 'package:book_app/core/client_http/dio_client.dart';
+import 'package:book_app/modules/favoritas/repository/favorite_repository.dart';
 import 'package:book_app/modules/home/repository/book_repository.dart';
 import 'package:book_app/core/status.dart';
 import 'package:flutter/material.dart';
@@ -18,11 +19,13 @@ abstract class _BookStoreBase with Store {
   bool searchIsSelect = false;
   @observable
   Status livrosCarregados = Status.NAO_CARREGADO;
-  final _service = BookRepository(DioClient());
 
+  BookRepository service;
+
+  FavoritaRepository favoritaRepository;
   TextEditingController searchBook = TextEditingController();
 
-  _BookStoreBase(){
+  _BookStoreBase(this.service, this.favoritaRepository){
     _initBookStore();
   }
 
@@ -31,10 +34,25 @@ abstract class _BookStoreBase with Store {
   }
 
   @action
+  tornaLivroFavorito(Book book){
+    listBooks.where((element ) => element.id == book.id).first.isFavorite = !listBooks.where((element ) => element.id == book.id).first.isFavorite;
+  }
+
+  @action
   Future<void> fetchAllBooks(String book) async{
     try {
       livrosCarregados = Status.CARREGANDO;
-      listBooks = await _service.fetchAll(book);
+      var idFavoritos = await favoritaRepository.booksFavorites();
+      listBooks = await service.fetchAll(book);
+      
+      for(int i = 0; i< listBooks.length; i++){
+        if(idFavoritos.isEmpty) break;
+        if(idFavoritos.contains(listBooks[i].id)){
+          listBooks[i].isFavorite = true;
+          idFavoritos.remove(listBooks[i].id);
+        }
+      }
+
       livrosCarregados = Status.SUCESSO;
     } catch (e) {
       print(e);

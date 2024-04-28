@@ -82,6 +82,20 @@ mixin _$BookStore on _BookStoreBase, Store {
     return _$fetchAllBooksAsyncAction.run(() => super.fetchAllBooks(book));
   }
 
+  late final _$_BookStoreBaseActionController =
+      ActionController(name: '_BookStoreBase', context: context);
+
+  @override
+  dynamic tornaLivroFavorito(Book book) {
+    final _$actionInfo = _$_BookStoreBaseActionController.startAction(
+        name: '_BookStoreBase.tornaLivroFavorito');
+    try {
+      return super.tornaLivroFavorito(book);
+    } finally {
+      _$_BookStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''

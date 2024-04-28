@@ -1,11 +1,12 @@
-import 'package:book_app/core/model/book_model.dart';
 import 'package:book_app/modules/auth/repository/auth_repository.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class FavoritaRepository {
 
   final supabase = Supabase.instance.client;
-  AuthRepository authRepository = AuthRepository();
+  AuthRepository authRepository = Modular.get();
+
   addFavorite(String idLivro) async{
    try {
       await supabase.from("favoritos").insert({
@@ -14,7 +15,7 @@ class FavoritaRepository {
       "book_id" : idLivro
     });
    } on PostgrestException catch (e) {
-     await supabase.from("favoritos").delete().eq("id_favoritos", "${authRepository.user!.id}$idLivro");
+     if(e.message.contains('duplicate key')) await supabase.from("favoritos").delete().eq("id_favoritos", "${authRepository.user!.id}$idLivro");
    }
   }
 
