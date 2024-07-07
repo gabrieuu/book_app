@@ -1,4 +1,4 @@
-import 'package:book_app/core/model/book_model.dart';
+import 'package:book_app/model/book_model.dart';
 import 'package:flutter/material.dart';
 
 class BookWidget extends StatelessWidget {

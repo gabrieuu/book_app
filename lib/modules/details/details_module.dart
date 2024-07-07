@@ -4,9 +4,11 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 class DetailsModule extends Module{
 
+
   @override
   void exportedBinds(Injector i) {
-    i.add(DetailsController.new);
+    
+    i.add(() => DetailsController());
   }
 
   @override

@@ -1,6 +1,6 @@
 
 
-import 'package:book_app/core/model/volume_info_model.dart';
+import 'package:book_app/model/volume_info_model.dart';
 
 class Book {
   String id;
@@ -14,7 +14,7 @@ class Book {
     required this.volumeInfo,
   });
 
-  static Book fromMap(Map<String, dynamic> map) {
+  static Book fromMap(Map<dynamic, dynamic> map) {
     return Book(
       id: map["id"],
       etag: map["etag"],

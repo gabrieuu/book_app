@@ -1,4 +1,4 @@
-import 'package:book_app/core/model/book_model.dart';
+import 'package:book_app/model/book_model.dart';
 import 'package:book_app/modules/details/details_controller.dart';
 import 'package:book_app/modules/favoritas/store/favoritas_store.dart';
 import 'package:flutter/material.dart';
@@ -6,7 +6,6 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class DetailsPage extends StatefulWidget {
-
   DetailsPage({super.key, required this.book});
 
   Book book;
@@ -17,6 +16,18 @@ class DetailsPage extends StatefulWidget {
 
 class _DetailsPageState extends State<DetailsPage> {
   DetailsController detailsController = Modular.get();
+  late bool isFavorita;
+
+  @override
+  void initState() {
+    super.initState();
+    detailsController.book = widget.book;
+    _initDetails();
+  }
+
+  _initDetails() async{
+    isFavorita = await detailsController.isFavorita(widget.book);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,11 +36,31 @@ class _DetailsPageState extends State<DetailsPage> {
           forceMaterialTransparency: true,
           actions: [
             IconButton(
-                onPressed: () async {
-                  detailsController.addFavorite(widget.book);     
-                  setState(() {});                                 
-                },
-                icon: Observer(builder: (_) {return (widget.book.isFavorite) ? Icon(Icons.bookmark, color: Colors.red) : Icon(Icons.bookmark_border, color: Colors.black,);}))
+              onPressed: () async {
+                if(isFavorita){
+                  await detailsController.removeFavorita(widget.book);
+                }else{
+                  await detailsController.addFavorite(widget.book);
+                }
+                setState(() {});
+              },
+              icon: FutureBuilder(
+                future: detailsController.isFavorita(widget.book),
+                builder: (_, snapshot){
+                if(snapshot.hasData){
+                  return (snapshot.data!)
+                    ? Icon(Icons.bookmark, color: Colors.red)
+                    : Icon(
+                        Icons.bookmark_border,
+                        color: Colors.black,
+                      );
+                }
+                return Icon(
+                        Icons.bookmark_border,
+                        color: Colors.black,
+                      );
+              }),
+            ),
           ],
         ),
         bottomNavigationBar:
@@ -48,9 +79,11 @@ class _DetailsPageState extends State<DetailsPage> {
                       child: ClipRRect(
                           borderRadius: BorderRadius.circular(10),
                           child:
-                              (widget.book.volumeInfo.imageLinks!.smallThumb != null)
+                              (widget.book.volumeInfo.imageLinks!.smallThumb !=
+                                      null)
                                   ? Image.network(
-                                      widget.book.volumeInfo.imageLinks!.smallThumb!,
+                                      widget.book.volumeInfo.imageLinks!
+                                          .smallThumb!,
                                       fit: BoxFit.cover,
                                     )
                                   : Image.network(

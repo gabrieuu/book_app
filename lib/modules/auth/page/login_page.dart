@@ -19,6 +19,15 @@ class _LoginPageState extends State<LoginPage> {
   final controller = Modular.get<AuthController>();
 
   @override
+  void initState() {
+    // TODO: implement initState
+    if(controller.userIsAuthenticate){
+      Modular.to.navigate('/initial');
+    }
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Padding(
@@ -80,13 +89,14 @@ class _LoginPageState extends State<LoginPage> {
                 height: 25,
               ),
               ElevatedButton(
-                onPressed: () {
+                onPressed: () async{
                   if(controller.formKey.currentState!.validate()){
                     if(controller.isLogin){
-                      controller.login();
+                      await controller.login();
                     }else{
-                      controller.createuser();
+                      await controller.createuser();
                     }
+                    Modular.to.navigate('/initial');
                   }
                 },
                 style: ElevatedButton.styleFrom(

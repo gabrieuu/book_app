@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import 'package:mobx/mobx.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 part 'auth_controller.g.dart';
 
 class AuthController = _AuthControllerBase with _$AuthController;
@@ -13,11 +14,13 @@ abstract class _AuthControllerBase with Store {
   final password = TextEditingController();
   final formKey = GlobalKey<FormState>();
 
-  AuthRepository repository;
+  final AuthRepository _repository;
 
-  _AuthControllerBase(this.repository){
+  _AuthControllerBase(this._repository){
     _isAuthenticated();
   }
+
+  User? get user => _repository.user;
 
   @observable
   var isLogin = true;
@@ -59,7 +62,7 @@ abstract class _AuthControllerBase with Store {
   }
 
   _isAuthenticated(){
-    if(repository.user != null){
+    if(_repository.user != null){
       userIsAuthenticate = true;
     }else{
       userIsAuthenticate = false;
@@ -69,19 +72,20 @@ abstract class _AuthControllerBase with Store {
 
   @action
   login() async{
-    await repository.signIn(email.text, password.text);
+    await _repository.signIn(email.text, password.text);
+
     userIsAuthenticate = true;
   }
   
   @action
    createuser() async{
-   await repository.createUser(name.text, email.text, password.text);
+   await _repository.createUser(name.text, email.text, password.text);
    userIsAuthenticate = true;
   }
 
   @action
   signOut() async{
-    await repository.signOut();
+    await _repository.signOut();
     userIsAuthenticate = false;
   }
 
