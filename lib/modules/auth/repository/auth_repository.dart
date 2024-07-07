@@ -7,7 +7,7 @@ enum Table {
 
 class AuthRepository {
   final supabase = Supabase.instance.client;
-
+  
   @observable
   User? _supabaseUser;
   
@@ -48,6 +48,7 @@ class AuthRepository {
       if (response != null) {
         final AuthResponse res = await supabase.auth
             .signInWithPassword(email: email, password: password);
+        
         _supabaseSession = res.session;
         _supabaseUser = res.user;
       }

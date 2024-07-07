@@ -1,6 +1,3 @@
-import 'package:book_app/core/model/book_model.dart';
-import 'package:book_app/core/status.dart';
-import 'package:book_app/modules/favoritas/repository/favorite_repository.dart';
 import 'package:book_app/modules/favoritas/store/favoritas_store.dart';
 import 'package:book_app/modules/details/page/details_page.dart';
 import 'package:flutter/material.dart';
@@ -20,18 +17,8 @@ class _FavoritesPageState extends State<FavoritesPage> {
   FavoritasStore favoritasStore = Modular.get();
 
   @override
-  void initState() {
-    _init();
-  }
-
-  _init() async{
-    await favoritasStore.getBooksFavorites();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
       body: Observer(builder: (context) {
         return (favoritasStore.listBooksFavorites.isEmpty) 
         ? const Center(child: Text("Não possui favoritos")) 
@@ -63,7 +50,7 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                             favoritasStore.listBooksFavorites[index].volumeInfo.imageLinks!.smallThumb!)
                                         : NetworkImage(
                                             "http://via.placeholder.com/140x190"))),
-                          ),SizedBox(width: 10,),
+                          ),const SizedBox(width: 10,),
                           Expanded(
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,

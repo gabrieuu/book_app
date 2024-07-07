@@ -1,19 +1,20 @@
 class UserModel {
+  String? id;
   String name;
-  String id;
   String email;
 
-  UserModel({
+  UserModel(
+    {
+    this.id,
     required this.name,
     required this.email,
-    required this.id,
   });
 
   static UserModel fromMap(Map<String, dynamic> map) {
     return UserModel(
+      id: map['id_user'],
       name: map["name"],
-      email: map["email"],
-      id: map["id_user"],
+      email: map["email"]
     );
   }
 }

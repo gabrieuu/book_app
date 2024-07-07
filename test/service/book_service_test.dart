@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:book_app/core/model/book_model.dart';
-import 'package:book_app/modules/home/repository/book_repository.dart';
+import 'package:book_app/model/book_model.dart';
 import 'package:book_app/core/client_http/client_http.dart';
 import 'package:book_app/core/client_http/dio_client.dart';
+import 'package:book_app/modules/books/repository/book_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 

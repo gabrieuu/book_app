@@ -6,8 +6,13 @@ import 'package:flutter_modular/flutter_modular.dart';
 class FavoritasModule extends Module{
 
   @override
-  void exportedBinds(Injector i) {    
-    i.add<FavoritaRepository>(() => FavoritaRepository());
-    i.addSingleton<FavoritasStore>(FavoritasStore.new);
+  void binds(Injector i) {    
+    i.addSingleton<FavoritaRepository>(() => FavoritaRepository());
+    i.addLazySingleton<FavoritasStore>(FavoritasStore.new);
+  }
+
+  @override
+  void routes(RouteManager r) {
+    r.child('/', child: (_) => const FavoritesPage());
   }
 }
