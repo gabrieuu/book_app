@@ -1,4 +1,6 @@
 import 'package:book_app/core/status.dart';
+import 'package:book_app/modules/auth/controller/user_controller.dart';
+import 'package:book_app/modules/comment_post/controller/comment_controller.dart';
 import 'package:book_app/modules/home/widgets/menu_drawer.dart';
 import 'package:book_app/modules/posts/post_store.dart';
 import 'package:book_app/modules/posts/post_widget/post_shimmer_widget.dart';
@@ -7,12 +9,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-class HomePage extends StatelessWidget {
+class HomePage extends StatefulWidget {
   HomePage({super.key});
 
-  PostStore postStore = Modular.get();
-
   static const String route = '/home';
+
+  @override
+  State<HomePage> createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  PostStore postStore = Modular.get();
+  
+  final userController = Modular.get<UserController>();
 
   @override
   Widget build(BuildContext context) {

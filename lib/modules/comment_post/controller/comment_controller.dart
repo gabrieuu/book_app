@@ -38,6 +38,10 @@ abstract class _CommentControllerBase with Store {
     commentInsert.clear();
     await repository.addComment(comment);
     getComments(idPost);
+  }
 
+  Future<int> quantidadeDeComentarios(int idPost) async{
+    var listComment = await repository.getCommentFromPost(idPost);
+    return listComment.length;
   }
 }

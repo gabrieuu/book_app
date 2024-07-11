@@ -1,3 +1,4 @@
+import 'package:book_app/core/client_http/client_http.dart';
 import 'package:book_app/core/client_http/dio_client.dart';
 import 'package:book_app/modules/books/page/book_page.dart';
 import 'package:book_app/modules/books/repository/book_repository.dart';
@@ -8,7 +9,8 @@ class BookModule extends Module{
   
   @override
   void binds(Injector i) {
-    i.addLazySingleton<BookRepository>(() => BookRepository(DioClient()));
+    i.addLazySingleton<ClientHttp>(() => DioClient());
+    i.addSingleton<BookRepository>(() => BookRepository(i.get()));
     i.addLazySingleton(() => BookStore(i.get()));
   }
 

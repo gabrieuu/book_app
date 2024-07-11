@@ -23,7 +23,7 @@ class VolumeInfo {
     //required this.language,
   });
 
-  static VolumeInfo fromMap(Map<String, dynamic> map) {
+  static VolumeInfo fromMap(Map<dynamic, dynamic> map) {
     return VolumeInfo(
       title: map["title"],
       authors: map["authors"] ?? [],

@@ -53,11 +53,9 @@ class _CommentPageState extends State<CommentPage> {
                         return ListView.builder(
                           itemCount: controller.comments.length,
                           itemBuilder: (context, index) {
-                            return Container(
-                              color: Colors.amber,
-                              child: CommentTile(
-                                  commentModel: controller.comments[index]),
-                            );
+                            return CommentTile(
+                                  commentModel: controller.comments[index]);
+                            
                           },
                         );
                       }

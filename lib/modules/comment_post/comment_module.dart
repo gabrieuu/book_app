@@ -5,12 +5,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 class CommentModule extends Module{
 
-  @override
-  void binds(Injector i) {
-    i.addInstance<CommentRepository>(CommentRepository());
-    i.addInstance<CommentController>(CommentController(repository: i.get()));
-  }
-
 
   @override
   void routes(RouteManager r) {

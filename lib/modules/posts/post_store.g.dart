@@ -12,13 +12,13 @@ mixin _$PostStore on _PostStoreBase, Store {
   late final _$postsAtom = Atom(name: '_PostStoreBase.posts', context: context);
 
   @override
-  List<PostModel> get posts {
+  ObservableList<PostModel> get posts {
     _$postsAtom.reportRead();
     return super.posts;
   }
 
   @override
-  set posts(List<PostModel> value) {
+  set posts(ObservableList<PostModel> value) {
     _$postsAtom.reportWrite(value, super.posts, () {
       super.posts = value;
     });
@@ -54,6 +54,47 @@ mixin _$PostStore on _PostStoreBase, Store {
     _$situacaoPostUploadAtom.reportWrite(value, super.situacaoPostUpload, () {
       super.situacaoPostUpload = value;
     });
+  }
+
+  late final _$getPostsAsyncAction =
+      AsyncAction('_PostStoreBase.getPosts', context: context);
+
+  @override
+  Future<void> getPosts() {
+    return _$getPostsAsyncAction.run(() => super.getPosts());
+  }
+
+  late final _$addPostAsyncAction =
+      AsyncAction('_PostStoreBase.addPost', context: context);
+
+  @override
+  Future<void> addPost() {
+    return _$addPostAsyncAction.run(() => super.addPost());
+  }
+
+  late final _$curtirPostAsyncAction =
+      AsyncAction('_PostStoreBase.curtirPost', context: context);
+
+  @override
+  Future<void> curtirPost(PostModel post) {
+    return _$curtirPostAsyncAction.run(() => super.curtirPost(post));
+  }
+
+  late final _$isCurtidoAsyncAction =
+      AsyncAction('_PostStoreBase.isCurtido', context: context);
+
+  @override
+  Future<bool> isCurtido(int idPost) {
+    return _$isCurtidoAsyncAction.run(() => super.isCurtido(idPost));
+  }
+
+  late final _$getQuantidadeCurtidasAsyncAction =
+      AsyncAction('_PostStoreBase.getQuantidadeCurtidas', context: context);
+
+  @override
+  Future<int> getQuantidadeCurtidas(int idPost) {
+    return _$getQuantidadeCurtidasAsyncAction
+        .run(() => super.getQuantidadeCurtidas(idPost));
   }
 
   @override

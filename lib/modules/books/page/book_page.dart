@@ -1,5 +1,6 @@
 import 'package:book_app/modules/books/store/book_store.dart';
 import 'package:book_app/modules/books/widgets/book_widget.dart';
+import 'package:book_app/modules/home/controller/bottom_navigator_controller.dart';
 import 'package:book_app/modules/home/widgets/menu_drawer.dart';
 import 'package:book_app/modules/details/page/details_page.dart';
 import 'package:book_app/core/status.dart';
@@ -16,6 +17,7 @@ class BookPage extends StatefulWidget {
 
 class _BookPageState extends State<BookPage> {
   BookStore bookStore = Modular.get();
+  BottomNavigatorController navigator = Modular.get();
 
   final listCategorias = ["Java", "Flutter", "Kotlin", ".net", "c++", "PHP"];
 
@@ -24,6 +26,10 @@ class _BookPageState extends State<BookPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios, color: Colors.blue, size: 20,),
+          onPressed: () => navigator.currentIndex = 0,
+        ),
         forceMaterialTransparency: true,
         title: Padding(
             padding: const EdgeInsets.only(left: 20),

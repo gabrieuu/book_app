@@ -11,7 +11,25 @@ class CommentTile extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Container(
-        child: Text(commentModel.content),
+        padding: EdgeInsets.all(10),
+        child: Row(
+          children: [
+            CircleAvatar(
+                  radius: 20,
+                  backgroundImage:
+                      const NetworkImage('https://picsum.photos/250?image=9'),
+                ),
+                SizedBox(width: 10),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(commentModel.autorName!, style: TextStyle(fontWeight: FontWeight.bold)),
+                Text(commentModel.content),
+              ],
+            ),
+
+          ],
+        ),
       ),
     );
   }

@@ -5,12 +5,12 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class FavoritaRepository {
-  final database = BDBook.instance;
+  final database = BDBook();
   final supabase = Supabase.instance.client;
   AuthRepository authRepository = Modular.get();
 
   addFavorite(String idLivro) async {
-    database.addFavorito();
+    //database.addFavorito();
     await supabase.from("favoritos").insert({
       "id_favoritos": "${authRepository.user!.id}$idLivro",
       "id_user": authRepository.user!.id,

@@ -8,12 +8,12 @@ class UserController = _UserControllerBase with _$UserController;
 abstract class _UserControllerBase with Store {
 
   @observable
-  late UserModel? _user;
+  UserModel? _user;
 
   UserRepository repository;
 
   _UserControllerBase(this.repository){
-    getUsers();
+    init();
   }
   
   @action

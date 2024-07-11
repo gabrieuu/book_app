@@ -7,7 +7,7 @@ class CommentRepository{
   final supabase = Supabase.instance.client;
 
   Future<List<CommentModel>> getCommentFromPost(int idPost) async{
-    var response = await supabase.from(table).select("*").eq('id_post', idPost) as List;
+    var response = await supabase.from(table).select("*, usuarios(name)").eq('id_post', idPost) as List;
     List<CommentModel> listComments = response.map((element) => CommentModel.fromJson(element)).toList();
     return listComments;
   }

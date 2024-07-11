@@ -18,14 +18,10 @@ mixin _$UserController on _UserControllerBase, Store {
     return super._user;
   }
 
-  bool __userIsInitialized = false;
-
   @override
   set _user(UserModel? value) {
-    _$_userAtom.reportWrite(value, __userIsInitialized ? super._user : null,
-        () {
+    _$_userAtom.reportWrite(value, super._user, () {
       super._user = value;
-      __userIsInitialized = true;
     });
   }
 

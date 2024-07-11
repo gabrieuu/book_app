@@ -1,10 +1,10 @@
-import 'package:book_app/modules/auth/controller/user_controller.dart';
 import 'package:book_app/modules/books/page/book_page.dart';
-import 'package:book_app/modules/home/widgets/menu_drawer.dart';
-import 'package:book_app/modules/favoritas/page/favorites_page.dart';
+import 'package:book_app/modules/home/controller/bottom_navigator_controller.dart';
 import 'package:book_app/modules/home/page/home_page.dart';
 import 'package:book_app/modules/posts/page/post_page.dart';
+import 'package:book_app/modules/profiile/pages/profile_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class NavigatorBottom extends StatefulWidget {
@@ -15,55 +15,60 @@ class NavigatorBottom extends StatefulWidget {
 }
 
 class _NavigatorBottomState extends State<NavigatorBottom> {
-  int index = 0;
-  final userController = Modular.get<UserController>();
-
+  BottomNavigatorController controller = Modular.get();
 
   @override
   void initState() {
     super.initState();
-    userController.init();
     Modular.to.navigate('/initial${HomePage.route}');
-  }
-
-  _onTap(int index){
-    switch (index) {
-      case 0: 
-        Modular.to.navigate('/initial${HomePage.route}');
-        break;
-      case 1: 
-        Modular.to.navigate('/initial${BookPage.rota}');
-        break;
-      case 2:
-        Modular.to.navigate('/initial${FavoritesPage.route}/');
-        break;
-      default:
-        Modular.to.navigate('/initial${HomePage.route}');
-    }
-    this.index = index;
-    setState(() {});
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: const RouterOutlet(),
-      floatingActionButton: FloatingActionButton(onPressed: (){
-        Modular.to.pushNamed(PostPage.route);
-      },child:  Icon(Icons.post_add, color: Colors.white),backgroundColor: Colors.blue, shape: CircleBorder()),
-      //floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: index,
-        onTap: _onTap,
-        fixedColor: Colors.white,        
-        items: const [
-        BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Inicio', backgroundColor: Colors.blue,),
-        BottomNavigationBarItem(icon: Icon(Icons.menu_book_rounded), label: 'Livros', backgroundColor: Colors.blue,),
-        BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Favoritos', backgroundColor: Colors.blue,),
-        BottomNavigationBarItem(icon: Icon(Icons.chat_bubble_outlined), label: 'Conversas', backgroundColor: Colors.blue,),
-        BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Perfil', backgroundColor: Colors.blue,),
-      ],
-      ),
+      floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            Modular.to.pushNamed(PostPage.route);
+          },
+          //floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+          child: Icon(Icons.post_add, color: Colors.white),
+          backgroundColor: Colors.blue,
+          shape: CircleBorder()),
+      bottomNavigationBar: Observer(builder: (_) {
+        return BottomNavigationBar(
+          currentIndex: controller.currentIndex,
+          onTap: (value) => controller.currentIndex = value,
+          fixedColor: Colors.white,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home),
+              label: 'Inicio',
+              backgroundColor: Colors.blue,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.menu_book_rounded),
+              label: 'Livros',
+              backgroundColor: Colors.blue,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.psychology_alt_outlined),
+              label: 'Desafio',
+              backgroundColor: Colors.blue,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.chat_bubble_outlined),
+              label: 'Conversas',
+              backgroundColor: Colors.blue,
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person),
+              label: 'Perfil',
+              backgroundColor: Colors.blue,
+            ),
+          ],
+        );
+      }),
     );
   }
 }

@@ -9,17 +9,21 @@ part 'details_controller.g.dart';
 class DetailsController = _DetailsControllerBase with _$DetailsController;
 
 abstract class _DetailsControllerBase with Store {
-  FavoritaRepository repository = Modular.get();
+  FavoritaRepository repository;
 
   @observable
   Book? book;
 
   @observable
-  BookStore store = Modular.get();
+  BookStore store;
 
   @observable
-  FavoritasStore favoritasStore = Modular.get();
-  _DetailsControllerBase();
+  FavoritasStore favoritasStore;
+  _DetailsControllerBase({
+    required this.repository,
+    required this.store,
+    required this.favoritasStore
+  });
 
   @action
   addFavorite(Book book) async{

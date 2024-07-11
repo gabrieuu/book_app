@@ -6,7 +6,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 class FavoritasModule extends Module{
 
   @override
-  void binds(Injector i) {    
+  void exportedBinds(Injector i) {    
     i.addSingleton<FavoritaRepository>(() => FavoritaRepository());
     i.addLazySingleton<FavoritasStore>(FavoritasStore.new);
   }

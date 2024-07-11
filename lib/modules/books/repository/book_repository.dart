@@ -5,12 +5,12 @@ import 'package:book_app/database/bd_book.dart';
 
 class BookRepository{
   ClientHttp client;
-  final bdBook = BDBook.instance;
+  BDBook bdBook = BDBook();
 
   BookRepository(this.client);
 
   Future<List<Book>> fetchAll(String volume) async{
-    List? list = bdBook.getBooks;
+    List? list = bdBook.getBooks();
     if(list == null || list[0] != volume){
       final url = "https://www.googleapis.com/books/v1/volumes?q=$volume";
       final response = await client.get(url);
@@ -18,6 +18,7 @@ class BookRepository{
       print(list.last);
       bdBook.addBook(key: volume, listBooks: response["items"]);
     }
+
     return (list.last as List).map((map) => Book.fromMap(map)).toList();
    
   }

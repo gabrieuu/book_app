@@ -7,9 +7,13 @@ class PostModel {
   List<Images>? images;
   String autorId;
   String? autorName;
+  int? quantidadeCurtidas;
+  int? quantidadeComentarios;
+  bool isCurtido;
+
 
   PostModel(
-      {required this.content, this.autorName, this.bookId, this.id, required this.autorId, this.images});
+      {required this.content, this.autorName, this.bookId, this.id, required this.autorId, this.images, this.quantidadeCurtidas, this.quantidadeComentarios, this.isCurtido = false});
 
   static PostModel fromJson(Map<dynamic, dynamic> map) {
     final post = PostModel(
@@ -18,6 +22,8 @@ class PostModel {
         autorId: map['autor_id'],
         autorName: map['usuarios']['name'],
         bookId: map['book_id'],
+        quantidadeCurtidas: map['curtidas'] ?? 0,
+        quantidadeComentarios: map['comentarios'] ?? 0
       );
     return post;
   }

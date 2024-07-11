@@ -7,7 +7,7 @@ class ImageLinks{
      this.thumbnail
   });
 
-  static ImageLinks fromMap(Map<String, dynamic> map){
+  static ImageLinks fromMap(Map<dynamic, dynamic> map){
     return ImageLinks(
       smallThumb: map["smallThumbnail"],
       thumbnail: map["thumbnail"]
