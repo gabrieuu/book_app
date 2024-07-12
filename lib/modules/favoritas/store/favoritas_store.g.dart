@@ -29,16 +29,24 @@ mixin _$FavoritasStore on _FavoritasStoreBase, Store {
       Atom(name: '_FavoritasStoreBase.listBooksFavorites', context: context);
 
   @override
-  List<Book> get listBooksFavorites {
+  ObservableList<Book> get listBooksFavorites {
     _$listBooksFavoritesAtom.reportRead();
     return super.listBooksFavorites;
   }
 
   @override
-  set listBooksFavorites(List<Book> value) {
+  set listBooksFavorites(ObservableList<Book> value) {
     _$listBooksFavoritesAtom.reportWrite(value, super.listBooksFavorites, () {
       super.listBooksFavorites = value;
     });
+  }
+
+  late final _$addFavoriteAsyncAction =
+      AsyncAction('_FavoritasStoreBase.addFavorite', context: context);
+
+  @override
+  Future<void> addFavorite(Book book) {
+    return _$addFavoriteAsyncAction.run(() => super.addFavorite(book));
   }
 
   late final _$getBooksFavoritesAsyncAction =
@@ -47,6 +55,28 @@ mixin _$FavoritasStore on _FavoritasStoreBase, Store {
   @override
   Future<void> getBooksFavorites() {
     return _$getBooksFavoritesAsyncAction.run(() => super.getBooksFavorites());
+  }
+
+  late final _$removeFavoritaAsyncAction =
+      AsyncAction('_FavoritasStoreBase.removeFavorita', context: context);
+
+  @override
+  Future removeFavorita(Book book) {
+    return _$removeFavoritaAsyncAction.run(() => super.removeFavorita(book));
+  }
+
+  late final _$_FavoritasStoreBaseActionController =
+      ActionController(name: '_FavoritasStoreBase', context: context);
+
+  @override
+  bool isFavorita(Book book) {
+    final _$actionInfo = _$_FavoritasStoreBaseActionController.startAction(
+        name: '_FavoritasStoreBase.isFavorita');
+    try {
+      return super.isFavorita(book);
+    } finally {
+      _$_FavoritasStoreBaseActionController.endAction(_$actionInfo);
+    }
   }
 
   @override

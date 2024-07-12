@@ -8,9 +8,9 @@ import 'package:flutter_modular/flutter_modular.dart';
 class BookModule extends Module{
   
   @override
-  void binds(Injector i) {
+  void exportedBinds(Injector i) {
     i.addLazySingleton<ClientHttp>(() => DioClient());
-    i.addSingleton<BookRepository>(() => BookRepository(i.get()));
+    i.addLazySingleton<BookRepository>(BookRepository.new);
     i.addLazySingleton(() => BookStore(i.get()));
   }
 

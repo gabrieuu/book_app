@@ -25,6 +25,22 @@ mixin _$BookStore on _BookStoreBase, Store {
     });
   }
 
+  late final _$listBooksSearchesAtom =
+      Atom(name: '_BookStoreBase.listBooksSearches', context: context);
+
+  @override
+  List<Book> get listBooksSearches {
+    _$listBooksSearchesAtom.reportRead();
+    return super.listBooksSearches;
+  }
+
+  @override
+  set listBooksSearches(List<Book> value) {
+    _$listBooksSearchesAtom.reportWrite(value, super.listBooksSearches, () {
+      super.listBooksSearches = value;
+    });
+  }
+
   late final _$indexActionChipSelectAtom =
       Atom(name: '_BookStoreBase.indexActionChipSelect', context: context);
 
@@ -74,12 +90,28 @@ mixin _$BookStore on _BookStoreBase, Store {
     });
   }
 
-  late final _$fetchAllBooksAsyncAction =
-      AsyncAction('_BookStoreBase.fetchAllBooks', context: context);
+  late final _$listCategoriasAtom =
+      Atom(name: '_BookStoreBase.listCategorias', context: context);
 
   @override
-  Future<void> fetchAllBooks(String book) {
-    return _$fetchAllBooksAsyncAction.run(() => super.fetchAllBooks(book));
+  List<String> get listCategorias {
+    _$listCategoriasAtom.reportRead();
+    return super.listCategorias;
+  }
+
+  @override
+  set listCategorias(List<String> value) {
+    _$listCategoriasAtom.reportWrite(value, super.listCategorias, () {
+      super.listCategorias = value;
+    });
+  }
+
+  late final _$searchBooksAsyncAction =
+      AsyncAction('_BookStoreBase.searchBooks', context: context);
+
+  @override
+  Future<void> searchBooks(String book) {
+    return _$searchBooksAsyncAction.run(() => super.searchBooks(book));
   }
 
   late final _$_BookStoreBaseActionController =
@@ -100,9 +132,11 @@ mixin _$BookStore on _BookStoreBase, Store {
   String toString() {
     return '''
 listBooks: ${listBooks},
+listBooksSearches: ${listBooksSearches},
 indexActionChipSelect: ${indexActionChipSelect},
 searchIsSelect: ${searchIsSelect},
-livrosCarregados: ${livrosCarregados}
+livrosCarregados: ${livrosCarregados},
+listCategorias: ${listCategorias}
     ''';
   }
 }

@@ -11,14 +11,16 @@ class FavoritaRepository {
 
   addFavorite(String idLivro) async {
     //database.addFavorito();
-    await supabase.from("favoritos").insert({
+    var response = await supabase.from("favoritos").insert({
       "id_favoritos": "${authRepository.user!.id}$idLivro",
       "id_user": authRepository.user!.id,
       "book_id": idLivro
     });
+
+    print(response);
   }
 
-  removeFavorita(String idLivro) async {
+  Future<void> removeFavorita(String idLivro) async {
     await supabase
         .from("favoritos")
         .delete()

@@ -7,16 +7,12 @@ class DetailsModule extends Module{
 
 
   @override
-  void exportedBinds(Injector i) {
-    i.add(() => DetailsController(
-      repository: i.get(),
-      store: i.get(),
-      favoritasStore: i.get()
-    ));
+  void binds(Injector i) {
+    i.addSingleton(DetailsController.new);
   }
 
   @override
   void routes(RouteManager r) {
-    r.child('/details', child: (_) => DetailsPage(book: r.args.data));
+    r.child('/', child: (_) => DetailsPage(book: r.args.data));
   }
 }

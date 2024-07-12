@@ -3,7 +3,7 @@ import 'package:book_app/modules/home/page/home_page.dart';
 import 'package:book_app/modules/profiile/pages/profile_page.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
-part 'bottom_navigator.g.dart';
+part 'bottom_navigator_controller.g.dart';
 
 class BottomNavigatorController = _BottomNavigatorControllerBase with _$BottomNavigatorController;
 
@@ -15,7 +15,6 @@ abstract class _BottomNavigatorControllerBase with Store {
   @computed
   int get currentIndex => _currentIndex;
 
-  @action
   set currentIndex(int value){
      switch (value) {
       case 0: 
@@ -25,6 +24,7 @@ abstract class _BottomNavigatorControllerBase with Store {
         Modular.to.pushNamed('/initial${BookPage.rota}');
         break;
       case 2:
+        Modular.to.pushNamed('/initial${ProfilePage.route}/');
         break;
       case 3:
         break;

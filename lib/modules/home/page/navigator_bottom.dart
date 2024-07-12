@@ -40,6 +40,8 @@ class _NavigatorBottomState extends State<NavigatorBottom> {
           currentIndex: controller.currentIndex,
           onTap: (value) => controller.currentIndex = value,
           fixedColor: Colors.white,
+          unselectedItemColor: Colors.blue[100],
+          backgroundColor: Colors.blue,
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
@@ -51,16 +53,16 @@ class _NavigatorBottomState extends State<NavigatorBottom> {
               label: 'Livros',
               backgroundColor: Colors.blue,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.psychology_alt_outlined),
-              label: 'Desafio',
-              backgroundColor: Colors.blue,
-            ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.chat_bubble_outlined),
-              label: 'Conversas',
-              backgroundColor: Colors.blue,
-            ),
+            // BottomNavigationBarItem(
+            //   icon: Icon(Icons.psychology_alt_outlined),
+            //   label: 'Desafio',
+            //   backgroundColor: Colors.blue,
+            // ),
+            // BottomNavigationBarItem(
+            //   icon: Icon(Icons.chat_bubble_outlined),
+            //   label: 'Conversas',
+            //   backgroundColor: Colors.blue,
+            // ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
               label: 'Perfil',

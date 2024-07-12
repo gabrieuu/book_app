@@ -25,6 +25,19 @@ class PostRepository{
     }
   }
 
+  Future<List<PostModel>> getPostByUser(String idUser) async{
+    try {
+      var response = await supabase
+                            .from('postagens')
+                            .select('*, usuarios(name)').eq('autor_id', idUser);
+      List<Map<String, dynamic>> data = List<Map<String, dynamic>>.from(response);
+      return data.map((e) => PostModel.fromJson(e)).toList();
+    } catch (e) {
+      print(e);
+      return [];
+    }
+  }
+
   Future<void> curtirPost(int idPost, String idUser) async{
     var response = await supabase.from('curtidas').select().eq('id_post', idPost).eq('id_user', idUser) as List;
     if(response.isNotEmpty) {

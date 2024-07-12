@@ -24,9 +24,6 @@ abstract class _PostStoreBase with Store {
 
   _PostStoreBase(this.repository, this.authRepository) {
     init();
-    // reaction((_) => situacaoPostUpload, (_) {
-    //   if(situacaoPostUpload == Status.SUCESSO) getPosts();
-    //  });
   }
 
   init() async {
@@ -46,6 +43,11 @@ abstract class _PostStoreBase with Store {
     await Future.wait(futures);
     posts.sort((a, b) => b.id!.compareTo(a.id!));
     situacaoPost = Status.SUCESSO;
+  }
+
+  Future<List<PostModel>> getPostsByUser(String userId) async{
+    var list = await repository.getPostByUser(authRepository.user!.id);
+    return list;
   }
 
   @action

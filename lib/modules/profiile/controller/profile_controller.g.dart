@@ -25,6 +25,54 @@ mixin _$ProfileController on _ProfileControllerBase, Store {
     });
   }
 
+  late final _$postStoreAtom =
+      Atom(name: '_ProfileControllerBase.postStore', context: context);
+
+  @override
+  PostStore get postStore {
+    _$postStoreAtom.reportRead();
+    return super.postStore;
+  }
+
+  @override
+  set postStore(PostStore value) {
+    _$postStoreAtom.reportWrite(value, super.postStore, () {
+      super.postStore = value;
+    });
+  }
+
+  late final _$myPostsAtom =
+      Atom(name: '_ProfileControllerBase.myPosts', context: context);
+
+  @override
+  ObservableList<PostModel> get myPosts {
+    _$myPostsAtom.reportRead();
+    return super.myPosts;
+  }
+
+  @override
+  set myPosts(ObservableList<PostModel> value) {
+    _$myPostsAtom.reportWrite(value, super.myPosts, () {
+      super.myPosts = value;
+    });
+  }
+
+  late final _$situacaoPostAtom =
+      Atom(name: '_ProfileControllerBase.situacaoPost', context: context);
+
+  @override
+  Status get situacaoPost {
+    _$situacaoPostAtom.reportRead();
+    return super.situacaoPost;
+  }
+
+  @override
+  set situacaoPost(Status value) {
+    _$situacaoPostAtom.reportWrite(value, super.situacaoPost, () {
+      super.situacaoPost = value;
+    });
+  }
+
   late final _$favoritasStoreAtom =
       Atom(name: '_ProfileControllerBase.favoritasStore', context: context);
 
@@ -41,10 +89,35 @@ mixin _$ProfileController on _ProfileControllerBase, Store {
     });
   }
 
+  late final _$getPostsByUserIdAsyncAction =
+      AsyncAction('_ProfileControllerBase.getPostsByUserId', context: context);
+
+  @override
+  Future getPostsByUserId() {
+    return _$getPostsByUserIdAsyncAction.run(() => super.getPostsByUserId());
+  }
+
+  late final _$_ProfileControllerBaseActionController =
+      ActionController(name: '_ProfileControllerBase', context: context);
+
+  @override
+  void setUser(UserModel user) {
+    final _$actionInfo = _$_ProfileControllerBaseActionController.startAction(
+        name: '_ProfileControllerBase.setUser');
+    try {
+      return super.setUser(user);
+    } finally {
+      _$_ProfileControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
 userController: ${userController},
+postStore: ${postStore},
+myPosts: ${myPosts},
+situacaoPost: ${situacaoPost},
 favoritasStore: ${favoritasStore}
     ''';
   }

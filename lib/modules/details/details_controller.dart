@@ -9,7 +9,6 @@ part 'details_controller.g.dart';
 class DetailsController = _DetailsControllerBase with _$DetailsController;
 
 abstract class _DetailsControllerBase with Store {
-  FavoritaRepository repository;
 
   @observable
   Book? book;
@@ -17,26 +16,7 @@ abstract class _DetailsControllerBase with Store {
   @observable
   BookStore store;
 
-  @observable
-  FavoritasStore favoritasStore;
   _DetailsControllerBase({
-    required this.repository,
-    required this.store,
-    required this.favoritasStore
+    required this.store
   });
-
-  @action
-  addFavorite(Book book) async{
-    await repository.addFavorite(book.id);
-  }
-
-  @action
-  removeFavorita(Book book) async{  
-    await repository.removeFavorita(book.id);
-  }
-
-  @action
-  Future<bool> isFavorita(Book book) async{
-    return repository.isFavorita(book);
-  }
 }

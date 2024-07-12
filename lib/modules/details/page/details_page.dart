@@ -16,7 +16,8 @@ class DetailsPage extends StatefulWidget {
 
 class _DetailsPageState extends State<DetailsPage> {
   DetailsController detailsController = Modular.get();
-  late bool isFavorita;
+  bool isFavorita = false;
+  FavoritasStore favoritasStore = Modular.get();
 
   @override
   void initState() {
@@ -25,8 +26,11 @@ class _DetailsPageState extends State<DetailsPage> {
     _initDetails();
   }
 
-  _initDetails() async{
-    isFavorita = await detailsController.isFavorita(widget.book);
+  _initDetails(){
+    isFavorita = favoritasStore.isFavorita(widget.book);
+    setState(() {
+      
+    });
   }
 
   @override
@@ -36,30 +40,25 @@ class _DetailsPageState extends State<DetailsPage> {
           forceMaterialTransparency: true,
           actions: [
             IconButton(
-              onPressed: () async {
+              onPressed: (){
                 if(isFavorita){
-                  await detailsController.removeFavorita(widget.book);
+                  favoritasStore.removeFavorita(widget.book);
                 }else{
-                  await detailsController.addFavorite(widget.book);
+                  favoritasStore.addFavorite(widget.book);
                 }
-                setState(() {});
+                setState(() {
+                isFavorita = favoritasStore.isFavorita(widget.book);
+
+                });
               },
-              icon: FutureBuilder(
-                future: detailsController.isFavorita(widget.book),
-                builder: (_, snapshot){
-                if(snapshot.hasData){
-                  return (snapshot.data!)
-                    ? Icon(Icons.bookmark, color: Colors.red)
-                    : Icon(
+              icon: Observer(builder: (_) {
+                return (isFavorita)
+                    ? const Icon(Icons.bookmark, color: Colors.red)
+                    : const Icon(
                         Icons.bookmark_border,
                         color: Colors.black,
                       );
-                }
-                return Icon(
-                        Icons.bookmark_border,
-                        color: Colors.black,
-                      );
-              }),
+              },)
             ),
           ],
         ),

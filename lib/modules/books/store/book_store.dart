@@ -11,12 +11,19 @@ abstract class _BookStoreBase with Store {
 
   @observable
   List<Book> listBooks = [];
+
+  @observable
+  List<Book> listBooksSearches = [];
+
   @observable
   int indexActionChipSelect = 0;
   @observable
   bool searchIsSelect = false;
   @observable
   Status livrosCarregados = Status.NAO_CARREGADO;
+
+  @observable
+  List<String> listCategorias = ["Romance", "Fiction", "Action", "Horror", "Mistery", "Comedy"];
 
   BookRepository service;
 
@@ -28,7 +35,7 @@ abstract class _BookStoreBase with Store {
   }
 
   _initBookStore() async{
-    await fetchAllBooks('Ação');
+    await fetchBookByCategory();
   }
 
   @action
@@ -37,10 +44,21 @@ abstract class _BookStoreBase with Store {
   }
 
   @action
-  Future<void> fetchAllBooks(String book) async{
+  Future<void> searchBooks(String book) async{
     try {
       livrosCarregados = Status.CARREGANDO;
-      listBooks = await service.fetchAll(book);
+      listBooksSearches = await service.fetchAll(book);
+      livrosCarregados = Status.SUCESSO;
+    } catch (e) {
+      print(e);
+      livrosCarregados = Status.ERRO;
+    }
+  }
+
+  Future<void> fetchBookByCategory() async{
+     try {
+      livrosCarregados = Status.CARREGANDO;
+      listBooks = await service.fetchCategory(listCategorias[indexActionChipSelect]);
       livrosCarregados = Status.SUCESSO;
     } catch (e) {
       print(e);

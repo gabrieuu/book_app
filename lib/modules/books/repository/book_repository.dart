@@ -23,23 +23,23 @@ class BookRepository{
    
   }
 
+  Future<List<Book>> fetchCategory(String category) async{
+    final url = "https://www.googleapis.com/books/v1/volumes?q=subject:$category&maxResults=10&orderBy=newest";
+    final response = await client.get(url);
+    var a = (response['items'] as List).map((e) => Book.fromMap(e)).toList();
+    return a;
+  }
+
   Future<List<Book>> fetchFavoritesBooks(List<String> listIdBooks) async{
     List<Book> listBooks = [];
-    for(int i = 0; i < listIdBooks.length; i++){
-       try {
-        final url = "https://www.googleapis.com/books/v1/volumes?q=${listIdBooks[i]}";
-        final response = await client.get(url);
-        
-        if(response["items"] != null){
-          final list = response["items"] as List;
-          Book book = Book.fromMap(list.first);
-          book.isFavorite = true;
-          listBooks.add(book);
-        }
-       } catch (e) {
-         print(e);
-       }
-    }
+    var futures = listIdBooks.map((e) => client.get("https://www.googleapis.com/books/v1/volumes/$e"));
+    List<Map<String,dynamic>> responses = List<Map<String,dynamic>>.from(await Future.wait(futures));
+    
+    responses.forEach((response) {
+        Book book = Book.fromMap(response);
+        book.isFavorite = true;
+        listBooks.add(book);    
+    });
 
     return listBooks;
   }

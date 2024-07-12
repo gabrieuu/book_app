@@ -41,52 +41,11 @@ mixin _$DetailsController on _DetailsControllerBase, Store {
     });
   }
 
-  late final _$favoritasStoreAtom =
-      Atom(name: '_DetailsControllerBase.favoritasStore', context: context);
-
-  @override
-  FavoritasStore get favoritasStore {
-    _$favoritasStoreAtom.reportRead();
-    return super.favoritasStore;
-  }
-
-  @override
-  set favoritasStore(FavoritasStore value) {
-    _$favoritasStoreAtom.reportWrite(value, super.favoritasStore, () {
-      super.favoritasStore = value;
-    });
-  }
-
-  late final _$addFavoriteAsyncAction =
-      AsyncAction('_DetailsControllerBase.addFavorite', context: context);
-
-  @override
-  Future addFavorite(Book book) {
-    return _$addFavoriteAsyncAction.run(() => super.addFavorite(book));
-  }
-
-  late final _$removeFavoritaAsyncAction =
-      AsyncAction('_DetailsControllerBase.removeFavorita', context: context);
-
-  @override
-  Future removeFavorita(Book book) {
-    return _$removeFavoritaAsyncAction.run(() => super.removeFavorita(book));
-  }
-
-  late final _$isFavoritaAsyncAction =
-      AsyncAction('_DetailsControllerBase.isFavorita', context: context);
-
-  @override
-  Future<bool> isFavorita(Book book) {
-    return _$isFavoritaAsyncAction.run(() => super.isFavorita(book));
-  }
-
   @override
   String toString() {
     return '''
 book: ${book},
-store: ${store},
-favoritasStore: ${favoritasStore}
+store: ${store}
     ''';
   }
 }

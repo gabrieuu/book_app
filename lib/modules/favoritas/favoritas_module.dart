@@ -7,12 +7,8 @@ class FavoritasModule extends Module{
 
   @override
   void exportedBinds(Injector i) {    
-    i.addSingleton<FavoritaRepository>(() => FavoritaRepository());
-    i.addLazySingleton<FavoritasStore>(FavoritasStore.new);
+    i.addSingleton<FavoritaRepository>(FavoritaRepository.new);
+    i.addSingleton<FavoritasStore>(FavoritasStore.new);
   }
 
-  @override
-  void routes(RouteManager r) {
-    r.child('/', child: (_) => const FavoritesPage());
-  }
 }
