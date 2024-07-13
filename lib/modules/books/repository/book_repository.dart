@@ -12,7 +12,7 @@ class BookRepository{
   Future<List<Book>> fetchAll(String volume) async{
     List? list = bdBook.getBooks();
     if(list == null || list[0] != volume){
-      final url = "https://www.googleapis.com/books/v1/volumes?q=$volume";
+      final url = "https://www.googleapis.com/books/v1/volumes?q=$volume&maxResults=20&orderBy=relevance";
       final response = await client.get(url);
       list = ['',response["items"] as List];
       print(list.last);

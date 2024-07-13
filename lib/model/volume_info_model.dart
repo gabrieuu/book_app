@@ -1,4 +1,5 @@
 import 'package:book_app/model/image_links_model.dart';
+import 'package:book_app/model/list_price.dart';
 
 class VolumeInfo {
   String title;
