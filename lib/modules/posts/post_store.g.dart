@@ -56,6 +56,38 @@ mixin _$PostStore on _PostStoreBase, Store {
     });
   }
 
+  late final _$searchIsSelectAtom =
+      Atom(name: '_PostStoreBase.searchIsSelect', context: context);
+
+  @override
+  bool get searchIsSelect {
+    _$searchIsSelectAtom.reportRead();
+    return super.searchIsSelect;
+  }
+
+  @override
+  set searchIsSelect(bool value) {
+    _$searchIsSelectAtom.reportWrite(value, super.searchIsSelect, () {
+      super.searchIsSelect = value;
+    });
+  }
+
+  late final _$searchControllerAtom =
+      Atom(name: '_PostStoreBase.searchController', context: context);
+
+  @override
+  TextEditingController get searchController {
+    _$searchControllerAtom.reportRead();
+    return super.searchController;
+  }
+
+  @override
+  set searchController(TextEditingController value) {
+    _$searchControllerAtom.reportWrite(value, super.searchController, () {
+      super.searchController = value;
+    });
+  }
+
   late final _$getPostsAsyncAction =
       AsyncAction('_PostStoreBase.getPosts', context: context);
 
@@ -102,7 +134,9 @@ mixin _$PostStore on _PostStoreBase, Store {
     return '''
 posts: ${posts},
 situacaoPost: ${situacaoPost},
-situacaoPostUpload: ${situacaoPostUpload}
+situacaoPostUpload: ${situacaoPostUpload},
+searchIsSelect: ${searchIsSelect},
+searchController: ${searchController}
     ''';
   }
 }

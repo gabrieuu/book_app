@@ -8,49 +8,29 @@ class BookWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
-        children: [
-          Container(
-            width: 140,
-            height: 190,
-            decoration: BoxDecoration(
-              color: Colors.grey[200],
-              borderRadius: BorderRadius.circular(10),
-              border: Border.all(color: Colors.black, width: 0.1),
-              image: DecorationImage(
-                fit: BoxFit.cover,
-                image: (book.volumeInfo.imageLinks!.smallThumb != null) 
-                ? NetworkImage(book.volumeInfo.imageLinks!.smallThumb!) : NetworkImage("http://via.placeholder.com/140x190"))
-            ),
+    return Column(
+      children: [
+        Container(
+          width: 130,
+          height: 160,
+          decoration: BoxDecoration(
+            color: Colors.grey[200],
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: Colors.black, width: 0.1),
+            image: DecorationImage(
+              fit: BoxFit.cover,
+              image: (book.volumeInfo.imageLinks!.smallThumb != null) 
+              ? NetworkImage(book.volumeInfo.imageLinks!.smallThumb!) : NetworkImage("http://via.placeholder.com/140x190"))
           ),
-          Container(
-            width: 140,
-            child: Expanded(
-              child: Column(            
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(book.volumeInfo.title,
-                        style: const TextStyle(
-                            fontSize: 15, fontWeight: FontWeight.bold),
-                        textAlign: TextAlign.start,
-                        maxLines: 1),
-                    if (book.volumeInfo.authors.isNotEmpty)
-                      Text(
-                        "${book.volumeInfo.authors[0]}",
-                        maxLines: 1,
-                      ),
-                    if (book.volumeInfo.categories.isNotEmpty)
-                      Text(
-                        "${book.volumeInfo.categories[0]}",
-                        style: const TextStyle(fontSize: 11),
-                        maxLines: 1,
-                      ),
-                  ]),
-            ),
-          ),
-        ],
-      ),
+        ),
+        Center(
+          child: Text(book.volumeInfo.title.trim(),
+              style: const TextStyle(
+                  fontSize: 15, fontWeight: FontWeight.bold),
+              textAlign: TextAlign.start,
+              maxLines: 1),
+        ),
+      ],
     );
   }
 }
