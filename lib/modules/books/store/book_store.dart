@@ -10,10 +10,10 @@ class BookStore = _BookStoreBase with _$BookStore;
 abstract class _BookStoreBase with Store {
 
   @observable
-  List<Book> listBooks = [];
+  ObservableList<Book> listBooks = ObservableList.of([]);
 
   @observable
-  List<Book> listBooksSearches = [];
+  ObservableList<Book> listBooksSearches = ObservableList.of([]);
 
   @observable
   int indexActionChipSelect = 0;
@@ -23,19 +23,52 @@ abstract class _BookStoreBase with Store {
   Status livrosCarregados = Status.NAO_CARREGADO;
 
   @observable
-  List<String> listCategorias = ["Romance", "Fiction", "Action", "Horror", "Mistery", "Comedy"];
+  Status livrosRecomendadosStatus = Status.NAO_CARREGADO;
 
+  @observable
+  int indexCategoriaSelecionada = 0;
+
+  @observable
+  ObservableList<Book> recomendados = ObservableList.of([]);
+
+  @action
+  void setIndexCategoriaSelecionada(int value) => indexCategoriaSelecionada = value;
+
+
+
+  @observable
+  List<String> listCategorias = ["Romance", "Fiction", "Action", "Horror", "Mistery", "Comedy"];
+  List<String> autores = [
+    'Cassandra Clare',
+    'Colleen Hoover',
+    'George R.R. Martin',
+    'Stephen King',
+    'J.K. Rowling',
+    'Holly Black',
+    'Raphael Montes',
+    'Sarah J. Mass',
+    'Emily Henry',
+    'Julia Quinn',
+    'John Green'
+  ];
   BookRepository service;
 
   // FavoritaRepository favoritaRepository;
+  @observable
   TextEditingController searchBook = TextEditingController();
 
   _BookStoreBase(this.service){
     _initBookStore();
+    reaction((p0) => indexCategoriaSelecionada, (p0) async{ 
+      await fetchBookByCategory();
+    });
   }
 
   _initBookStore() async{
-    await fetchBookByCategory();
+    await Future.wait<void>([
+      getRecomendados(),
+      fetchBookByCategory()
+    ]);
   }
 
   @action
@@ -47,7 +80,7 @@ abstract class _BookStoreBase with Store {
   Future<void> searchBooks(String book) async{
     try {
       livrosCarregados = Status.CARREGANDO;
-      listBooksSearches = await service.fetchAll(book);
+      listBooksSearches = ObservableList.of(await service.fetchAll(book));
       livrosCarregados = Status.SUCESSO;
     } catch (e) {
       print(e);
@@ -55,10 +88,21 @@ abstract class _BookStoreBase with Store {
     }
   }
 
+ Future<void>getRecomendados() async{
+    try {
+      livrosRecomendadosStatus = Status.CARREGANDO;
+      recomendados = ObservableList.of(await service.getBooksRecomendados());
+      livrosRecomendadosStatus = Status.SUCESSO;
+    } catch (e) {
+      print(e);
+      livrosRecomendadosStatus = Status.ERRO;
+    }
+  }
+
   Future<void> fetchBookByCategory() async{
      try {
       livrosCarregados = Status.CARREGANDO;
-      listBooks = await service.fetchCategory(listCategorias[indexActionChipSelect]);
+      listBooks = ObservableList.of(await service.fetchCategory(listCategorias[indexCategoriaSelecionada]));
       livrosCarregados = Status.SUCESSO;
     } catch (e) {
       print(e);

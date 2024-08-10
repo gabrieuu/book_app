@@ -6,7 +6,7 @@ class VolumeInfo {
   List<dynamic> authors;
   String? publisher;
   String publishedDate;
-  String description;
+  String? description;
   int pageCount;
   List<dynamic> categories;
   ImageLinks? imageLinks;
@@ -30,7 +30,7 @@ class VolumeInfo {
       authors: map["authors"] ?? [],
       publisher: "${map["publisher"]}",
       publishedDate: "${map["publishedDate"]}",
-      description: "${map["description"]}",
+      description: map["description"],
       pageCount: map["pageCount"] ?? 0,
       categories: map["categories"] ?? [],
       imageLinks: ImageLinks.fromMap((map["imageLinks"] ?? {})),

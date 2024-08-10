@@ -49,14 +49,6 @@ mixin _$FavoritasStore on _FavoritasStoreBase, Store {
     return _$addFavoriteAsyncAction.run(() => super.addFavorite(book));
   }
 
-  late final _$getBooksFavoritesAsyncAction =
-      AsyncAction('_FavoritasStoreBase.getBooksFavorites', context: context);
-
-  @override
-  Future<void> getBooksFavorites() {
-    return _$getBooksFavoritesAsyncAction.run(() => super.getBooksFavorites());
-  }
-
   late final _$removeFavoritaAsyncAction =
       AsyncAction('_FavoritasStoreBase.removeFavorita', context: context);
 
