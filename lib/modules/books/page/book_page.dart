@@ -62,6 +62,7 @@ class _BookPageState extends State<BookPage> {
           preferredSize: const Size.fromHeight(60),
           child: Observer(builder: (context) {
             return AppBarWidget(
+              hintText: 'Busque um Livro',
             searchIsSelect: bookStore.searchIsSelect, 
             textFieldOnChanged: (string) async {
                           if (bookStore.searchBook.text.isEmpty) {

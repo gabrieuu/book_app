@@ -25,6 +25,22 @@ mixin _$AuthController on _AuthControllerBase, Store {
     });
   }
 
+  late final _$erroNomeAtom =
+      Atom(name: '_AuthControllerBase.erroNome', context: context);
+
+  @override
+  String get erroNome {
+    _$erroNomeAtom.reportRead();
+    return super.erroNome;
+  }
+
+  @override
+  set erroNome(String value) {
+    _$erroNomeAtom.reportWrite(value, super.erroNome, () {
+      super.erroNome = value;
+    });
+  }
+
   late final _$erroEmailAtom =
       Atom(name: '_AuthControllerBase.erroEmail', context: context);
 
@@ -137,6 +153,22 @@ mixin _$AuthController on _AuthControllerBase, Store {
     });
   }
 
+  late final _$titleButtonAtom =
+      Atom(name: '_AuthControllerBase.titleButton', context: context);
+
+  @override
+  String get titleButton {
+    _$titleButtonAtom.reportRead();
+    return super.titleButton;
+  }
+
+  @override
+  set titleButton(String value) {
+    _$titleButtonAtom.reportWrite(value, super.titleButton, () {
+      super.titleButton = value;
+    });
+  }
+
   late final _$loginAsyncAction =
       AsyncAction('_AuthControllerBase.login', context: context);
 
@@ -163,6 +195,17 @@ mixin _$AuthController on _AuthControllerBase, Store {
 
   late final _$_AuthControllerBaseActionController =
       ActionController(name: '_AuthControllerBase', context: context);
+
+  @override
+  void clear() {
+    final _$actionInfo = _$_AuthControllerBaseActionController.startAction(
+        name: '_AuthControllerBase.clear');
+    try {
+      return super.clear();
+    } finally {
+      _$_AuthControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   dynamic togglePasswordVisibility() {
@@ -198,16 +241,29 @@ mixin _$AuthController on _AuthControllerBase, Store {
   }
 
   @override
+  String? validarNome(String nome) {
+    final _$actionInfo = _$_AuthControllerBaseActionController.startAction(
+        name: '_AuthControllerBase.validarNome');
+    try {
+      return super.validarNome(nome);
+    } finally {
+      _$_AuthControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
 loginIsLoading: ${loginIsLoading},
+erroNome: ${erroNome},
 erroEmail: ${erroEmail},
 erroSenha: ${erroSenha},
 passwordVisibility: ${passwordVisibility},
 isLogin: ${isLogin},
 title: ${title},
 botaoCadastrar: ${botaoCadastrar},
-userIsAuthenticate: ${userIsAuthenticate}
+userIsAuthenticate: ${userIsAuthenticate},
+titleButton: ${titleButton}
     ''';
   }
 }

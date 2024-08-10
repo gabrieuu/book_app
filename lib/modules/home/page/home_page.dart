@@ -31,6 +31,19 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
           appBar: AppBarWidget(
             searchIsSelect: postStore.searchIsSelect, 
+            hintText: 'Encontre uma pessoa',
+            searchIconAction: (){
+              postStore.searchIsSelect = !postStore.searchIsSelect;
+              setState(() {
+                
+              });
+            },
+            backAction: () => {
+              postStore.searchIsSelect = !postStore.searchIsSelect,
+              setState(() {
+                
+              })
+            },
             textFieldOnChanged: (value){}, 
             textFieldController: postStore.searchController,),
           body: Observer(

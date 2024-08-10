@@ -1,8 +1,8 @@
 import 'package:book_app/modules/auth/repository/auth_repository.dart';
+import 'package:crypto/crypto.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:get/get.dart';
-
 import 'package:mobx/mobx.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 part 'auth_controller.g.dart';
@@ -15,8 +15,13 @@ abstract class _AuthControllerBase with Store {
   final password = TextEditingController();
   final formKey = GlobalKey<FormState>();
   
+  GlobalKey<ScaffoldMessengerState> scaffoldKeyLoginPage = GlobalKey<ScaffoldMessengerState>();
+
   @observable
   bool loginIsLoading = false;
+
+  @observable
+  String erroNome = '';
   @observable
   String erroEmail = '';
   @observable
@@ -43,20 +48,36 @@ abstract class _AuthControllerBase with Store {
   @observable
   var userIsAuthenticate = false;
   
+  @observable
   var titleButton = "Entrar";
+
+  @action
+  void clear(){
+    name.clear();
+    email.clear();
+    password.clear();
+    erroEmail = '';
+    erroSenha = '';
+    erroNome = '';
+  }
 
   @action
   togglePasswordVisibility() => passwordVisibility = !passwordVisibility;
 
   @action
-  void toggleRegistrar () => isLogin = !isLogin;
+  void toggleRegistrar (){
+    isLogin = !isLogin;
+    clear();
+  }
 
   String? validarEmail(String email){
     if(email.isEmpty){
       erroEmail = "Campo não pode ser vazio!";
+       return null;
     }else if(!RegExp(r'^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})$')
       .hasMatch(email)){
         erroEmail = "Formato de email inválido!";
+         return null;
     }
     erroEmail = '';
       return null;
@@ -67,18 +88,22 @@ abstract class _AuthControllerBase with Store {
   String? validarSenha(String pass){
     if(pass.length < 6){
       erroSenha = "Senha precisa ser maior que 5!";
+      return null;
     }
     erroSenha = '';
       return null;
     
   }
 
+  @action
   String? validarNome(String nome){
-    if(nome.isNotEmpty){
+    if(nome.isEmpty){
+      erroNome = '';
       return null;
-    }else{
-      return "Informe um nome";
     }
+    erroNome = '';
+    return null;
+    
   }
 
   _isAuthenticated(){
@@ -98,9 +123,8 @@ abstract class _AuthControllerBase with Store {
       userIsAuthenticate = true;
       Modular.to.navigate('/initial');
       loginIsLoading = false;
-    } catch (e) {
+    } on AuthException catch (e) {
       loginIsLoading = false;
-      print("erro ao logar: $e");
     }
   }
   

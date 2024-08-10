@@ -9,7 +9,8 @@ class AppBarWidget extends StatelessWidget implements	 PreferredSizeWidget {
       this.focusNode,
       required this.textFieldOnChanged,
       required this.textFieldController,
-      this.searchIconAction});
+      this.searchIconAction,
+      this.hintText});
 
   final bool searchIsSelect;
   final Function()? backAction;
@@ -17,7 +18,7 @@ class AppBarWidget extends StatelessWidget implements	 PreferredSizeWidget {
   final Function(String) textFieldOnChanged;
   final TextEditingController textFieldController;
   final void Function()? searchIconAction;
-
+  final String? hintText;
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -38,8 +39,8 @@ class AppBarWidget extends StatelessWidget implements	 PreferredSizeWidget {
             onChanged: textFieldOnChanged,
             autofocus: true,
             controller: textFieldController,
-            decoration: const InputDecoration(
-                focusedBorder: OutlineInputBorder(
+            decoration: InputDecoration(
+                focusedBorder: const OutlineInputBorder(
                     borderSide: BorderSide(color: Colors.grey),
                     borderRadius: BorderRadius.all(Radius.circular(10))),
                 focusColor: Colors.grey,
@@ -49,7 +50,7 @@ class AppBarWidget extends StatelessWidget implements	 PreferredSizeWidget {
                 //         BorderRadius.all(Radius.circular(10))),
                 contentPadding: EdgeInsets.only(top: 10, left: 10),
                 hintStyle: TextStyle(fontSize: 15),
-                hintText: 'Busque um Livro'),
+                hintText: hintText),
           ),
         ))
       : SizedBox(
