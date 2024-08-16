@@ -50,6 +50,7 @@ class _HomePageState extends State<HomePage> {
                       Expanded(
                         child: ListView.builder(
                           shrinkWrap: true,
+                          reverse: true,
                           itemCount: postStore.posts.length,
                           itemBuilder: (context, index) {
                             return InkWell(

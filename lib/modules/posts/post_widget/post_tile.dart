@@ -46,7 +46,7 @@ class _PostTileState extends State<PostTile> {
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(widget.post.autorName!,
+                    Text(widget.post.autorName ?? "autor",
                         style: TextStyle(
                             fontSize: 20, fontWeight: FontWeight.bold)),
                     InkWell(
@@ -95,28 +95,28 @@ class _PostTileState extends State<PostTile> {
                 ],
               )),
             ),
-            if (widget.post.images != null)
-              Row(
-                children: [
-                  Expanded(
-                      child: SizedBox(
-                    height: 400,
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      children: List.generate(
-                        widget.post.images!.length,
-                        (index) => Padding(
-                          padding: const EdgeInsets.only(right: 10),
-                          child: Container(
-                            width: 300,
-                            decoration: BoxDecoration(color: Colors.grey),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ))
-                ],
-              ),
+            // if (widget.post.images != null)
+            //   Row(
+            //     children: [
+            //       Expanded(
+            //           child: SizedBox(
+            //         height: 400,
+            //         child: ListView(
+            //           scrollDirection: Axis.horizontal,
+            //           children: List.generate(
+            //             widget.post.images!.length,
+            //             (index) => Padding(
+            //               padding: const EdgeInsets.only(right: 10),
+            //               child: Container(
+            //                 width: 300,
+            //                 decoration: BoxDecoration(color: Colors.grey),
+            //               ),
+            //             ),
+            //           ),
+            //         ),
+            //       ))
+            //     ],
+            //   ),
             Observer(builder: (_) {
               return Row(
                 children: [

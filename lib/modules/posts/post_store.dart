@@ -55,8 +55,9 @@ abstract class _PostStoreBase with Store {
     situacaoPostUpload = Status.CARREGANDO;
     final postModel = PostModel(
         content: content.text, autorId: authRepository.user!.id, bookId: null);
-    await repository.addPost(postModel);
     posts.add(postModel);
+    print(posts.toString());
+    await repository.addPost(postModel);
     situacaoPostUpload = Status.SUCESSO;
   }
 
