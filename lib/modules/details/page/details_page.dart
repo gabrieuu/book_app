@@ -138,7 +138,7 @@ class _DetailsPageState extends State<DetailsPage> {
                       ),
                     ),
                     Text(
-                      widget.book.volumeInfo.description,
+                      widget.book.volumeInfo.description!,
                       style: TextStyle(fontSize: 12, color: Colors.grey),
                       textAlign: TextAlign.justify,
                     )

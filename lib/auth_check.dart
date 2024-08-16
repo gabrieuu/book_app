@@ -5,18 +5,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-class AuthCheck extends StatelessWidget {
-  AuthCheck({super.key});
+// class AuthCheck extends StatelessWidget {
+//   AuthCheck({super.key});
 
-  AuthController authController = Modular.get();
+//   AuthController authController = Modular.get();
 
-  @override
-  Widget build(BuildContext context) {
-    return Observer(builder: (_) {
-       return (authController.userIsAuthenticate) 
-      ? const NavigatorBottom() 
-      : const LoginPage();
-    }
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Observer(builder: (_) {
+//        return (authController.userIsAuthenticate) 
+//       ? const NavigatorBottom() 
+//       : const LoginPage();
+//     }
+//     );
+//   }
+// }

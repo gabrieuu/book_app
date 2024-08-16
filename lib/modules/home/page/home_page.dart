@@ -1,6 +1,7 @@
 import 'package:book_app/core/status.dart';
 import 'package:book_app/modules/auth/controller/user_controller.dart';
 import 'package:book_app/modules/comment_post/controller/comment_controller.dart';
+import 'package:book_app/modules/home/widgets/appbar.dart';
 import 'package:book_app/modules/home/widgets/menu_drawer.dart';
 import 'package:book_app/modules/posts/post_store.dart';
 import 'package:book_app/modules/posts/post_widget/post_shimmer_widget.dart';
@@ -28,14 +29,23 @@ class _HomePageState extends State<HomePage> {
     return RefreshIndicator(
       onRefresh: () => postStore.init(),
       child: Scaffold(
-          backgroundColor: Colors.grey[200],
-          appBar: AppBar(
-            title: const Text('Home Page'),
-            surfaceTintColor: Colors.white,
-          ),
-          drawer: Drawer(
-            child: MenuDrawer(),
-          ),
+          appBar: AppBarWidget(
+            searchIsSelect: postStore.searchIsSelect, 
+            hintText: 'Encontre uma pessoa',
+            searchIconAction: (){
+              postStore.searchIsSelect = !postStore.searchIsSelect;
+              setState(() {
+                
+              });
+            },
+            backAction: () => {
+              postStore.searchIsSelect = !postStore.searchIsSelect,
+              setState(() {
+                
+              })
+            },
+            textFieldOnChanged: (value){}, 
+            textFieldController: postStore.searchController,),
           body: Observer(
             builder: (_) {
               switch (postStore.situacaoPost) {
@@ -60,7 +70,8 @@ class _HomePageState extends State<HomePage> {
                               child: PostTile(post: postStore.posts[index]));
                           },
                         ),
-                      )
+                      ),
+                      
                     ],
                   );
                 default:

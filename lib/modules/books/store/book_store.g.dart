@@ -13,13 +13,13 @@ mixin _$BookStore on _BookStoreBase, Store {
       Atom(name: '_BookStoreBase.listBooks', context: context);
 
   @override
-  List<Book> get listBooks {
+  ObservableList<Book> get listBooks {
     _$listBooksAtom.reportRead();
     return super.listBooks;
   }
 
   @override
-  set listBooks(List<Book> value) {
+  set listBooks(ObservableList<Book> value) {
     _$listBooksAtom.reportWrite(value, super.listBooks, () {
       super.listBooks = value;
     });
@@ -29,13 +29,13 @@ mixin _$BookStore on _BookStoreBase, Store {
       Atom(name: '_BookStoreBase.listBooksSearches', context: context);
 
   @override
-  List<Book> get listBooksSearches {
+  ObservableList<Book> get listBooksSearches {
     _$listBooksSearchesAtom.reportRead();
     return super.listBooksSearches;
   }
 
   @override
-  set listBooksSearches(List<Book> value) {
+  set listBooksSearches(ObservableList<Book> value) {
     _$listBooksSearchesAtom.reportWrite(value, super.listBooksSearches, () {
       super.listBooksSearches = value;
     });
@@ -90,6 +90,56 @@ mixin _$BookStore on _BookStoreBase, Store {
     });
   }
 
+  late final _$livrosRecomendadosStatusAtom =
+      Atom(name: '_BookStoreBase.livrosRecomendadosStatus', context: context);
+
+  @override
+  Status get livrosRecomendadosStatus {
+    _$livrosRecomendadosStatusAtom.reportRead();
+    return super.livrosRecomendadosStatus;
+  }
+
+  @override
+  set livrosRecomendadosStatus(Status value) {
+    _$livrosRecomendadosStatusAtom
+        .reportWrite(value, super.livrosRecomendadosStatus, () {
+      super.livrosRecomendadosStatus = value;
+    });
+  }
+
+  late final _$indexCategoriaSelecionadaAtom =
+      Atom(name: '_BookStoreBase.indexCategoriaSelecionada', context: context);
+
+  @override
+  int get indexCategoriaSelecionada {
+    _$indexCategoriaSelecionadaAtom.reportRead();
+    return super.indexCategoriaSelecionada;
+  }
+
+  @override
+  set indexCategoriaSelecionada(int value) {
+    _$indexCategoriaSelecionadaAtom
+        .reportWrite(value, super.indexCategoriaSelecionada, () {
+      super.indexCategoriaSelecionada = value;
+    });
+  }
+
+  late final _$recomendadosAtom =
+      Atom(name: '_BookStoreBase.recomendados', context: context);
+
+  @override
+  ObservableList<Book> get recomendados {
+    _$recomendadosAtom.reportRead();
+    return super.recomendados;
+  }
+
+  @override
+  set recomendados(ObservableList<Book> value) {
+    _$recomendadosAtom.reportWrite(value, super.recomendados, () {
+      super.recomendados = value;
+    });
+  }
+
   late final _$listCategoriasAtom =
       Atom(name: '_BookStoreBase.listCategorias', context: context);
 
@@ -106,6 +156,22 @@ mixin _$BookStore on _BookStoreBase, Store {
     });
   }
 
+  late final _$searchBookAtom =
+      Atom(name: '_BookStoreBase.searchBook', context: context);
+
+  @override
+  TextEditingController get searchBook {
+    _$searchBookAtom.reportRead();
+    return super.searchBook;
+  }
+
+  @override
+  set searchBook(TextEditingController value) {
+    _$searchBookAtom.reportWrite(value, super.searchBook, () {
+      super.searchBook = value;
+    });
+  }
+
   late final _$searchBooksAsyncAction =
       AsyncAction('_BookStoreBase.searchBooks', context: context);
 
@@ -116,6 +182,17 @@ mixin _$BookStore on _BookStoreBase, Store {
 
   late final _$_BookStoreBaseActionController =
       ActionController(name: '_BookStoreBase', context: context);
+
+  @override
+  void setIndexCategoriaSelecionada(int value) {
+    final _$actionInfo = _$_BookStoreBaseActionController.startAction(
+        name: '_BookStoreBase.setIndexCategoriaSelecionada');
+    try {
+      return super.setIndexCategoriaSelecionada(value);
+    } finally {
+      _$_BookStoreBaseActionController.endAction(_$actionInfo);
+    }
+  }
 
   @override
   dynamic tornaLivroFavorito(Book book) {
@@ -136,7 +213,11 @@ listBooksSearches: ${listBooksSearches},
 indexActionChipSelect: ${indexActionChipSelect},
 searchIsSelect: ${searchIsSelect},
 livrosCarregados: ${livrosCarregados},
-listCategorias: ${listCategorias}
+livrosRecomendadosStatus: ${livrosRecomendadosStatus},
+indexCategoriaSelecionada: ${indexCategoriaSelecionada},
+recomendados: ${recomendados},
+listCategorias: ${listCategorias},
+searchBook: ${searchBook}
     ''';
   }
 }

@@ -34,10 +34,10 @@ abstract class _FavoritasStoreBase with Store {
     await favoritesRepository.addFavorite(book.id);
   }
 
-  @action
+
   Future<void> getBooksFavorites() async{ 
     List<String> lists = await favoritesRepository.booksFavorites();
-    listBooksFavorites = ObservableList.of(await bookRepository.fetchFavoritesBooks(lists));
+    listBooksFavorites = ObservableList.of(await bookRepository.getBooksByListId(lists));
   }
 
   @action

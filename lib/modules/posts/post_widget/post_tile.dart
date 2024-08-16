@@ -95,6 +95,7 @@ class _PostTileState extends State<PostTile> {
                 ],
               )),
             ),
+<<<<<<< HEAD
             // if (widget.post.images != null)
             //   Row(
             //     children: [
@@ -121,32 +122,63 @@ class _PostTileState extends State<PostTile> {
               return Row(
                 children: [
                   IconButton(
-                    onPressed: () {
-                      postStore.curtirPost(widget.post);
-                      widget.post.isCurtido = !widget.post.isCurtido;
-                      widget.post.quantidadeCurtidas = widget.post.isCurtido
-                          ? widget.post.quantidadeCurtidas! + 1
-                          : widget.post.quantidadeCurtidas! - 1;
-                      setState(() {});
-                    },
-                    icon: Icon(widget.post.isCurtido
-                        ? Icons.favorite
-                        : Icons.favorite_border_outlined),
-                    color: widget.post.isCurtido ? Colors.red : null,
-                  ),
-                  Text('${widget.post.quantidadeCurtidas ?? 0}'),
-                  IconButton(
-                      onPressed: () {
-                        Modular.to
-                            .pushNamed('/comment', arguments: widget.post);
-                      },
-                      icon: const Icon(Icons.comment_outlined)),
-                  Text('${widget.post.quantidadeComentarios ?? 0}'),
-                  // IconButton(onPressed: (){}, icon: Icon(Icons.share_outlined)),
-                  // Text('null'),
+=======
+            if (widget.post.images != null)
+              Row(
+                children: [
+                  Expanded(
+                      child: SizedBox(
+                    height: 400,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: List.generate(
+                        widget.post.images!.length,
+                        (index) => Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: Container(
+                            width: 300,
+                            decoration: BoxDecoration(color: Colors.grey),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ))
                 ],
-              );
-            })
+              ),
+            Row(
+              children: [
+                IconButton(
+                  onPressed: () {
+                    postStore.curtirPost(widget.post);
+                    widget.post.isCurtido = !widget.post.isCurtido;
+                    widget.post.quantidadeCurtidas = widget.post.isCurtido
+                        ? widget.post.quantidadeCurtidas! + 1
+                        : widget.post.quantidadeCurtidas! - 1;
+                    setState(() {});
+                  },
+                  icon: Icon(widget.post.isCurtido
+                      ? Icons.favorite
+                      : Icons.favorite_border_outlined),
+                  color: widget.post.isCurtido ? Colors.red : null,
+                ),
+                Text('${widget.post.quantidadeCurtidas ?? 0}'),
+                IconButton(
+>>>>>>> cd1aa647cc0f86823ae55a9b3214c5ed77754725
+                    onPressed: () {
+                      Modular.to
+                          .pushNamed('/comment', arguments: widget.post);
+                    },
+                    icon: const Icon(Icons.comment_outlined)),
+                Text('${widget.post.quantidadeComentarios ?? 0}'),
+                // IconButton(onPressed: (){}, icon: Icon(Icons.share_outlined)),
+                // Text('null'),
+              ],
+            ),
+            Divider(
+              color: Colors.grey, // Cor da linha
+              height: 0, // Espaço vertical ao redor da linha
+              thickness: 1, // Espessura da linha
+            ),
           ],
         ),
       ),

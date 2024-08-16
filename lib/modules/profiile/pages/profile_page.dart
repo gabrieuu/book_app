@@ -1,8 +1,10 @@
 import 'package:book_app/core/status.dart';
 import 'package:book_app/modules/home/controller/bottom_navigator_controller.dart';
+import 'package:book_app/modules/home/widgets/menu_drawer.dart';
 import 'package:book_app/modules/posts/post_widget/post_shimmer_widget.dart';
 import 'package:book_app/modules/posts/post_widget/post_tile.dart';
 import 'package:book_app/modules/profiile/controller/profile_controller.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -20,31 +22,22 @@ class ProfilePage extends StatelessWidget {
     return DefaultTabController(
       length: 2,
       child: Scaffold(
+        backgroundColor: Colors.white,
+        key: controller.globalkey,           
+        endDrawer: Drawer(
+          child: MenuDrawer(),
+        ),
         body: NestedScrollView(
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
               SliverAppBar(
-                leading: IconButton(
-                  onPressed: () {
-                    navigator.currentIndex = 0;
-                  },
-                  icon: Icon(Icons.arrow_back_ios),
-                ),
+                automaticallyImplyLeading: false,
                 expandedHeight: 200.0,
                 pinned: true,
-                
-                surfaceTintColor: Colors.blue,
                 flexibleSpace: FlexibleSpaceBar(
                   collapseMode: CollapseMode.pin,
                   background: Stack(
                     children: [
-                      Container(
-                        height: 150,
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          color: Colors.blue[200],                    
-                        ),
-                      ),
                       Align(
                         alignment: Alignment.bottomCenter,
                         child: CircleAvatar(
@@ -137,7 +130,7 @@ class ProfilePage extends StatelessWidget {
                           Column(
                             children: [
                               Text(
-                                '1000',
+                                '0',
                                 style: TextStyle(
                                     fontSize: 20,
                                     color: Colors.black,
@@ -156,7 +149,7 @@ class ProfilePage extends StatelessWidget {
                           Column(
                             children: [
                               Text(
-                                '100',
+                                '0',
                                 style: TextStyle(
                                     fontSize: 20,
                                     color: Colors.black,

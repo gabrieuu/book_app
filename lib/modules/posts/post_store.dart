@@ -20,6 +20,12 @@ abstract class _PostStoreBase with Store {
   @observable
   Status situacaoPostUpload = Status.NAO_CARREGADO;
 
+  @observable
+  bool searchIsSelect = false;
+  
+  @observable
+  TextEditingController searchController = TextEditingController();
+
   final content = TextEditingController();
 
   _PostStoreBase(this.repository, this.authRepository) {

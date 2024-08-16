@@ -21,6 +21,8 @@ abstract class _ProfileControllerBase with Store {
   @observable
   ObservableList<PostModel> myPosts = ObservableList.of([]);
 
+  GlobalKey<ScaffoldState> globalkey = GlobalKey<ScaffoldState>();
+
   @observable
   Status situacaoPost = Status.NAO_CARREGADO;
 

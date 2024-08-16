@@ -10,7 +10,7 @@ class AuthModule extends Module{
   @override
   void exportedBinds(Injector i) {
     i.addInstance<AuthRepository>(AuthRepository());
-    i.addLazySingleton<AuthController>(() => AuthController(i.get()));
+    i.addInstance<AuthController>(AuthController(i.get()));
     i.addInstance<UserRepository>(UserRepository(i.get()));
     i.addLazySingleton<UserController>(() => UserController(i.get()));
   }
