@@ -1,4 +1,5 @@
 import 'package:book_app/core/status.dart';
+import 'package:book_app/model/book_model.dart';
 import 'package:book_app/model/post_model.dart';
 import 'package:book_app/model/user_model.dart';
 import 'package:book_app/modules/auth/controller/user_controller.dart';
@@ -15,11 +16,16 @@ abstract class _ProfileControllerBase with Store {
   @observable
   UserController userController;
   
+  FavoritasStore favoritasStore;
+
   @observable
   PostStore postStore;
 
   @observable
   ObservableList<PostModel> myPosts = ObservableList.of([]);
+
+  @observable
+  ObservableList<Book> myFavoritas = ObservableList.of([]);
 
   GlobalKey<ScaffoldState> globalkey = GlobalKey<ScaffoldState>();
 
@@ -27,28 +33,26 @@ abstract class _ProfileControllerBase with Store {
   Status situacaoPost = Status.NAO_CARREGADO;
 
   @observable
-  FavoritasStore favoritasStore;
+  Status situacaoFavoritos = Status.NAO_CARREGADO;
 
   _ProfileControllerBase({
     required this.userController,
-    required this.favoritasStore,
     required this.postStore,
-  }){
-    getPostsByUserId();
-  }
+    required this.favoritasStore
+  });
 
   @action
-  void setUser(UserModel user){
-    getPostsByUserId();
-  }
-
-  @action
-  getPostsByUserId() async {
+  getPostsByUserId({String? userId}) async {
     situacaoPost = Status.CARREGANDO;
-    myPosts = ObservableList.of(await postStore.getPostsByUser(userController.user.id!));
+    myPosts = ObservableList.of(await postStore.getPostsByUser(userId ?? userController.user.id!));
     situacaoPost = Status.SUCESSO;
   }
-
+  @action
+  getFavoritosByUserId({String? userId}) async {
+    situacaoFavoritos = Status.CARREGANDO;
+    myFavoritas = ObservableList.of(await favoritasStore.getBooksFavorites(userId));
+    situacaoFavoritos = Status.SUCESSO;
+  }
 
 
 }

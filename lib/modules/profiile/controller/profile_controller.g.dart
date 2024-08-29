@@ -57,6 +57,22 @@ mixin _$ProfileController on _ProfileControllerBase, Store {
     });
   }
 
+  late final _$myFavoritasAtom =
+      Atom(name: '_ProfileControllerBase.myFavoritas', context: context);
+
+  @override
+  ObservableList<Book> get myFavoritas {
+    _$myFavoritasAtom.reportRead();
+    return super.myFavoritas;
+  }
+
+  @override
+  set myFavoritas(ObservableList<Book> value) {
+    _$myFavoritasAtom.reportWrite(value, super.myFavoritas, () {
+      super.myFavoritas = value;
+    });
+  }
+
   late final _$situacaoPostAtom =
       Atom(name: '_ProfileControllerBase.situacaoPost', context: context);
 
@@ -73,19 +89,19 @@ mixin _$ProfileController on _ProfileControllerBase, Store {
     });
   }
 
-  late final _$favoritasStoreAtom =
-      Atom(name: '_ProfileControllerBase.favoritasStore', context: context);
+  late final _$situacaoFavoritosAtom =
+      Atom(name: '_ProfileControllerBase.situacaoFavoritos', context: context);
 
   @override
-  FavoritasStore get favoritasStore {
-    _$favoritasStoreAtom.reportRead();
-    return super.favoritasStore;
+  Status get situacaoFavoritos {
+    _$situacaoFavoritosAtom.reportRead();
+    return super.situacaoFavoritos;
   }
 
   @override
-  set favoritasStore(FavoritasStore value) {
-    _$favoritasStoreAtom.reportWrite(value, super.favoritasStore, () {
-      super.favoritasStore = value;
+  set situacaoFavoritos(Status value) {
+    _$situacaoFavoritosAtom.reportWrite(value, super.situacaoFavoritos, () {
+      super.situacaoFavoritos = value;
     });
   }
 
@@ -93,22 +109,19 @@ mixin _$ProfileController on _ProfileControllerBase, Store {
       AsyncAction('_ProfileControllerBase.getPostsByUserId', context: context);
 
   @override
-  Future getPostsByUserId() {
-    return _$getPostsByUserIdAsyncAction.run(() => super.getPostsByUserId());
+  Future getPostsByUserId({String? userId}) {
+    return _$getPostsByUserIdAsyncAction
+        .run(() => super.getPostsByUserId(userId: userId));
   }
 
-  late final _$_ProfileControllerBaseActionController =
-      ActionController(name: '_ProfileControllerBase', context: context);
+  late final _$getFavoritosByUserIdAsyncAction = AsyncAction(
+      '_ProfileControllerBase.getFavoritosByUserId',
+      context: context);
 
   @override
-  void setUser(UserModel user) {
-    final _$actionInfo = _$_ProfileControllerBaseActionController.startAction(
-        name: '_ProfileControllerBase.setUser');
-    try {
-      return super.setUser(user);
-    } finally {
-      _$_ProfileControllerBaseActionController.endAction(_$actionInfo);
-    }
+  Future getFavoritosByUserId({String? userId}) {
+    return _$getFavoritosByUserIdAsyncAction
+        .run(() => super.getFavoritosByUserId(userId: userId));
   }
 
   @override
@@ -117,8 +130,9 @@ mixin _$ProfileController on _ProfileControllerBase, Store {
 userController: ${userController},
 postStore: ${postStore},
 myPosts: ${myPosts},
+myFavoritas: ${myFavoritas},
 situacaoPost: ${situacaoPost},
-favoritasStore: ${favoritasStore}
+situacaoFavoritos: ${situacaoFavoritos}
     ''';
   }
 }

@@ -14,13 +14,6 @@ class _PersonInfoDrawerState extends State<PersonInfoDrawer> {
  UserController controller = Modular.get();
 
   @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    controller.init();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return UserAccountsDrawerHeader(
        decoration: const BoxDecoration(

@@ -5,6 +5,11 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 class DetailsModule extends Module{
 
+  @override
+  // TODO: implement imports
+  List<Module> get imports => [
+    FavoritasModule()
+  ];
 
   @override
   void binds(Injector i) {

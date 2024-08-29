@@ -1,7 +1,9 @@
 import 'package:book_app/core/status.dart';
 import 'package:book_app/model/comment_model.dart';
+import 'package:book_app/model/post_model.dart';
 import 'package:book_app/modules/auth/repository/auth_repository.dart';
 import 'package:book_app/modules/comment_post/repository/comment_repository.dart';
+import 'package:book_app/modules/posts/post_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
@@ -12,17 +14,23 @@ class CommentController = _CommentControllerBase with _$CommentController;
 abstract class _CommentControllerBase with Store {
   
   CommentRepository repository;
-  AuthRepository authRepository = Modular.get();
-  
+  AuthRepository authRepository;
+
+  @observable
+  PostStore postStore;
+
   @observable
   ObservableList<CommentModel> comments = ObservableList();
+
+  @observable
+  PostModel? postSelecionado;
 
   @observable
   Status commentsLoading = Status.NAO_CARREGADO;
 
   final commentInsert = TextEditingController();
 
-  _CommentControllerBase({required this.repository});
+  _CommentControllerBase({required this.repository, required this.authRepository, required this.postStore});
 
   @action
   getComments(int idPost) async{
@@ -32,12 +40,18 @@ abstract class _CommentControllerBase with Store {
     comments.addAll(commentsResponse);
     commentsLoading = Status.SUCESSO;
   }
+
   @action
-  addComments(int idPost, String userId) async{
-    final comment = CommentModel(content: commentInsert.text, idPost: idPost, autorId: userId);
+  addComments(String userId) async{
+    final comment = CommentModel(content: commentInsert.text, idPost: postSelecionado!.id!, autorId: userId);
     commentInsert.clear();
     await repository.addComment(comment);
-    getComments(idPost);
+    int index = postStore.posts.indexWhere((element) => element.id == postSelecionado!.id);
+    if(index != -1){
+      postSelecionado!.quantidadeComentarios++;
+      postStore.posts[index] = postSelecionado!;
+    }
+    getComments(postSelecionado!.id!);
   }
 
   Future<int> quantidadeDeComentarios(int idPost) async{

@@ -44,7 +44,7 @@ class _DetailsPageState extends State<DetailsPage> {
                 if(isFavorita){
                   favoritasStore.removeFavorita(widget.book);
                 }else{
-                  favoritasStore.addFavorite(widget.book);
+                  favoritasStore.addFavorite(book: widget.book);
                 }
                 setState(() {
                 isFavorita = favoritasStore.isFavorita(widget.book);

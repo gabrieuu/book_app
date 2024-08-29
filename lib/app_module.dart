@@ -8,7 +8,9 @@ import 'package:book_app/modules/home/controller/bottom_navigator_controller.dar
 import 'package:book_app/modules/home/home_module.dart';
 import 'package:book_app/modules/home/page/navigator_bottom.dart';
 import 'package:book_app/modules/posts/post_module.dart';
+import 'package:book_app/modules/primeiro_acesso/primeiro_acesso_module.dart';
 import 'package:book_app/modules/profiile/profile_module.dart';
+import 'package:book_app/splash_screen.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class AppModule extends Module{
@@ -16,8 +18,6 @@ class AppModule extends Module{
   @override
   List<Module> get imports => [
     AuthModule(),
-    BookModule(),
-    FavoritasModule()
   ];
 
   @override
@@ -27,15 +27,10 @@ class AppModule extends Module{
 
   @override
   void routes(RouteManager r) {
-    r.module('/', module: AuthModule());
-    r.child('/initial', child: (_) => NavigatorBottom(), children: [
-      ModuleRoute('/home', module: HomeModule(), transition: TransitionType.leftToRight),
-      ModuleRoute('/book', module: BookModule(), transition: TransitionType.rightToLeft),
-      ModuleRoute('/profile', module: ProfileModule(), transition: TransitionType.rightToLeft),
-    ]);
-    r.module('/post', module: PostModule());
-    r.module('/comment', module: CommentModule());
-    r.module('/details', module: DetailsModule());
+    r.child('/', child: (_) => SplashScreen());
+    r.module('/auth', module: AuthModule());
+    r.module('/primeiro-acesso', module: PrimeiroAcessoModule());
+    r.module('/initial', module: HomeModule());
    
   }
 }

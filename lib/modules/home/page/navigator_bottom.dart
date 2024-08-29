@@ -29,7 +29,7 @@ class _NavigatorBottomState extends State<NavigatorBottom> {
       body: const RouterOutlet(),
       floatingActionButton: FloatingActionButton(
           onPressed: () {
-            Modular.to.pushNamed(PostPage.route);
+            Modular.to.pushNamed('/initial${PostPage.route}/');
           },
           //floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
           child: Icon(Icons.post_add, color: Colors.white),

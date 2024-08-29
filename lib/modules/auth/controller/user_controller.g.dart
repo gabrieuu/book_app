@@ -25,26 +25,59 @@ mixin _$UserController on _UserControllerBase, Store {
     });
   }
 
-  late final _$initAsyncAction =
-      AsyncAction('_UserControllerBase.init', context: context);
+  late final _$usersSearchedAtom =
+      Atom(name: '_UserControllerBase.usersSearched', context: context);
 
   @override
-  Future init() {
-    return _$initAsyncAction.run(() => super.init());
+  ObservableList<UserModel> get usersSearched {
+    _$usersSearchedAtom.reportRead();
+    return super.usersSearched;
   }
 
-  late final _$getUsersAsyncAction =
-      AsyncAction('_UserControllerBase.getUsers', context: context);
+  @override
+  set usersSearched(ObservableList<UserModel> value) {
+    _$usersSearchedAtom.reportWrite(value, super.usersSearched, () {
+      super.usersSearched = value;
+    });
+  }
+
+  late final _$usersSearchedsAtom =
+      Atom(name: '_UserControllerBase.usersSearcheds', context: context);
 
   @override
-  Future getUsers() {
-    return _$getUsersAsyncAction.run(() => super.getUsers());
+  Status get usersSearcheds {
+    _$usersSearchedsAtom.reportRead();
+    return super.usersSearcheds;
+  }
+
+  @override
+  set usersSearcheds(Status value) {
+    _$usersSearchedsAtom.reportWrite(value, super.usersSearcheds, () {
+      super.usersSearcheds = value;
+    });
+  }
+
+  late final _$getUserAsyncAction =
+      AsyncAction('_UserControllerBase.getUser', context: context);
+
+  @override
+  Future<UserModel?> getUser({String? userId}) {
+    return _$getUserAsyncAction.run(() => super.getUser(userId: userId));
+  }
+
+  late final _$getAllUsersAsyncAction =
+      AsyncAction('_UserControllerBase.getAllUsers', context: context);
+
+  @override
+  Future getAllUsers(String name) {
+    return _$getAllUsersAsyncAction.run(() => super.getAllUsers(name));
   }
 
   @override
   String toString() {
     return '''
-
+usersSearched: ${usersSearched},
+usersSearcheds: ${usersSearcheds}
     ''';
   }
 }

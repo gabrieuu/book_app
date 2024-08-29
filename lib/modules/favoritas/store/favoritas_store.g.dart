@@ -45,8 +45,9 @@ mixin _$FavoritasStore on _FavoritasStoreBase, Store {
       AsyncAction('_FavoritasStoreBase.addFavorite', context: context);
 
   @override
-  Future<void> addFavorite(Book book) {
-    return _$addFavoriteAsyncAction.run(() => super.addFavorite(book));
+  Future<void> addFavorite({required Book book, String? idUser}) {
+    return _$addFavoriteAsyncAction
+        .run(() => super.addFavorite(book: book, idUser: idUser));
   }
 
   late final _$removeFavoritaAsyncAction =

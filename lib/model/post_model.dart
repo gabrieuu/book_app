@@ -7,13 +7,13 @@ class PostModel {
   List<Images>? images;
   String autorId;
   String? autorName;
-  int? quantidadeCurtidas;
-  int? quantidadeComentarios;
+  int quantidadeCurtidas;
+  int quantidadeComentarios;
   bool isCurtido;
 
 
   PostModel(
-      {required this.content, this.autorName, this.bookId, this.id, required this.autorId, this.images, this.quantidadeCurtidas, this.quantidadeComentarios, this.isCurtido = false});
+      {required this.content, this.autorName, this.bookId, this.id, required this.autorId, this.images, this.quantidadeCurtidas = 0, this.quantidadeComentarios = 0, this.isCurtido = false});
 
   static PostModel fromJson(Map<dynamic, dynamic> map) {
     final post = PostModel(

@@ -26,8 +26,8 @@ class _CommentPageState extends State<CommentPage> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
+    controller.postSelecionado = widget.post;
     controller.getComments(widget.post.id!);
   }
 
@@ -37,7 +37,9 @@ class _CommentPageState extends State<CommentPage> {
       body: SafeArea(
         child: Column(
           children: [
-            PostTile(post: widget.post),
+            Observer(builder: (_) {
+              return PostTile(post: controller.postSelecionado!);
+            }),
             Expanded(
               child: Observer(
                 builder: (_) {
@@ -54,8 +56,7 @@ class _CommentPageState extends State<CommentPage> {
                           itemCount: controller.comments.length,
                           itemBuilder: (context, index) {
                             return CommentTile(
-                                  commentModel: controller.comments[index]);
-                            
+                                commentModel: controller.comments[index]);
                           },
                         );
                       }
@@ -77,9 +78,9 @@ class _CommentPageState extends State<CommentPage> {
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(20)),
                       suffixIcon: IconButton(
-                        onPressed: () {
-                          controller.addComments(widget.post.id!,
-                              controller.authRepository.user!.id);
+                        onPressed: () async {
+                          await controller
+                              .addComments(controller.authRepository.user!.id);
                         },
                         icon: Icon(Icons.send),
                       )),

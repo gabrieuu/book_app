@@ -31,28 +31,27 @@ class AppBarWidget extends StatelessWidget implements	 PreferredSizeWidget {
     forceMaterialTransparency: true,
     automaticallyImplyLeading: false,
     title: (searchIsSelect)
-      ? Expanded(
-          child: SizedBox(
-          height: 50,
-          child: TextField(
-            focusNode: focusNode,
-            onChanged: textFieldOnChanged,
-            autofocus: true,
-            controller: textFieldController,
-            decoration: InputDecoration(
-                focusedBorder: const OutlineInputBorder(
-                    borderSide: BorderSide(color: Colors.grey),
-                    borderRadius: BorderRadius.all(Radius.circular(10))),
-                focusColor: Colors.grey,
-                // border: OutlineInputBorder(
-                //     borderSide: Border;})Side(color: Colors.grey),
-                //     borderRadius:
-                //         BorderRadius.all(Radius.circular(10))),
-                contentPadding: EdgeInsets.only(top: 10, left: 10),
-                hintStyle: TextStyle(fontSize: 15),
-                hintText: hintText),
-          ),
-        ))
+      ?  SizedBox(
+      height: 50,
+      child: TextField(
+        focusNode: focusNode,
+        onChanged: textFieldOnChanged,
+        autofocus: true,
+        controller: textFieldController,
+        decoration: InputDecoration(
+            focusedBorder: const OutlineInputBorder(
+                borderSide: BorderSide(color: Colors.grey),
+                borderRadius: BorderRadius.all(Radius.circular(10))),
+            focusColor: Colors.grey,
+            // border: OutlineInputBorder(
+            //     borderSide: Border;})Side(color: Colors.grey),
+            //     borderRadius:
+            //         BorderRadius.all(Radius.circular(10))),
+            contentPadding: EdgeInsets.only(top: 10, left: 10),
+            hintStyle: TextStyle(fontSize: 15),
+            hintText: hintText),
+      ),
+              )
       : SizedBox(
           width: 100,
           child: Image.asset('assets/images/logo_book.png'),

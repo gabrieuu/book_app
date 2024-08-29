@@ -35,12 +35,12 @@ class BookRepository{
     List<Book> listBooks = [];
     var futures = listIdBooks.map((e) => client.get("https://www.googleapis.com/books/v1/volumes/$e"));
     List<Map<String,dynamic>> responses = List<Map<String,dynamic>>.from(await Future.wait(futures));
-    
-    responses.forEach((response) {
-        Book book = Book.fromMap(response);
+
+    for (var element in responses) {
+        Book book = Book.fromMap(element);
         book.isFavorite = true;
-        listBooks.add(book);    
-    });
+        listBooks.add(book); 
+    }
     return listBooks;
   }
 

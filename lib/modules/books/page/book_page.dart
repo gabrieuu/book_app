@@ -101,7 +101,7 @@ class _BookPageState extends State<BookPage> {
                     itemBuilder: (context, index) {
                       return InkWell(
                         onTap: () {
-                          Modular.to.pushNamed(DetailsPage.route,
+                          Modular.to.pushNamed('/initial/book${DetailsPage.route}/',
                               arguments: bookStore.listBooksSearches[index]);
                         },
                         child: BookWidget(

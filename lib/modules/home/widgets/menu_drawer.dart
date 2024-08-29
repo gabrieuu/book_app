@@ -25,7 +25,6 @@ class MenuDrawer extends StatelessWidget {
             ListTile(
               onTap: ()async{
                 await controller.signOut();
-                Modular.to.navigate('/');
               },
               title: Text("Sair do App"),
               leading: Icon(Icons.exit_to_app),

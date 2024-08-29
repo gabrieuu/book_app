@@ -7,41 +7,39 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 class FavoritaRepository {
   final database = BDBook();
   final supabase = Supabase.instance.client;
-  AuthRepository authRepository = Modular.get();
 
-  addFavorite(String idLivro) async {
+  addFavorite({required String idLivro, required String idUser}) async {
     //database.addFavorito();
     var response = await supabase.from("favoritos").insert({
-      "id_favoritos": "${authRepository.user!.id}$idLivro",
-      "id_user": authRepository.user!.id,
+      "id_favoritos": "$idUser$idLivro",
+      "id_user": idUser,
       "book_id": idLivro
     });
 
     print(response);
   }
 
-  Future<void> removeFavorita(String idLivro) async {
+  Future<void> removeFavorita({required String idLivro, required String idUser}) async {
     await supabase
         .from("favoritos")
         .delete()
-        .eq("id_favoritos", "${authRepository.user!.id}$idLivro");
+        .eq("id_favoritos", "$idUser$idLivro");
   }
 
-  Future<bool> isFavorita(Book book) async{
-    List response = await supabase.from("favoritos").select("book_id").eq('id_user', authRepository.user!.id).eq('id_favoritos', '${authRepository.user!.id}${book.id}');
+  Future<bool> isFavorita({required Book book, required String userId}) async{
+    List response = await supabase.from("favoritos").select("book_id").eq('id_user', userId).eq('id_favoritos', '$userId${book.id}');
     if(response.isNotEmpty) return true;
     return false;
   }
 
-  Future<List<String>> booksFavorites() async {
+  Future<List<String>> booksFavorites(String userId) async {
     List<String> listBook = [];
     try {
       final response = await supabase
           .from("favoritos")
           .select("book_id")
-          .eq("id_user", authRepository.user!.id);
+          .eq("id_user", userId);
       response.forEach((element) => listBook.add(element["book_id"]));
-      print(listBook);
     } catch (e) {
       print(e);
     }

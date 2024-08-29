@@ -22,7 +22,7 @@ abstract class _PostStoreBase with Store {
 
   @observable
   bool searchIsSelect = false;
-  
+
   @observable
   TextEditingController searchController = TextEditingController();
 
@@ -51,8 +51,8 @@ abstract class _PostStoreBase with Store {
     situacaoPost = Status.SUCESSO;
   }
 
-  Future<List<PostModel>> getPostsByUser(String userId) async{
-    var list = await repository.getPostByUser(authRepository.user!.id);
+  Future<List<PostModel>>  getPostsByUser(String userId) async{
+    var list = await repository.getPostByUser(userId);
     return list;
   }
 

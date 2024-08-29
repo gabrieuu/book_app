@@ -23,7 +23,7 @@ class AuthRepository {
     _supabaseUser = supabase.auth.currentUser;
   }
 
-  Future<void> createUser(String name, String email, String password) async {
+  Future<void> createUser({required String email, required String password}) async {
     String passEncript = md5.convert(password.codeUnits).toString();
     final AuthResponse res = await supabase.auth.signUp(
       email: email,
@@ -31,7 +31,6 @@ class AuthRepository {
     );
     await supabase.from(Table.usuarios.name).insert({
       'id_user': res.user!.id,
-      'name': name,
       'email': email,
       'password': passEncript,
     });

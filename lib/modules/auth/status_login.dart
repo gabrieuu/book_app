@@ -1,0 +1,6 @@
+enum StatusLogin{
+  NAO_CARREGADO,
+  CARREGANDO,
+  AUTENTICADO,
+  NAO_AUTENTICADO,
+}

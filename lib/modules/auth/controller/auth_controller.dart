@@ -1,8 +1,8 @@
+import 'package:book_app/modules/auth/controller/user_controller.dart';
 import 'package:book_app/modules/auth/repository/auth_repository.dart';
-import 'package:crypto/crypto.dart';
+import 'package:book_app/modules/auth/status_login.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:get/get.dart';
 import 'package:mobx/mobx.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 part 'auth_controller.g.dart';
@@ -15,6 +15,10 @@ abstract class _AuthControllerBase with Store {
   final password = TextEditingController();
   final formKey = GlobalKey<FormState>();
   
+  @observable
+  StatusLogin isLogadoStatus = StatusLogin.NAO_CARREGADO;
+
+  UserController userController;
   GlobalKey<ScaffoldMessengerState> scaffoldKeyLoginPage = GlobalKey<ScaffoldMessengerState>();
 
   @observable
@@ -32,8 +36,8 @@ abstract class _AuthControllerBase with Store {
   
   final AuthRepository _repository;
 
-  _AuthControllerBase(this._repository){
-    _isAuthenticated();
+  _AuthControllerBase(this._repository, this.userController){
+    isAuthenticated();
   }
 
   User? get user => _repository.user;
@@ -44,9 +48,6 @@ abstract class _AuthControllerBase with Store {
   var title = "Bem vindo ao BookApp!";
   @observable
   var botaoCadastrar = "Criar Conta";
-  
-  @observable
-  var userIsAuthenticate = false;
   
   @observable
   var titleButton = "Entrar";
@@ -106,11 +107,18 @@ abstract class _AuthControllerBase with Store {
     
   }
 
-  _isAuthenticated(){
+  isAuthenticated() async{
     if(_repository.user != null){
-      userIsAuthenticate = true;
+      await userController.getUser();
+        
+      if (userController.user.passouIntroducao) {
+        Modular.to.navigate('/initial/home');
+        return;
+      }
+
+      Modular.to.navigate('/primeiro-acesso/apresentacao');
     }else{
-      userIsAuthenticate = false;
+      Modular.to.navigate('/auth/');
     }
 
   }
@@ -120,8 +128,7 @@ abstract class _AuthControllerBase with Store {
     try {
       loginIsLoading = true;
       await _repository.signIn(email.text, password.text);
-      userIsAuthenticate = true;
-      Modular.to.navigate('/initial');
+      await isAuthenticated();
       loginIsLoading = false;
     } on AuthException catch (e) {
       loginIsLoading = false;
@@ -130,17 +137,25 @@ abstract class _AuthControllerBase with Store {
   
   @action
    createuser() async{
-    loginIsLoading = true;
-   await _repository.createUser(name.text, email.text, password.text);
-   Modular.to.navigate('/initial');
-   userIsAuthenticate = true;
-   loginIsLoading = false;
+    try {
+      loginIsLoading = true;
+      await _repository.createUser(email: email.text,password: password.text);
+      await isAuthenticated();
+      loginIsLoading = false;
+    } catch (e) {
+      print(e);
+      loginIsLoading = false;
+    }
   }
 
   @action
   signOut() async{
-    await _repository.signOut();
-    userIsAuthenticate = false;
+    try {
+      await _repository.signOut();
+      Modular.to.navigate('/auth');
+    } catch (e) {
+      print('erro ao deslogar');
+    }
   }
 
 }

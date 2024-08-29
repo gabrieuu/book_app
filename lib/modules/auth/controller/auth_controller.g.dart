@@ -9,6 +9,22 @@ part of 'auth_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$AuthController on _AuthControllerBase, Store {
+  late final _$isLogadoStatusAtom =
+      Atom(name: '_AuthControllerBase.isLogadoStatus', context: context);
+
+  @override
+  StatusLogin get isLogadoStatus {
+    _$isLogadoStatusAtom.reportRead();
+    return super.isLogadoStatus;
+  }
+
+  @override
+  set isLogadoStatus(StatusLogin value) {
+    _$isLogadoStatusAtom.reportWrite(value, super.isLogadoStatus, () {
+      super.isLogadoStatus = value;
+    });
+  }
+
   late final _$loginIsLoadingAtom =
       Atom(name: '_AuthControllerBase.loginIsLoading', context: context);
 
@@ -137,22 +153,6 @@ mixin _$AuthController on _AuthControllerBase, Store {
     });
   }
 
-  late final _$userIsAuthenticateAtom =
-      Atom(name: '_AuthControllerBase.userIsAuthenticate', context: context);
-
-  @override
-  bool get userIsAuthenticate {
-    _$userIsAuthenticateAtom.reportRead();
-    return super.userIsAuthenticate;
-  }
-
-  @override
-  set userIsAuthenticate(bool value) {
-    _$userIsAuthenticateAtom.reportWrite(value, super.userIsAuthenticate, () {
-      super.userIsAuthenticate = value;
-    });
-  }
-
   late final _$titleButtonAtom =
       Atom(name: '_AuthControllerBase.titleButton', context: context);
 
@@ -254,6 +254,7 @@ mixin _$AuthController on _AuthControllerBase, Store {
   @override
   String toString() {
     return '''
+isLogadoStatus: ${isLogadoStatus},
 loginIsLoading: ${loginIsLoading},
 erroNome: ${erroNome},
 erroEmail: ${erroEmail},
@@ -262,7 +263,6 @@ passwordVisibility: ${passwordVisibility},
 isLogin: ${isLogin},
 title: ${title},
 botaoCadastrar: ${botaoCadastrar},
-userIsAuthenticate: ${userIsAuthenticate},
 titleButton: ${titleButton}
     ''';
   }

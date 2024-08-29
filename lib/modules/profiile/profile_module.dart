@@ -10,11 +10,11 @@ class ProfileModule extends Module{
 
   @override
   void binds(Injector i) {
-    i.addLazySingleton(ProfileController.new);
+    i.add(ProfileController.new);
   }
 
   @override
   void routes(RouteManager r) {
-    r.child('/', child:(_) => ProfilePage());
+    r.child('/', child:(_) => ProfilePage(userId: r.args.data,));
   }
 }
