@@ -1,3 +1,4 @@
+import 'package:book_app/modules/auth/auth_module.dart';
 import 'package:book_app/modules/books/book_module.dart';
 import 'package:book_app/modules/comment_post/comment_module.dart';
 import 'package:book_app/modules/comment_post/controller/comment_controller.dart';
@@ -14,27 +15,21 @@ import 'package:book_app/modules/profiile/profile_module.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class HomeModule extends Module {
-
   @override
   // TODO: implement imports
-  List<Module> get imports => [
-    BookModule(),
-    ProfileModule(),
-    ];
-
-   @override
-  void binds(Injector i) {
-    i.addLazySingleton<PostRepository>(PostRepository.new);
-    i.addLazySingleton<PostStore>(PostStore.new);
-  }
+  List<Module> get imports =>
+      [AuthModule(), BookModule(), ProfileModule(), PostModule()];
 
   @override
   void routes(RouteManager r) {
     r.child('/', child: (_) => NavigatorBottom(), children: [
-      ChildRoute('/home', child:(_) => HomePage(), transition: TransitionType.fadeIn),
-      ModuleRoute('/book', module: BookModule(), transition: TransitionType.fadeIn),
-      ModuleRoute('/profile', module: ProfileModule(), transition: TransitionType.fadeIn),
-    ]);   
+      ChildRoute('/home',
+          child: (_) => HomePage(), transition: TransitionType.fadeIn),
+      ModuleRoute('/book',
+          module: BookModule(), transition: TransitionType.fadeIn),
+      ModuleRoute('/profile',
+          module: ProfileModule(), transition: TransitionType.fadeIn),
+    ]);
     r.module('/post', module: PostModule());
     r.module('/comment', module: CommentModule());
   }

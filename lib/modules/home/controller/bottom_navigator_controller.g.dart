@@ -33,6 +33,21 @@ mixin _$BottomNavigatorController on _BottomNavigatorControllerBase, Store {
     });
   }
 
+  late final _$_BottomNavigatorControllerBaseActionController =
+      ActionController(
+          name: '_BottomNavigatorControllerBase', context: context);
+
+  @override
+  void setCurrentIndex(int value) {
+    final _$actionInfo = _$_BottomNavigatorControllerBaseActionController
+        .startAction(name: '_BottomNavigatorControllerBase.setCurrentIndex');
+    try {
+      return super.setCurrentIndex(value);
+    } finally {
+      _$_BottomNavigatorControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
