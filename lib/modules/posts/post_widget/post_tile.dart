@@ -126,36 +126,34 @@ class _PostTileState extends State<PostTile> {
               //       ))
               //     ],
               //   ),
-              Observer(builder: (_) {
-                return Row(
-                  children: [
-                    IconButton(
+              Row(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      postStore.curtirPost(widget.post);
+                      widget.post.isCurtido = !widget.post.isCurtido;
+                      widget.post.quantidadeCurtidas = widget.post.isCurtido
+                          ? widget.post.quantidadeCurtidas + 1
+                          : widget.post.quantidadeCurtidas - 1;
+                      setState(() {});
+                    },
+                    icon: Icon(widget.post.isCurtido
+                        ? Icons.favorite
+                        : Icons.favorite_border_outlined),
+                    color: widget.post.isCurtido ? Colors.red : null,
+                  ),
+                  Text('${widget.post.quantidadeCurtidas}'),
+                  IconButton(
                       onPressed: () {
-                        postStore.curtirPost(widget.post);
-                        widget.post.isCurtido = !widget.post.isCurtido;
-                        widget.post.quantidadeCurtidas = widget.post.isCurtido
-                            ? widget.post.quantidadeCurtidas + 1
-                            : widget.post.quantidadeCurtidas - 1;
-                        setState(() {});
+                        Modular.to
+                            .pushNamed('/comment', arguments: widget.post);
                       },
-                      icon: Icon(widget.post.isCurtido
-                          ? Icons.favorite
-                          : Icons.favorite_border_outlined),
-                      color: widget.post.isCurtido ? Colors.red : null,
-                    ),
-                    Text('${widget.post.quantidadeCurtidas}'),
-                    IconButton(
-                        onPressed: () {
-                          Modular.to
-                              .pushNamed('/comment', arguments: widget.post);
-                        },
-                        icon: const Icon(Icons.comment_outlined)),
-                    Text('${widget.post.quantidadeComentarios}'),
-                    // IconButton(onPressed: (){}, icon: Icon(Icons.share_outlined)),
-                    // Text('null'),
-                  ],
-                );
-              })
+                      icon: const Icon(Icons.comment_outlined)),
+                  Text('${widget.post.quantidadeComentarios}'),
+                  // IconButton(onPressed: (){}, icon: Icon(Icons.share_outlined)),
+                  // Text('null'),
+                ],
+              )
             ],
           ),
         ),

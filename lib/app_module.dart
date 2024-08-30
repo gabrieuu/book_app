@@ -13,16 +13,16 @@ import 'package:book_app/modules/profiile/profile_module.dart';
 import 'package:book_app/splash_screen.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
-class AppModule extends Module{
-
+class AppModule extends Module {
   @override
   List<Module> get imports => [
-    AuthModule(),
-  ];
+        AuthModule(),
+      ];
 
   @override
   void binds(Injector i) {
-    i.addLazySingleton<BottomNavigatorController>(BottomNavigatorController.new);
+    i.addLazySingleton<BottomNavigatorController>(
+        BottomNavigatorController.new);
   }
 
   @override
@@ -31,6 +31,5 @@ class AppModule extends Module{
     r.module('/auth', module: AuthModule());
     r.module('/primeiro-acesso', module: PrimeiroAcessoModule());
     r.module('/initial', module: HomeModule());
-   
   }
 }

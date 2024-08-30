@@ -1,11 +1,14 @@
+import 'package:book_app/core/themes.dart';
 import 'package:book_app/modules/books/page/book_page.dart';
 import 'package:book_app/modules/home/controller/bottom_navigator_controller.dart';
 import 'package:book_app/modules/home/page/home_page.dart';
 import 'package:book_app/modules/posts/page/post_page.dart';
 import 'package:book_app/modules/profiile/pages/profile_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:mobx/mobx.dart';
 
 class NavigatorBottom extends StatefulWidget {
   const NavigatorBottom({super.key});
@@ -16,11 +19,18 @@ class NavigatorBottom extends StatefulWidget {
 
 class _NavigatorBottomState extends State<NavigatorBottom> {
   BottomNavigatorController controller = Modular.get();
-
+  late ReactionDisposer atualizaIndex;
   @override
   void initState() {
     super.initState();
     Modular.to.navigate('/initial${HomePage.route}');
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    atualizaIndex.reaction.dispose();
   }
 
   @override
@@ -33,15 +43,15 @@ class _NavigatorBottomState extends State<NavigatorBottom> {
           },
           //floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
           child: Icon(Icons.post_add, color: Colors.white),
-          backgroundColor: Colors.blue,
+          backgroundColor: Themes.corPrincipalAppModoClaro,
           shape: CircleBorder()),
       bottomNavigationBar: Observer(builder: (_) {
         return BottomNavigationBar(
           currentIndex: controller.currentIndex,
-          onTap: (value) => controller.currentIndex = value,
+          onTap: controller.setCurrentIndex,
           fixedColor: Colors.white,
           unselectedItemColor: Colors.blue[100],
-          backgroundColor: Colors.blue,
+          backgroundColor: Themes.corPrincipalAppModoClaro,
           items: const [
             BottomNavigationBarItem(
               icon: Icon(Icons.home),
