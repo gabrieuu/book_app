@@ -1,5 +1,6 @@
 import 'package:book_app/core/status.dart';
 import 'package:book_app/core/themes.dart';
+import 'package:book_app/model/dto/view_chats_dto.dart';
 import 'package:book_app/model/user_model.dart';
 import 'package:book_app/modules/auth/controller/user_controller.dart';
 import 'package:book_app/modules/favoritas/store/favoritas_store.dart';
@@ -172,7 +173,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 GestureDetector(
                                   onTap: () {
                                     Modular.to.pushNamed(
-                                        '/initial/profile/seguidores');
+                                        '/initial/profile/seguidores',
+                                        arguments: 0);
                                   },
                                   child: Column(
                                     children: [
@@ -199,7 +201,8 @@ class _ProfilePageState extends State<ProfilePage> {
                                 GestureDetector(
                                   onTap: () {
                                     Modular.to.pushNamed(
-                                        '/initial/profile/seguidores');
+                                        '/initial/profile/seguidores',
+                                        arguments: 1);
                                   },
                                   child: Column(
                                     children: [
@@ -246,7 +249,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                       ));
                                 }),
                                 IconButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Modular.to.pushNamed('/initial/chat/tela',
+                                          arguments: ChatsViewDto(
+                                              nomeDoUsuario: user!.name,
+                                              usernameDoUsuario: user!.username,
+                                              userId: user!.id!));
+                                    },
                                     icon: Icon(
                                       Icons.chat_bubble_outline_sharp,
                                       color: Colors.green,

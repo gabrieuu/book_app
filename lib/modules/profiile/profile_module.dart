@@ -23,6 +23,9 @@ class ProfileModule extends Module {
         child: (_) => ProfilePage(
               userId: r.args.data,
             ));
-    r.child('/seguidores', child: (_) => SeguidoresPage());
+    r.child('/seguidores',
+        child: (_) => SeguidoresPage(
+              index: r.args.data ?? 0,
+            ));
   }
 }

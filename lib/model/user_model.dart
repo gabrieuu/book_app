@@ -21,4 +21,12 @@ class UserModel {
       passouIntroducao: map["passou_introducao"] ?? false,
     );
   }
+
+  static UserModel empty() {
+    return UserModel(
+        name: 'teste',
+        email: 'teste',
+        username: 'testee',
+        passouIntroducao: true);
+  }
 }

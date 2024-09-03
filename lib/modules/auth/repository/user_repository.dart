@@ -67,9 +67,10 @@ class UserRepository {
   Future<bool> getIsSeguindo(String userIdLogado, String idUsuario) async {
     var response = await client
         .from('seguidores')
-        .select('*', const FetchOptions(count: CountOption.exact))
+        .select('*')
         .eq('pessoa_seguidora_id', userIdLogado)
-        .eq('pessoa_seguida_id', idUsuario);
+        .eq('pessoa_seguida_id', idUsuario)
+        .count(CountOption.exact);
     if (response.count > 0) return true;
     return false;
   }
@@ -100,8 +101,9 @@ class UserRepository {
     try {
       var response = await client
           .from('seguidores')
-          .select('*', const FetchOptions(count: CountOption.exact))
-          .eq('pessoa_seguida_id', userId);
+          .select('*')
+          .eq('pessoa_seguida_id', userId)
+          .count(CountOption.exact);
       return response.count;
     } catch (e) {
       log('$e');
@@ -113,8 +115,9 @@ class UserRepository {
     try {
       var response = await client
           .from('seguidores')
-          .select('*', const FetchOptions(count: CountOption.exact))
-          .eq('pessoa_seguidora_id', userId);
+          .select('*')
+          .eq('pessoa_seguidora_id', userId)
+          .count(CountOption.exact);
       return response.count;
     } catch (e) {
       log('$e');

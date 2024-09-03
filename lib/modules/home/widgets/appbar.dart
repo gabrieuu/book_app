@@ -1,75 +1,56 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 
-class AppBarWidget extends StatelessWidget implements	 PreferredSizeWidget {
+class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   const AppBarWidget(
       {super.key,
-      required this.searchIsSelect,
+      this.searchIsSelect,
       this.backAction,
       this.focusNode,
-      required this.textFieldOnChanged,
-      required this.textFieldController,
+      this.textFieldOnChanged,
+      this.textFieldController,
       this.searchIconAction,
       this.hintText});
 
-  final bool searchIsSelect;
+  final bool? searchIsSelect;
   final Function()? backAction;
   final FocusNode? focusNode;
-  final Function(String) textFieldOnChanged;
-  final TextEditingController textFieldController;
+  final Function(String)? textFieldOnChanged;
+  final TextEditingController? textFieldController;
   final void Function()? searchIconAction;
   final String? hintText;
   @override
   Widget build(BuildContext context) {
     return AppBar(
-    leading:(searchIsSelect)
-      ? IconButton(
-          onPressed: backAction,
-          icon: const Icon(Icons.arrow_back),
+      forceMaterialTransparency: true,
+      automaticallyImplyLeading: false,
+      title: SizedBox(
+        width: 100,
+        child: Image.asset('assets/images/logo_book.png'),
+      ),
+      actions: [
+        // Padding(
+        //   padding: const EdgeInsets.only(right: 10),
+        //   child: IconButton(
+        //     onPressed: searchIconAction,
+        //     icon: (searchIsSelect)
+        //       ? const Icon(Icons.close)
+        //       : const Icon(Icons.search)
+        //   ),
+        // ),
+        Padding(
+          padding: const EdgeInsets.only(right: 10),
+          child: IconButton(
+              onPressed: () {
+                Modular.to.pushNamed('/initial/chat/');
+              },
+              icon: Icon(Icons.chat_bubble_outline)),
         )
-      : null,
-    forceMaterialTransparency: true,
-    automaticallyImplyLeading: false,
-    title: (searchIsSelect)
-      ?  SizedBox(
-      height: 50,
-      child: TextField(
-        focusNode: focusNode,
-        onChanged: textFieldOnChanged,
-        autofocus: true,
-        controller: textFieldController,
-        decoration: InputDecoration(
-            focusedBorder: const OutlineInputBorder(
-                borderSide: BorderSide(color: Colors.grey),
-                borderRadius: BorderRadius.all(Radius.circular(10))),
-            focusColor: Colors.grey,
-            // border: OutlineInputBorder(
-            //     borderSide: Border;})Side(color: Colors.grey),
-            //     borderRadius:
-            //         BorderRadius.all(Radius.circular(10))),
-            contentPadding: EdgeInsets.only(top: 10, left: 10),
-            hintStyle: TextStyle(fontSize: 15),
-            hintText: hintText),
-      ),
-              )
-      : SizedBox(
-          width: 100,
-          child: Image.asset('assets/images/logo_book.png'),
-        ),
-    actions: [
-      Padding(
-        padding: const EdgeInsets.only(right: 10),
-        child: IconButton(
-          onPressed: searchIconAction,
-          icon: (searchIsSelect)
-            ? const Icon(Icons.close)
-            : const Icon(Icons.search)
-        ),
-      ),
-    ],
-        );
+      ],
+    );
   }
-  
+
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
 }

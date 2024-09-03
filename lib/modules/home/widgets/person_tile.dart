@@ -11,7 +11,7 @@ class PersonTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       horizontalTitleGap: 0,
-      onTap: (){
+      onTap: () {
         Modular.to.pushNamed('/initial/profile/', arguments: user.id);
       },
       leading: CircleAvatar(
@@ -19,9 +19,11 @@ class PersonTile extends StatelessWidget {
         maxRadius: 40,
         child: Text(user.name[0]),
       ),
-      title: Text(user.username, style: TextStyle(fontWeight: FontWeight.bold),),
+      title: Text(
+        user.username,
+        style: TextStyle(fontWeight: FontWeight.bold),
+      ),
       subtitle: Text(user.name),
-
     );
   }
 }

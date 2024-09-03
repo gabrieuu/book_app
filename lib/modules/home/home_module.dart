@@ -1,5 +1,6 @@
 import 'package:book_app/modules/auth/auth_module.dart';
 import 'package:book_app/modules/books/book_module.dart';
+import 'package:book_app/modules/chat/chat_module.dart';
 import 'package:book_app/modules/comment_post/comment_module.dart';
 import 'package:book_app/modules/comment_post/controller/comment_controller.dart';
 import 'package:book_app/modules/comment_post/repository/comment_repository.dart';
@@ -30,6 +31,7 @@ class HomeModule extends Module {
       ModuleRoute('/profile',
           module: ProfileModule(), transition: TransitionType.fadeIn),
     ]);
+    r.module('/chat', module: ChatModule());
     r.module('/post', module: PostModule());
     r.module('/comment', module: CommentModule());
   }

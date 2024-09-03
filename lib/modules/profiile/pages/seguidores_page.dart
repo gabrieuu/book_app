@@ -5,12 +5,15 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class SeguidoresPage extends StatelessWidget {
-  SeguidoresPage({super.key});
+  const SeguidoresPage({super.key, this.index = 0});
+
+  final int index;
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2,
+      initialIndex: index,
       child: Scaffold(
         appBar: AppBar(
           title: Text('Seguidores'),
