@@ -34,30 +34,6 @@ class _HomePageState extends State<HomePage> {
           appBar: AppBarWidget(
             searchIsSelect: postStore.searchIsSelect,
             hintText: 'Encontre uma pessoa',
-            searchIconAction: () {
-              setState(() {
-                postStore.searchIsSelect = !postStore.searchIsSelect;
-              });
-              postStore.searchController.clear();
-              setState(() {});
-            },
-            backAction: () => {
-              postStore.searchIsSelect = !postStore.searchIsSelect,
-              postStore.searchController.clear(),
-              setState(() {})
-            },
-            textFieldOnChanged: (value) {
-              if(postStore.searchController.text.isEmpty){
-                userController.usersSearched.clear();
-                return;
-              }
-              if (value.isNotEmpty) {
-                debouncer(() async {
-                  print('atualizou');
-                  await userController.getAllUsers(value);
-                });
-              }
-            },
             textFieldController: postStore.searchController,
           ),
           body: (postStore.searchIsSelect)
@@ -74,8 +50,7 @@ class _HomePageState extends State<HomePage> {
                           shrinkWrap: true,
                           itemCount: postStore.posts.length,
                           itemBuilder: (context, index) {
-                            return PostTile(
-                                post: postStore.posts[index]);
+                            return PostTile(post: postStore.posts[index]);
                           },
                         );
                       default:

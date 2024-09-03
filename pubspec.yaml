@@ -37,7 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   dio: ^5.3.3
   cached_network_image: ^3.3.0
-  supabase_flutter: ^1.6.2
+  supabase_flutter: ^2.0.2
   get: ^4.6.6
   flutter_modular: ^6.3.4
   flutter_mobx: ^2.2.1+1

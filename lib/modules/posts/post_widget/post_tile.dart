@@ -53,9 +53,15 @@ class _PostTileState extends State<PostTile> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(widget.post.autorName ?? "autor",
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.bold)),
+                      GestureDetector(
+                        onTap: () {
+                          Modular.to.pushNamed('/initial/profile',
+                              arguments: widget.post.autorId);
+                        },
+                        child: Text(widget.post.autorName ?? "autor",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold)),
+                      ),
                       InkWell(
                         onTap: () {},
                         child: Text('Link Livro',
@@ -145,8 +151,8 @@ class _PostTileState extends State<PostTile> {
                   Text('${widget.post.quantidadeCurtidas}'),
                   IconButton(
                       onPressed: () {
-                        Modular.to
-                            .pushNamed('/comment', arguments: widget.post);
+                        Modular.to.pushNamed('/initial/comment/',
+                            arguments: widget.post);
                       },
                       icon: const Icon(Icons.comment_outlined)),
                   Text('${widget.post.quantidadeComentarios}'),
