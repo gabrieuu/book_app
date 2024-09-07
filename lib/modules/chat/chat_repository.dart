@@ -44,6 +44,18 @@ class ChatRepository {
     return chats;
   }
 
+  visualizarMensagem({required String userId, required String chatId}) async {
+    try {
+      await client
+          .from(MESSAGES_TABLE)
+          .update({'visualizado': true})
+          .eq('user_id', userId)
+          .eq('chat_id', chatId);
+    } catch (e) {
+      log('$e');
+    }
+  }
+
   sendMessage(Mensagem mensagem) async {
     await client.from(MESSAGES_TABLE).insert(mensagem.toJson());
   }

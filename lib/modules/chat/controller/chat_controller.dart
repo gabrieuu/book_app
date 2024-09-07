@@ -26,6 +26,7 @@ abstract class _ChatControllerBase with Store {
   late StreamSubscription chatStream;
 
   _ChatControllerBase(this.userController, this.chatRepository) {
+    log('inicio chat');
     chatStream = Supabase.instance.client
         .from(CHAT_TABLE)
         .stream(primaryKey: ['id']).listen((data) {
@@ -44,5 +45,19 @@ abstract class _ChatControllerBase with Store {
       chats = ObservableList.of([]);
       carregandoChats = Status.ERRO;
     }
+  }
+
+  @action
+  int mensagensNaoVisualizadas() {
+    int count = 0;
+
+    for (var chat in chats) {
+      if (!chat.visualizado! &&
+          chat.idDoUsuarioQueEnviouUltimaMsg != userController.user.id!) {
+        count++;
+      }
+    }
+
+    return count;
   }
 }

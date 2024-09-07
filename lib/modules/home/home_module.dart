@@ -19,7 +19,7 @@ class HomeModule extends Module {
   @override
   // TODO: implement imports
   List<Module> get imports =>
-      [AuthModule(), BookModule(), ProfileModule(), PostModule()];
+      [AuthModule(), BookModule(), ProfileModule(), PostModule(), ChatModule()];
 
   @override
   void routes(RouteManager r) {
@@ -31,7 +31,8 @@ class HomeModule extends Module {
       ModuleRoute('/profile',
           module: ProfileModule(), transition: TransitionType.fadeIn),
     ]);
-    r.module('/chat', module: ChatModule());
+    r.module('/chat',
+        module: ChatModule(), transition: TransitionType.rightToLeft);
     r.module('/post', module: PostModule());
     r.module('/comment', module: CommentModule());
   }

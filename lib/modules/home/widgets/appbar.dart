@@ -1,9 +1,10 @@
+import 'package:book_app/modules/chat/controller/chat_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
-  const AppBarWidget(
+  AppBarWidget(
       {super.key,
       this.searchIsSelect,
       this.backAction,
@@ -20,6 +21,9 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   final TextEditingController? textFieldController;
   final void Function()? searchIconAction;
   final String? hintText;
+
+  final ChatController chatController = Modular.get();
+
   @override
   Widget build(BuildContext context) {
     return AppBar(
@@ -40,12 +44,18 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
         //   ),
         // ),
         Padding(
-          padding: const EdgeInsets.only(right: 10),
-          child: IconButton(
-              onPressed: () {
-                Modular.to.pushNamed('/initial/chat/');
-              },
-              icon: Icon(Icons.chat_bubble_outline)),
+          padding: const EdgeInsets.only(right: 20),
+          child: Observer(builder: (_) {
+            return Badge.count(
+              isLabelVisible: (chatController.mensagensNaoVisualizadas() != 0),
+              count: chatController.mensagensNaoVisualizadas(),
+              child: IconButton(
+                  onPressed: () {
+                    Modular.to.pushNamed('/initial/chat/');
+                  },
+                  icon: const Icon(Icons.chat_bubble_outline)),
+            );
+          }),
         )
       ],
     );

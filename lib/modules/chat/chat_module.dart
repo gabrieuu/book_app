@@ -12,9 +12,9 @@ class ChatModule extends Module {
   List<Module> get imports => [AuthModule(), ProfileModule()];
 
   @override
-  void binds(Injector i) {
+  void exportedBinds(Injector i) {
     i.add(ChatRepository.new);
-    i.addLazySingleton(ChatController.new);
+    i.addSingleton(ChatController.new);
     i.add(MensagemController.new);
   }
 

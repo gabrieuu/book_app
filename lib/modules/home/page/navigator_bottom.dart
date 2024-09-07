@@ -1,5 +1,6 @@
 import 'package:book_app/core/themes.dart';
 import 'package:book_app/modules/books/page/book_page.dart';
+import 'package:book_app/modules/chat/controller/chat_controller.dart';
 import 'package:book_app/modules/home/controller/bottom_navigator_controller.dart';
 import 'package:book_app/modules/home/page/home_page.dart';
 import 'package:book_app/modules/posts/page/post_page.dart';
@@ -20,6 +21,7 @@ class NavigatorBottom extends StatefulWidget {
 class _NavigatorBottomState extends State<NavigatorBottom> {
   BottomNavigatorController controller = Modular.get();
   late ReactionDisposer atualizaIndex;
+  ChatController chatController = Modular.get();
   @override
   void initState() {
     super.initState();

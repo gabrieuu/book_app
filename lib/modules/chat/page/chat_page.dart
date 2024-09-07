@@ -26,13 +26,21 @@ class _ChatPageState extends State<ChatPage> {
   @override
   void initState() {
     super.initState();
-    mensagemController.getAllMessages(widget.chatDto.userId);
+    mensagemController.isChatOpen = true;
+    mensagemController.friendId = widget.chatDto.userId;
+    init();
   }
 
   @override
   void dispose() {
     mensagemController.mensagensStream.cancel();
+    mensagemController.isChatOpen = false;
     super.dispose();
+  }
+
+  init() async {
+    await mensagemController.getAllMessages(widget.chatDto.userId);
+    await mensagemController.visualizarMensagem(widget.chatDto.userId);
   }
 
   @override
@@ -73,7 +81,10 @@ class _ChatPageState extends State<ChatPage> {
                         ],
                         messageContaint(data, userController.user.id!, context),
                         if (data.userId == userController.user.id)
-                          MessageStatusDot(status: MessageStatus.notView)
+                          MessageStatusDot(
+                              status: data.visualizado == true
+                                  ? MessageStatus.visualizado
+                                  : MessageStatus.naoVisualizado)
                       ],
                     ),
                   );
@@ -107,7 +118,13 @@ Widget messageContaint(Mensagem data, String userId, BuildContext context) {
   );
 }
 
-enum MessageStatus { notSent, notView, viewed }
+enum MessageStatus {
+  visualizado(true),
+  naoVisualizado(false);
+
+  const MessageStatus(this.status);
+  final bool status;
+}
 
 class MessageStatusDot extends StatelessWidget {
   final MessageStatus? status;
@@ -117,11 +134,9 @@ class MessageStatusDot extends StatelessWidget {
   Widget build(BuildContext context) {
     Color dotColor(MessageStatus status) {
       switch (status) {
-        case MessageStatus.notSent:
-          return const Color(0xFFF03738);
-        case MessageStatus.notView:
+        case MessageStatus.naoVisualizado:
           return Theme.of(context).textTheme.bodyLarge!.color!.withOpacity(0.1);
-        case MessageStatus.viewed:
+        case MessageStatus.visualizado:
           return const Color(0xFF00BF6D);
         default:
           return Colors.transparent;
@@ -137,7 +152,7 @@ class MessageStatusDot extends StatelessWidget {
         shape: BoxShape.circle,
       ),
       child: Icon(
-        status == MessageStatus.notSent ? Icons.close : Icons.done,
+        Icons.done,
         size: 8,
         color: Theme.of(context).scaffoldBackgroundColor,
       ),

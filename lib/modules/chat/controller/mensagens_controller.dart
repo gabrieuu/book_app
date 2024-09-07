@@ -19,6 +19,12 @@ abstract class _MensagemControllerBase with Store {
   String? idChat;
 
   @observable
+  String? friendId;
+
+  @observable
+  bool isChatOpen = false;
+
+  @observable
   ObservableList<Mensagem> mensagens = ObservableList.of([]);
 
   ChatRepository chatRepository;
@@ -37,17 +43,23 @@ abstract class _MensagemControllerBase with Store {
       this.chatRepository, this.userController, this.chatController) {
     mensagensStream = Supabase.instance.client
         .from('mensagens')
-        .stream(primaryKey: ['id']).listen((data) {
+        .stream(primaryKey: ['id']).listen((data) async {
       mensagens.clear();
       for (var mensagemJson in data) {
         var mensagem = Mensagem.fromJson(mensagemJson);
         if (idChat != null && mensagem.chatId == idChat) {
           mensagens.add(mensagem);
-          chatController.getAllChats();
         }
       }
+      if (isChatOpen == true && friendId != null) visualizarMensagem(friendId!);
+      chatController.getAllChats();
       mensagens.sort((a, b) => b.dataEnviada!.compareTo(a.dataEnviada!));
     });
+  }
+
+  @action
+  Future<void> visualizarMensagem(String userId) async {
+    await chatRepository.visualizarMensagem(userId: userId, chatId: idChat!);
   }
 
   @action
