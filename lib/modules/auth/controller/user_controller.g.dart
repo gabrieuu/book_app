@@ -25,38 +25,6 @@ mixin _$UserController on _UserControllerBase, Store {
     });
   }
 
-  late final _$usersSearchedAtom =
-      Atom(name: '_UserControllerBase.usersSearched', context: context);
-
-  @override
-  ObservableList<UserModel> get usersSearched {
-    _$usersSearchedAtom.reportRead();
-    return super.usersSearched;
-  }
-
-  @override
-  set usersSearched(ObservableList<UserModel> value) {
-    _$usersSearchedAtom.reportWrite(value, super.usersSearched, () {
-      super.usersSearched = value;
-    });
-  }
-
-  late final _$usersSearchedsAtom =
-      Atom(name: '_UserControllerBase.usersSearcheds', context: context);
-
-  @override
-  Status get usersSearcheds {
-    _$usersSearchedsAtom.reportRead();
-    return super.usersSearcheds;
-  }
-
-  @override
-  set usersSearcheds(Status value) {
-    _$usersSearchedsAtom.reportWrite(value, super.usersSearcheds, () {
-      super.usersSearcheds = value;
-    });
-  }
-
   late final _$getUserAsyncAction =
       AsyncAction('_UserControllerBase.getUser', context: context);
 
@@ -76,8 +44,7 @@ mixin _$UserController on _UserControllerBase, Store {
   @override
   String toString() {
     return '''
-usersSearched: ${usersSearched},
-usersSearcheds: ${usersSearcheds}
+
     ''';
   }
 }

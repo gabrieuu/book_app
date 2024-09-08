@@ -2,7 +2,7 @@ import 'package:book_app/core/themes.dart';
 import 'package:book_app/model/user_model.dart';
 import 'package:book_app/modules/chat/controller/chat_controller.dart';
 import 'package:book_app/modules/chat/widgets/chat_tile.dart';
-import 'package:book_app/modules/home/widgets/person_tile.dart';
+import 'package:book_app/modules/search/widgets/person_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';

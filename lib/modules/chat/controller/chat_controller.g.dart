@@ -49,6 +49,20 @@ mixin _$ChatController on _ChatControllerBase, Store {
     return _$getAllChatsAsyncAction.run(() => super.getAllChats());
   }
 
+  late final _$_ChatControllerBaseActionController =
+      ActionController(name: '_ChatControllerBase', context: context);
+
+  @override
+  int mensagensNaoVisualizadas() {
+    final _$actionInfo = _$_ChatControllerBaseActionController.startAction(
+        name: '_ChatControllerBase.mensagensNaoVisualizadas');
+    try {
+      return super.mensagensNaoVisualizadas();
+    } finally {
+      _$_ChatControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''

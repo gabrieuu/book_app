@@ -1,9 +1,9 @@
 import 'package:book_app/core/status.dart';
 import 'package:book_app/modules/auth/controller/user_controller.dart';
 import 'package:book_app/modules/comment_post/controller/comment_controller.dart';
-import 'package:book_app/modules/home/page/list_users.dart';
-import 'package:book_app/modules/home/widgets/appbar.dart';
-import 'package:book_app/modules/home/widgets/menu_drawer.dart';
+import 'package:book_app/modules/search/widgets/list_users_search.dart';
+import 'package:book_app/shared/appbar.dart';
+import 'package:book_app/shared/menu_drawer.dart';
 import 'package:book_app/modules/posts/post_store.dart';
 import 'package:book_app/modules/posts/post_widget/post_shimmer_widget.dart';
 import 'package:book_app/modules/posts/post_widget/post_tile.dart';
@@ -31,33 +31,31 @@ class _HomePageState extends State<HomePage> {
     return RefreshIndicator(
       onRefresh: () => postStore.init(),
       child: Scaffold(
+          backgroundColor: Colors.grey[200],
           appBar: AppBarWidget(
             searchIsSelect: postStore.searchIsSelect,
             hintText: 'Encontre uma pessoa',
             textFieldController: postStore.searchController,
           ),
-          body: (postStore.searchIsSelect)
-              ? ListUsers()
-              : Observer(
-                  builder: (_) {
-                    switch (postStore.situacaoPost) {
-                      case Status.CARREGANDO:
-                        return ListView.builder(
-                            itemCount: 5,
-                            itemBuilder: (_, index) => PostShimmer());
-                      case Status.SUCESSO:
-                        return ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: postStore.posts.length,
-                          itemBuilder: (context, index) {
-                            return PostTile(post: postStore.posts[index]);
-                          },
-                        );
-                      default:
-                        return const Center(child: Text('erro'));
-                    }
-                  },
-                )),
+          body: Observer(
+            builder: (_) {
+              switch (postStore.situacaoPost) {
+                case Status.CARREGANDO:
+                  return ListView.builder(
+                      itemCount: 5, itemBuilder: (_, index) => PostShimmer());
+                case Status.SUCESSO:
+                  return ListView.builder(
+                    shrinkWrap: true,
+                    itemCount: postStore.posts.length,
+                    itemBuilder: (context, index) {
+                      return PostTile(post: postStore.posts[index]);
+                    },
+                  );
+                default:
+                  return const Center(child: Text('erro'));
+              }
+            },
+          )),
     );
   }
 }

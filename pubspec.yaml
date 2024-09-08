@@ -48,6 +48,7 @@ dependencies:
   shimmer: ^3.0.0
   crypto: ^3.0.3
   one_context: ^4.0.0
+  sizer: ^3.0.0
   
 dev_dependencies:
   flutter_test:

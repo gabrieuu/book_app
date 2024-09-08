@@ -10,7 +10,7 @@ import 'package:book_app/modules/home/page/navigator_bottom.dart';
 import 'package:book_app/modules/posts/post_module.dart';
 import 'package:book_app/modules/primeiro_acesso/primeiro_acesso_module.dart';
 import 'package:book_app/modules/profiile/profile_module.dart';
-import 'package:book_app/splash_screen.dart';
+import 'package:book_app/shared/splash_screen.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class AppModule extends Module {

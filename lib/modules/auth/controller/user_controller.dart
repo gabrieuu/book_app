@@ -9,24 +9,18 @@ part 'user_controller.g.dart';
 class UserController = _UserControllerBase with _$UserController;
 
 abstract class _UserControllerBase with Store {
-
   @observable
   UserModel? _user;
-
-  @observable
-  ObservableList<UserModel> usersSearched = ObservableList.of([]);
-  @observable
-  Status usersSearcheds = Status.NAO_CARREGADO;
   AuthRepository authRepository;
   UserRepository repository;
 
   _UserControllerBase(this.repository, this.authRepository);
 
   @action
-  Future<UserModel?> getUser({String? userId}) async{
-
-    UserModel user = await repository.getUserById(userId ?? authRepository.user!.id);
-    if(userId == null){
+  Future<UserModel?> getUser({String? userId}) async {
+    UserModel user =
+        await repository.getUserById(userId ?? authRepository.user!.id);
+    if (userId == null) {
       _user = user;
       return null;
     }
@@ -34,15 +28,8 @@ abstract class _UserControllerBase with Store {
   }
 
   @action
-  getAllUsers(String name) async{
-   try {
-      usersSearcheds = Status.CARREGANDO;
-      usersSearched = ObservableList.of(await repository.getUsersByName(name));
-      usersSearcheds = Status.SUCESSO;
-   } catch (e) {
-     print(e);
-     usersSearcheds = Status.ERRO;
-   }
+  getAllUsers(String name) async {
+    ObservableList.of(await repository.getUsersByName(name));
   }
 
   UserModel get user => _user!;

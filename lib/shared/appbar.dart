@@ -1,3 +1,4 @@
+import 'package:book_app/core/themes.dart';
 import 'package:book_app/modules/chat/controller/chat_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -27,22 +28,14 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      forceMaterialTransparency: true,
+      backgroundColor: Themes.branco,
       automaticallyImplyLeading: false,
+      surfaceTintColor: Colors.white,
       title: SizedBox(
         width: 100,
         child: Image.asset('assets/images/logo_book.png'),
       ),
       actions: [
-        // Padding(
-        //   padding: const EdgeInsets.only(right: 10),
-        //   child: IconButton(
-        //     onPressed: searchIconAction,
-        //     icon: (searchIsSelect)
-        //       ? const Icon(Icons.close)
-        //       : const Icon(Icons.search)
-        //   ),
-        // ),
         Padding(
           padding: const EdgeInsets.only(right: 20),
           child: Observer(builder: (_) {

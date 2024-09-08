@@ -49,6 +49,11 @@ class _NavigatorBottomState extends State<NavigatorBottom> {
           shape: CircleBorder()),
       bottomNavigationBar: Observer(builder: (_) {
         return BottomNavigationBar(
+          iconSize: 21,
+          type: BottomNavigationBarType.fixed,
+          selectedFontSize: 0,
+          showSelectedLabels: false,
+          showUnselectedLabels: false,
           currentIndex: controller.currentIndex,
           onTap: controller.setCurrentIndex,
           fixedColor: Colors.white,
@@ -61,20 +66,15 @@ class _NavigatorBottomState extends State<NavigatorBottom> {
               backgroundColor: Colors.blue,
             ),
             BottomNavigationBarItem(
+              icon: Icon(Icons.search_outlined),
+              label: 'Buscar',
+              backgroundColor: Colors.blue,
+            ),
+            BottomNavigationBarItem(
               icon: Icon(Icons.menu_book_rounded),
               label: 'Livros',
               backgroundColor: Colors.blue,
             ),
-            // BottomNavigationBarItem(
-            //   icon: Icon(Icons.psychology_alt_outlined),
-            //   label: 'Desafio',
-            //   backgroundColor: Colors.blue,
-            // ),
-            // BottomNavigationBarItem(
-            //   icon: Icon(Icons.chat_bubble_outlined),
-            //   label: 'Conversas',
-            //   backgroundColor: Colors.blue,
-            // ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
               label: 'Perfil',

@@ -5,8 +5,8 @@ import 'package:book_app/model/user_model.dart';
 import 'package:book_app/modules/auth/controller/user_controller.dart';
 import 'package:book_app/modules/favoritas/store/favoritas_store.dart';
 import 'package:book_app/modules/home/controller/bottom_navigator_controller.dart';
-import 'package:book_app/modules/home/widgets/appbar.dart';
-import 'package:book_app/modules/home/widgets/menu_drawer.dart';
+import 'package:book_app/shared/appbar.dart';
+import 'package:book_app/shared/menu_drawer.dart';
 import 'package:book_app/modules/posts/post_widget/post_shimmer_widget.dart';
 import 'package:book_app/modules/posts/post_widget/post_tile.dart';
 import 'package:book_app/modules/profiile/controller/profile_controller.dart';
@@ -126,7 +126,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 20, vertical: 10),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.spaceAround,
                               children: [
                                 Column(
                                   children: [
@@ -142,13 +142,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                     Text(
                                       'Posts',
                                       style: TextStyle(
-                                          fontSize: 15,
+                                          fontSize: 13,
                                           color: Colors.black,
                                           fontWeight: FontWeight.w300),
                                     ),
                                   ],
                                 ),
-                                SizedBox(width: 20),
                                 Column(
                                   children: [
                                     Observer(builder: (_) {
@@ -163,13 +162,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                     Text(
                                       'Favoritos',
                                       style: TextStyle(
-                                          fontSize: 15,
+                                          fontSize: 13,
                                           color: Colors.black,
                                           fontWeight: FontWeight.w300),
                                     ),
                                   ],
                                 ),
-                                SizedBox(width: 20),
                                 GestureDetector(
                                   onTap: () {
                                     Modular.to.pushNamed(
@@ -190,14 +188,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                       Text(
                                         'Seguidores',
                                         style: TextStyle(
-                                            fontSize: 15,
+                                            fontSize: 13,
                                             color: Colors.black,
                                             fontWeight: FontWeight.w300),
                                       ),
                                     ],
                                   ),
                                 ),
-                                SizedBox(width: 20),
                                 GestureDetector(
                                   onTap: () {
                                     Modular.to.pushNamed(
@@ -218,7 +215,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       Text(
                                         'Seguindo',
                                         style: TextStyle(
-                                            fontSize: 15,
+                                            fontSize: 13,
                                             color: Colors.black,
                                             fontWeight: FontWeight.w300),
                                       ),

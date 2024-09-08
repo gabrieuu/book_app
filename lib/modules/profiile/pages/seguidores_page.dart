@@ -1,4 +1,4 @@
-import 'package:book_app/modules/home/widgets/person_tile.dart';
+import 'package:book_app/modules/search/widgets/person_tile.dart';
 import 'package:book_app/modules/profiile/controller/profile_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';

@@ -25,6 +25,38 @@ mixin _$MensagemController on _MensagemControllerBase, Store {
     });
   }
 
+  late final _$friendIdAtom =
+      Atom(name: '_MensagemControllerBase.friendId', context: context);
+
+  @override
+  String? get friendId {
+    _$friendIdAtom.reportRead();
+    return super.friendId;
+  }
+
+  @override
+  set friendId(String? value) {
+    _$friendIdAtom.reportWrite(value, super.friendId, () {
+      super.friendId = value;
+    });
+  }
+
+  late final _$isChatOpenAtom =
+      Atom(name: '_MensagemControllerBase.isChatOpen', context: context);
+
+  @override
+  bool get isChatOpen {
+    _$isChatOpenAtom.reportRead();
+    return super.isChatOpen;
+  }
+
+  @override
+  set isChatOpen(bool value) {
+    _$isChatOpenAtom.reportWrite(value, super.isChatOpen, () {
+      super.isChatOpen = value;
+    });
+  }
+
   late final _$mensagensAtom =
       Atom(name: '_MensagemControllerBase.mensagens', context: context);
 
@@ -78,6 +110,16 @@ mixin _$MensagemController on _MensagemControllerBase, Store {
     });
   }
 
+  late final _$visualizarMensagemAsyncAction = AsyncAction(
+      '_MensagemControllerBase.visualizarMensagem',
+      context: context);
+
+  @override
+  Future<void> visualizarMensagem(String userId) {
+    return _$visualizarMensagemAsyncAction
+        .run(() => super.visualizarMensagem(userId));
+  }
+
   late final _$getAllMessagesAsyncAction =
       AsyncAction('_MensagemControllerBase.getAllMessages', context: context);
 
@@ -90,6 +132,8 @@ mixin _$MensagemController on _MensagemControllerBase, Store {
   String toString() {
     return '''
 idChat: ${idChat},
+friendId: ${friendId},
+isChatOpen: ${isChatOpen},
 mensagens: ${mensagens},
 carregandoMensagens: ${carregandoMensagens},
 mensagensStream: ${mensagensStream}

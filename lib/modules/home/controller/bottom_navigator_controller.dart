@@ -19,15 +19,16 @@ abstract class _BottomNavigatorControllerBase with Store {
   void setCurrentIndex(int value) {
     switch (value) {
       case 0:
-        Modular.to.navigate('/initial${HomePage.route}');
+        Modular.to.pushNamed('/initial${HomePage.route}');
         break;
       case 1:
-        Modular.to.pushNamed('/initial${BookPage.rota}');
+        Modular.to.pushNamed('/initial/search');
         break;
       case 2:
-        Modular.to.pushNamed('/initial${ProfilePage.route}/');
+        Modular.to.pushNamed('/initial${BookPage.rota}');
         break;
       case 3:
+        Modular.to.pushNamed('/initial${ProfilePage.route}/');
         break;
       case 4:
         Modular.to.pushNamed('/initial${ProfilePage.route}/');

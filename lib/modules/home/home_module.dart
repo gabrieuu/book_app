@@ -13,6 +13,7 @@ import 'package:book_app/modules/posts/post_module.dart';
 import 'package:book_app/modules/posts/post_repository/post_repository.dart';
 import 'package:book_app/modules/posts/post_store.dart';
 import 'package:book_app/modules/profiile/profile_module.dart';
+import 'package:book_app/modules/search/search_module.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class HomeModule extends Module {
@@ -30,10 +31,13 @@ class HomeModule extends Module {
           module: BookModule(), transition: TransitionType.fadeIn),
       ModuleRoute('/profile',
           module: ProfileModule(), transition: TransitionType.fadeIn),
+      ModuleRoute('/search',
+          module: SearchModule(), transition: TransitionType.fadeIn),
     ]);
     r.module('/chat',
         module: ChatModule(), transition: TransitionType.rightToLeft);
-    r.module('/post', module: PostModule());
-    r.module('/comment', module: CommentModule());
+    r.module('/post', module: PostModule(), transition: TransitionType.fadeIn);
+    r.module('/comment',
+        module: CommentModule(), transition: TransitionType.downToUp);
   }
 }
