@@ -89,27 +89,6 @@ mixin _$MensagemController on _MensagemControllerBase, Store {
     });
   }
 
-  late final _$mensagensStreamAtom =
-      Atom(name: '_MensagemControllerBase.mensagensStream', context: context);
-
-  @override
-  StreamSubscription<dynamic> get mensagensStream {
-    _$mensagensStreamAtom.reportRead();
-    return super.mensagensStream;
-  }
-
-  bool _mensagensStreamIsInitialized = false;
-
-  @override
-  set mensagensStream(StreamSubscription<dynamic> value) {
-    _$mensagensStreamAtom.reportWrite(
-        value, _mensagensStreamIsInitialized ? super.mensagensStream : null,
-        () {
-      super.mensagensStream = value;
-      _mensagensStreamIsInitialized = true;
-    });
-  }
-
   late final _$visualizarMensagemAsyncAction = AsyncAction(
       '_MensagemControllerBase.visualizarMensagem',
       context: context);
@@ -135,8 +114,7 @@ idChat: ${idChat},
 friendId: ${friendId},
 isChatOpen: ${isChatOpen},
 mensagens: ${mensagens},
-carregandoMensagens: ${carregandoMensagens},
-mensagensStream: ${mensagensStream}
+carregandoMensagens: ${carregandoMensagens}
     ''';
   }
 }

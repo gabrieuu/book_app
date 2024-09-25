@@ -1,5 +1,5 @@
 class ChatsViewDto {
-  String? id;
+  String? chatId;
   DateTime? dataCriacao;
   String nomeDoUsuario;
   String usernameDoUsuario;
@@ -9,7 +9,7 @@ class ChatsViewDto {
   String? idDoUsuarioQueEnviouUltimaMsg;
 
   ChatsViewDto(
-      {this.id,
+      {this.chatId,
       this.dataCriacao,
       required this.nomeDoUsuario,
       required this.usernameDoUsuario,
@@ -20,7 +20,7 @@ class ChatsViewDto {
 
   static ChatsViewDto fromJson(Map<String, dynamic> map) {
     return ChatsViewDto(
-        id: map['id'],
+        chatId: map['chat_id'],
         dataCriacao: DateTime.parse(map['data_criacao']),
         nomeDoUsuario: map['name'],
         usernameDoUsuario: map['username'],

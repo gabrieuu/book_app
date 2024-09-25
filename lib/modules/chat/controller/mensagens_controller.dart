@@ -36,24 +36,45 @@ abstract class _MensagemControllerBase with Store {
   @observable
   Status carregandoMensagens = Status.NAO_CARREGADO;
 
-  @observable
-  late StreamSubscription mensagensStream;
-
+  StreamSubscription<List<Map<String, dynamic>>>? chatStream;
+  Timer? _debounce;
   _MensagemControllerBase(
       this.chatRepository, this.userController, this.chatController) {
-    mensagensStream = Supabase.instance.client
+    chatStream = Supabase.instance.client
         .from('mensagens')
         .stream(primaryKey: ['id']).listen((data) async {
-      mensagens.clear();
       for (var mensagemJson in data) {
         var mensagem = Mensagem.fromJson(mensagemJson);
-        if (idChat != null && mensagem.chatId == idChat) {
-          mensagens.add(mensagem);
+        if (idChat != null && mensagem.chatId == idChat!) {
+          var mensagemExistente = mensagens.firstWhere(
+              (element) => element.id == mensagem.id,
+              orElse: () => Mensagem.nulo());
+          if (mensagemExistente.chatId == '') {
+            mensagens.add(mensagem);
+          } else {
+            var index =
+                mensagens.indexWhere((element) => element.id == mensagem.id);
+            mensagens[index] = mensagem;
+          }
         }
       }
-      if (isChatOpen == true && friendId != null) visualizarMensagem(friendId!);
-      chatController.getAllChats();
+      // chatController.getAllChats();
       mensagens.sort((a, b) => b.dataEnviada!.compareTo(a.dataEnviada!));
+
+      _onNewMessagesProcessed();
+    });
+  }
+
+  void _onNewMessagesProcessed() {
+    // Se já existir um debounce ativo, cancelamos ele
+    if (_debounce?.isActive ?? false) _debounce?.cancel();
+
+    // Defina um intervalo de tempo (exemplo: 500ms) antes de processar as funções
+    _debounce = Timer(Duration(milliseconds: 500), () async {
+      chatController.updateChatPorId(idChat!);
+      if (isChatOpen == true && friendId != null) {
+        await visualizarMensagem(friendId!);
+      }
     });
   }
 

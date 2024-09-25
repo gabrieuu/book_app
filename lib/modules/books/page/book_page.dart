@@ -5,7 +5,6 @@ import 'package:book_app/modules/books/widgets/recomendados_shimmer.dart';
 import 'package:book_app/modules/home/controller/bottom_navigator_controller.dart';
 import 'package:book_app/shared/appbar.dart';
 import 'package:book_app/shared/menu_drawer.dart';
-import 'package:book_app/modules/details/page/details_page.dart';
 import 'package:book_app/core/status.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -252,7 +251,7 @@ class _BookPageState extends State<BookPage> {
                                                   InkWell(
                                                     onTap: () {
                                                       Modular.to.pushNamed(
-                                                          DetailsPage.route,
+                                                          '/initial/book/details/',
                                                           arguments: bookStore
                                                                   .recomendados[
                                                               index]);

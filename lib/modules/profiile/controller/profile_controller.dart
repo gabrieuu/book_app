@@ -146,7 +146,7 @@ abstract class _ProfileControllerBase with Store {
   @computed
   double get getAlturaTabbar {
     if (tabBarSelecionada == 0) {
-      return myPosts.length * 160 + 50;
+      return myPosts.length * 160 + 80;
     }
     return myFavoritas.length * 160 + 50;
   }

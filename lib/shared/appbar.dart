@@ -40,8 +40,8 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
           padding: const EdgeInsets.only(right: 20),
           child: Observer(builder: (_) {
             return Badge.count(
-              isLabelVisible: (chatController.mensagensNaoVisualizadas() != 0),
-              count: chatController.mensagensNaoVisualizadas(),
+              isLabelVisible: (chatController.mensagensNaoVisualizadas != 0),
+              count: chatController.mensagensNaoVisualizadas,
               child: IconButton(
                   onPressed: () {
                     Modular.to.pushNamed('/initial/chat/');

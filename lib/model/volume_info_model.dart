@@ -4,25 +4,28 @@ import 'package:book_app/model/list_price.dart';
 class VolumeInfo {
   String title;
   List<dynamic> authors;
-  String? publisher;
+  String? _publisher;
   String publishedDate;
   String? description;
   int pageCount;
   List<dynamic> categories;
   ImageLinks imageLinks;
+  double? averageRating;
   //String language;
 
   VolumeInfo({
     required this.title,
     required this.authors,
-    required this.publisher,
+    required String? publisher,
     required this.publishedDate,
     required this.description,
     required this.pageCount,
     required this.categories,
     required this.imageLinks,
-    //required this.language,
-  });
+    this.averageRating,
+  }) {
+    _publisher = publisher;
+  }
 
   static VolumeInfo fromMap(Map<dynamic, dynamic> map) {
     return VolumeInfo(
@@ -48,5 +51,13 @@ class VolumeInfo {
         pageCount == 0 ||
         categories.isEmpty ||
         (imageLinks.smallThumb == "" && imageLinks.thumbnail == "");
+  }
+
+  set publisher(String publisher) {
+    _publisher = publisher;
+  }
+
+  String get publisher {
+    return _publisher?.split('Editora ').last ?? '';
   }
 }

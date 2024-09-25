@@ -24,7 +24,8 @@ class BookTile extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Padding(
-                  padding: const EdgeInsets.only(left: 20),
+                  padding: EdgeInsets.only(
+                      left: MediaQuery.of(context).size.width * 0.05),
                   child: Stack(
                     children: [
                       Container(
@@ -86,8 +87,7 @@ class BookTile extends StatelessWidget {
                           style: TextStyle(fontSize: 12),
                         ),
                         Text(
-                          book.volumeInfo.publisher?.split('Editora ').last ??
-                              '',
+                          book.volumeInfo.publisher,
                           style: TextStyle(fontSize: 12),
                         ),
                       ],
@@ -97,23 +97,23 @@ class BookTile extends StatelessWidget {
               ],
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.only(right: 10, top: 5),
-            child: GestureDetector(
-                onTap: () {},
-                child: Icon(
-                  Icons.favorite_border,
-                  color: Colors.black45,
-                  // shadows: (true) ? [
-                  //   BoxShadow(
-                  //     color: Colors.black.withOpacity(0.3),
-                  //     blurRadius: 2.0,
-                  //     spreadRadius: 0.03,
-                  //     offset: const Offset(1, 1),
-                  //   )
-                  // ] : null,
-                )),
-          ),
+          // Padding(
+          //   padding: const EdgeInsets.only(right: 10, top: 5),
+          //   child: GestureDetector(
+          //       onTap: () {},
+          //       child: Icon(
+          //         Icons.favorite_border,
+          //         color: Colors.black45,
+          //         // shadows: (true) ? [
+          //         //   BoxShadow(
+          //         //     color: Colors.black.withOpacity(0.3),
+          //         //     blurRadius: 2.0,
+          //         //     spreadRadius: 0.03,
+          //         //     offset: const Offset(1, 1),
+          //         //   )
+          //         // ] : null,
+          //       )),
+          // ),
         ],
       ),
     );

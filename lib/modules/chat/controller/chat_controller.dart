@@ -22,11 +22,9 @@ abstract class _ChatControllerBase with Store {
 
   ChatRepository chatRepository;
   UserController userController;
-
-  late StreamSubscription chatStream;
+  StreamSubscription? chatStream;
 
   _ChatControllerBase(this.userController, this.chatRepository) {
-    log('inicio chat');
     chatStream = Supabase.instance.client
         .from(CHAT_TABLE)
         .stream(primaryKey: ['id']).listen((data) {
@@ -35,7 +33,7 @@ abstract class _ChatControllerBase with Store {
   }
 
   @action
-  getAllChats() async {
+  Future<void> getAllChats() async {
     try {
       carregandoChats = Status.CARREGANDO;
       chats = ObservableList.of(await chatRepository
@@ -48,7 +46,18 @@ abstract class _ChatControllerBase with Store {
   }
 
   @action
-  int mensagensNaoVisualizadas() {
+  Future<void> updateChatPorId(String chatId) async {
+    try {
+      var chat = await chatRepository.getChatPorId(chatId);
+      var index = chats.indexWhere((element) => element.chatId == chatId);
+      chats[index] = chat;
+    } catch (e) {
+      print('erro ao atualizar chat');
+    }
+  }
+
+  @computed
+  int get mensagensNaoVisualizadas {
     int count = 0;
 
     for (var chat in chats) {

@@ -5,6 +5,7 @@ import 'package:book_app/model/user_model.dart';
 import 'package:book_app/modules/auth/controller/user_controller.dart';
 import 'package:book_app/modules/favoritas/store/favoritas_store.dart';
 import 'package:book_app/modules/home/controller/bottom_navigator_controller.dart';
+import 'package:book_app/modules/search/widgets/book_tile.dart';
 import 'package:book_app/shared/appbar.dart';
 import 'package:book_app/shared/menu_drawer.dart';
 import 'package:book_app/modules/posts/post_widget/post_shimmer_widget.dart';
@@ -58,6 +59,7 @@ class _ProfilePageState extends State<ProfilePage> {
       length: 2,
       child: Scaffold(
         appBar: AppBar(
+          automaticallyImplyLeading: (widget.userId != null) ? true : false,
           backgroundColor: Themes.branco,
         ),
         backgroundColor: Colors.white,
@@ -269,7 +271,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                   Icons.text_fields_outlined,
                                 ),
                               ),
-                              Tab(icon: Icon(Icons.book)),
+                              Tab(icon: Icon(Icons.favorite)),
                             ],
                           ),
                           // Conteúdo do TabBarView
@@ -304,7 +306,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                           shrinkWrap: true,
                                           physics:
                                               NeverScrollableScrollPhysics(),
-                                          itemCount: 5,
+                                          itemCount: 1,
                                           itemBuilder: (context, index) {
                                             return PostShimmer();
                                           },
@@ -312,42 +314,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                     }
                                   }),
                                   Observer(builder: (_) {
-                                    return GridView.builder(
-                                      padding: EdgeInsets.zero,
+                                    return ListView.builder(
+                                      padding: const EdgeInsets.only(top: 10),
                                       shrinkWrap: true,
                                       physics: NeverScrollableScrollPhysics(),
-                                      gridDelegate:
-                                          SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 3,
-                                      ),
                                       itemCount: controller.myFavoritas.length,
                                       itemBuilder: (context, index) {
-                                        return Container(
-                                          margin: EdgeInsets.all(5),
-                                          decoration: BoxDecoration(
-                                            color: Colors.grey,
-                                            image: DecorationImage(
-                                              image: NetworkImage(
-                                                controller
-                                                        .myFavoritas[index]
-                                                        .volumeInfo
-                                                        .imageLinks
-                                                        ?.thumbnail ??
-                                                    'https://via.placeholder.com/150',
-                                              ),
-                                              fit: BoxFit.cover,
-                                            ),
-                                            borderRadius:
-                                                BorderRadius.circular(10),
-                                          ),
-                                          child: Center(
-                                            child: Text(
-                                              controller.myFavoritas[index]
-                                                  .volumeInfo.title,
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            ),
-                                          ),
+                                        return Padding(
+                                          padding:
+                                              const EdgeInsets.only(bottom: 10),
+                                          child: BookTile(
+                                              book: controller
+                                                  .myFavoritas[index]),
                                         );
                                       },
                                     );

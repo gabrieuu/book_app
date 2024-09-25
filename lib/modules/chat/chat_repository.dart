@@ -44,6 +44,15 @@ class ChatRepository {
     return chats;
   }
 
+  Future<ChatsViewDto> getChatPorId(String chatId) {
+    return client
+        .from(CHAT_VIEW)
+        .select('*')
+        .eq('chat_id', chatId)
+        .limit(1)
+        .then((value) => ChatsViewDto.fromJson(value[0]));
+  }
+
   visualizarMensagem({required String userId, required String chatId}) async {
     try {
       await client

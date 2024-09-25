@@ -27,4 +27,8 @@ class Mensagem {
         dataEnviada: DateTime.parse(map['data_enviada']),
         visualizado: map['visualizado']);
   }
+
+  static Mensagem nulo() {
+    return Mensagem(chatId: '', userId: '', content: '');
+  }
 }

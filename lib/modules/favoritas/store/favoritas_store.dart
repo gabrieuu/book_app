@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:book_app/model/book_model.dart';
 import 'package:book_app/core/status.dart';
 import 'package:book_app/modules/auth/repository/auth_repository.dart';
@@ -21,42 +23,45 @@ abstract class _FavoritasStoreBase with Store {
   @observable
   ObservableList<Book> listBooksFavorites = ObservableList.of([]);
 
-  _FavoritasStoreBase(this.bookRepository,this.favoritesRepository, this.authRepository){
+  _FavoritasStoreBase(
+      this.bookRepository, this.favoritesRepository, this.authRepository) {
     _init();
   }
 
-  _init() async{
-    await getBooksFavorites(authRepository.user?.id);
+  _init() async {
+    log('favoritas');
+    await getBooksFavorites(null);
   }
 
   @action
-  Future<void> addFavorite({required Book book, String? idUser}) async{
+  Future<void> addFavorite({required Book book, String? idUser}) async {
     listBooksFavorites.add(book);
-    await favoritesRepository.addFavorite(idLivro: book.id, idUser: idUser ?? authRepository.user!.id);
+    await favoritesRepository.addFavorite(
+        idLivro: book.id, idUser: idUser ?? authRepository.user!.id);
   }
 
-
-  Future<List<Book>> getBooksFavorites(String? userId) async{ 
-    List<String> lists = await favoritesRepository.booksFavorites(userId ?? authRepository.user!.id);
+  Future<List<Book>> getBooksFavorites(String? userId) async {
+    List<String> lists = await favoritesRepository
+        .booksFavorites(userId ?? authRepository.user!.id);
     List<Book> listBooks = await bookRepository.getBooksByListId(lists);
-    if(userId == null) {
+    if (userId == null) {
       listBooksFavorites = ObservableList.of(listBooks);
     }
     return listBooks;
   }
 
   @action
-  bool isFavorita(Book book){
-    for(int i = 0; i < listBooksFavorites.length; i++){
-      if(listBooksFavorites[i].id == book.id) return true;
+  bool isFavorita(Book book) {
+    for (int i = 0; i < listBooksFavorites.length; i++) {
+      if (listBooksFavorites[i].id == book.id) return true;
     }
     return false;
   }
 
   @action
-  removeFavorita(Book book) async{  
+  removeFavorita(Book book) async {
     listBooksFavorites.removeWhere((element) => element.id == book.id);
-    await favoritesRepository.removeFavorita(idLivro: book.id, idUser: authRepository.user!.id);
+    await favoritesRepository.removeFavorita(
+        idLivro: book.id, idUser: authRepository.user!.id);
   }
-
 }

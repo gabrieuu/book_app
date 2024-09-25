@@ -4,7 +4,7 @@ import 'package:book_app/modules/chat/chat_module.dart';
 import 'package:book_app/modules/comment_post/comment_module.dart';
 import 'package:book_app/modules/comment_post/controller/comment_controller.dart';
 import 'package:book_app/modules/comment_post/repository/comment_repository.dart';
-import 'package:book_app/modules/details/details_module.dart';
+import 'package:book_app/modules/book_details/details_module.dart';
 import 'package:book_app/modules/favoritas/favoritas_module.dart';
 import 'package:book_app/modules/home/controller/bottom_navigator_controller.dart';
 import 'package:book_app/modules/home/page/home_page.dart';
@@ -19,8 +19,14 @@ import 'package:flutter_modular/flutter_modular.dart';
 class HomeModule extends Module {
   @override
   // TODO: implement imports
-  List<Module> get imports =>
-      [AuthModule(), BookModule(), ProfileModule(), PostModule(), ChatModule()];
+  List<Module> get imports => [
+        AuthModule(),
+        BookModule(),
+        ProfileModule(),
+        PostModule(),
+        ChatModule(),
+        FavoritasModule()
+      ];
 
   @override
   void routes(RouteManager r) {

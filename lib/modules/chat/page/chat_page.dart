@@ -1,3 +1,6 @@
+import 'dart:async';
+import 'dart:developer';
+
 import 'package:book_app/model/dto/view_chats_dto.dart';
 import 'package:book_app/model/mensagem.dart';
 import 'package:book_app/model/user_model.dart';
@@ -8,6 +11,7 @@ import 'package:book_app/modules/chat/widgets/text_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ChatPage extends StatefulWidget {
@@ -22,18 +26,21 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   final UserController userController = Modular.get();
   final MensagemController mensagemController = Modular.get();
+  final ChatController chatController = Modular.get();
 
   @override
   void initState() {
     super.initState();
+    mensagemController.idChat = widget.chatDto.chatId;
     mensagemController.isChatOpen = true;
     mensagemController.friendId = widget.chatDto.userId;
+
     init();
   }
 
   @override
   void dispose() {
-    mensagemController.mensagensStream.cancel();
+    mensagemController.chatStream?.cancel();
     mensagemController.isChatOpen = false;
     super.dispose();
   }
@@ -63,7 +70,7 @@ class _ChatPageState extends State<ChatPage> {
                 itemCount: mensagemController.mensagens.length,
                 reverse: true,
                 itemBuilder: (context, index) {
-                  final data = mensagemController.mensagens[index];
+                  final data = mensagemController.mensagens[index]!;
                   return Padding(
                     padding: const EdgeInsets.only(top: 16.0),
                     child: Row(

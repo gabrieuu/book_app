@@ -49,6 +49,9 @@ dependencies:
   crypto: ^3.0.3
   one_context: ^4.0.0
   sizer: ^3.0.0
+  auto_size_text: ^3.0.0
+  flutter_rating_bar: ^4.0.1
+  flutter_html: ^3.0.0-beta.2
   
 dev_dependencies:
   flutter_test:
