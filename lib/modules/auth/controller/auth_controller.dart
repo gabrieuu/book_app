@@ -1,3 +1,7 @@
+import 'dart:developer';
+
+import 'package:book_app/model/user_model.dart';
+import 'package:book_app/modules/auth/repository/interfaces/custom_auth_repository.dart';
 import 'package:book_app/modules/auth/controller/user_controller.dart';
 import 'package:book_app/modules/auth/repository/auth_repository.dart';
 import 'package:book_app/modules/auth/status_login.dart';
@@ -14,12 +18,13 @@ abstract class _AuthControllerBase with Store {
   final email = TextEditingController();
   final password = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  
+
   @observable
   StatusLogin isLogadoStatus = StatusLogin.NAO_CARREGADO;
 
   UserController userController;
-  GlobalKey<ScaffoldMessengerState> scaffoldKeyLoginPage = GlobalKey<ScaffoldMessengerState>();
+  GlobalKey<ScaffoldMessengerState> scaffoldKeyLoginPage =
+      GlobalKey<ScaffoldMessengerState>();
 
   @observable
   bool loginIsLoading = false;
@@ -33,14 +38,14 @@ abstract class _AuthControllerBase with Store {
 
   @observable
   bool passwordVisibility = false;
-  
-  final AuthRepository _repository;
 
-  _AuthControllerBase(this._repository, this.userController){
+  final CustomAuthRepository _repository;
+
+  _AuthControllerBase(this._repository, this.userController) {
     isAuthenticated();
   }
 
-  User? get user => _repository.user;
+  UserModel? get user => _repository.user;
 
   @observable
   var isLogin = true;
@@ -48,12 +53,12 @@ abstract class _AuthControllerBase with Store {
   var title = "Bem vindo ao BookApp!";
   @observable
   var botaoCadastrar = "Criar Conta";
-  
+
   @observable
   var titleButton = "Entrar";
 
   @action
-  void clear(){
+  void clear() {
     name.clear();
     email.clear();
     password.clear();
@@ -66,65 +71,66 @@ abstract class _AuthControllerBase with Store {
   togglePasswordVisibility() => passwordVisibility = !passwordVisibility;
 
   @action
-  void toggleRegistrar (){
+  void toggleRegistrar() {
     isLogin = !isLogin;
     clear();
   }
 
-  String? validarEmail(String email){
-    if(email.isEmpty){
+  String? validarEmail(String email) {
+    if (email.isEmpty) {
       erroEmail = "Campo não pode ser vazio!";
-       return null;
-    }else if(!RegExp(r'^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})$')
-      .hasMatch(email)){
-        erroEmail = "Formato de email inválido!";
-         return null;
+      return null;
+    } else if (!RegExp(
+            r'^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})$')
+        .hasMatch(email)) {
+      erroEmail = "Formato de email inválido!";
+      return null;
     }
     erroEmail = '';
-      return null;
-
+    return null;
   }
 
   @action
-  String? validarSenha(String pass){
-    if(pass.length < 6){
+  String? validarSenha(String pass) {
+    if (pass.length < 6) {
       erroSenha = "Senha precisa ser maior que 5!";
       return null;
     }
     erroSenha = '';
-      return null;
-    
+    return null;
   }
 
   @action
-  String? validarNome(String nome){
-    if(nome.isEmpty){
+  String? validarNome(String nome) {
+    if (nome.isEmpty) {
       erroNome = '';
       return null;
     }
     erroNome = '';
     return null;
-    
   }
 
-  isAuthenticated() async{
-    if(_repository.user != null){
-      await userController.getUser();
-        
-      if (userController.user.passouIntroducao) {
-        Modular.to.navigate('/initial/home');
-        return;
+  isAuthenticated() async {
+    try {
+      if (_repository.user != null) {
+        await userController.getUser();
+
+        if (userController.user.passouIntroducao) {
+          Modular.to.navigate('/initial/home');
+          return;
+        }
+
+        Modular.to.navigate('/primeiro-acesso/apresentacao');
+      } else {
+        Modular.to.navigate('/auth/');
       }
-
-      Modular.to.navigate('/primeiro-acesso/apresentacao');
-    }else{
-      Modular.to.navigate('/auth/');
+    } catch (e) {
+      await signOut();
     }
-
   }
 
   @action
-  login() async{
+  login() async {
     try {
       loginIsLoading = true;
       await _repository.signIn(email.text, password.text);
@@ -132,14 +138,17 @@ abstract class _AuthControllerBase with Store {
       loginIsLoading = false;
     } on AuthException catch (e) {
       loginIsLoading = false;
+    } catch (e) {
+      log('$e');
+      loginIsLoading = false;
     }
   }
-  
+
   @action
-   createuser() async{
+  createuser() async {
     try {
       loginIsLoading = true;
-      await _repository.createUser(email: email.text,password: password.text);
+      await _repository.createUser(email: email.text, password: password.text);
       await isAuthenticated();
       loginIsLoading = false;
     } catch (e) {
@@ -149,13 +158,12 @@ abstract class _AuthControllerBase with Store {
   }
 
   @action
-  signOut() async{
+  signOut() async {
     try {
       await _repository.signOut();
-      Modular.to.navigate('/auth');
+      Modular.to.navigate('/auth/');
     } catch (e) {
       print('erro ao deslogar');
     }
   }
-
 }

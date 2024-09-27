@@ -79,8 +79,7 @@ class _CommentPageState extends State<CommentPage> {
                           borderRadius: BorderRadius.circular(20)),
                       suffixIcon: IconButton(
                         onPressed: () async {
-                          await controller
-                              .addComments(controller.authRepository.user!.id);
+                          await controller.addComments(user.user.id!);
                         },
                         icon: Icon(Icons.send),
                       )),

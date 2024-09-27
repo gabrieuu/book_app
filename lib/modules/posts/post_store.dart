@@ -1,6 +1,8 @@
 import 'package:book_app/core/status.dart';
 import 'package:book_app/model/post_model.dart';
+import 'package:book_app/modules/auth/controller/user_controller.dart';
 import 'package:book_app/modules/auth/repository/auth_repository.dart';
+import 'package:book_app/modules/posts/post_repository/custom_posts_repository.dart';
 import 'package:book_app/modules/posts/post_repository/post_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
@@ -9,8 +11,8 @@ part 'post_store.g.dart';
 class PostStore = _PostStoreBase with _$PostStore;
 
 abstract class _PostStoreBase with Store {
-  PostRepository repository;
-  AuthRepository authRepository;
+  CustomPostsRepository repository;
+  //AuthRepository authRepository;
 
   @observable
   ObservableList<PostModel> posts = ObservableList.of([]);
@@ -20,6 +22,7 @@ abstract class _PostStoreBase with Store {
   @observable
   Status situacaoPostUpload = Status.NAO_CARREGADO;
 
+  UserController userController;
   @observable
   bool searchIsSelect = false;
 
@@ -28,7 +31,7 @@ abstract class _PostStoreBase with Store {
 
   final content = TextEditingController();
 
-  _PostStoreBase(this.repository, this.authRepository) {
+  _PostStoreBase(this.repository, this.userController) {
     init();
   }
 
@@ -51,7 +54,7 @@ abstract class _PostStoreBase with Store {
     situacaoPost = Status.SUCESSO;
   }
 
-  Future<List<PostModel>>  getPostsByUser(String userId) async{
+  Future<List<PostModel>> getPostsByUser(String userId) async {
     var list = await repository.getPostByUser(userId);
     return list;
   }
@@ -60,7 +63,7 @@ abstract class _PostStoreBase with Store {
   Future<void> addPost() async {
     situacaoPostUpload = Status.CARREGANDO;
     final postModel = PostModel(
-        content: content.text, autorId: authRepository.user!.id, bookId: null);
+        content: content.text, autorId: userController.user.id!, bookId: null);
     posts.add(postModel);
     print(posts.toString());
     await repository.addPost(postModel);
@@ -68,8 +71,7 @@ abstract class _PostStoreBase with Store {
   }
 
   @action
-  Future<void> curtirPost(PostModel post) async {  
-
+  Future<void> curtirPost(PostModel post) async {
     int index = posts.indexWhere((element) => element.id == post.id);
 
     if (index != -1) {
@@ -79,16 +81,18 @@ abstract class _PostStoreBase with Store {
           id: post.id,
           autorName: post.autorName,
           bookId: post.bookId,
-          quantidadeCurtidas: (post.isCurtido) ? post.quantidadeCurtidas! - 1 : post.quantidadeCurtidas! + 1,
+          quantidadeCurtidas: (post.isCurtido)
+              ? post.quantidadeCurtidas! - 1
+              : post.quantidadeCurtidas! + 1,
           quantidadeComentarios: post.quantidadeComentarios,
           isCurtido: !post.isCurtido);
     }
-    await repository.curtirPost(post.id!, authRepository.user!.id);
+    await repository.curtirPost(post.id!, userController.user.id!);
   }
 
   @action
   Future<bool> isCurtido(int idPost) async {
-    return await repository.isCurtido(idPost, authRepository.user!.id);
+    return await repository.isCurtido(idPost, userController.user.id!);
   }
 
   @action

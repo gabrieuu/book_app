@@ -1,15 +1,16 @@
 import 'package:book_app/model/book_model.dart';
 import 'package:book_app/core/client_http/client_http.dart';
 import 'package:book_app/database/bd_book.dart';
+import 'package:book_app/modules/books/repository/custom_book_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-class BookRepository {
-  ClientHttp client;
-  //BDBook bdBook = BDBook();
+class BookRepositoryImpl implements CustomBookRepository {
+  final ClientHttp client;
   final supabase = Supabase.instance.client;
 
-  BookRepository(this.client);
+  BookRepositoryImpl(this.client);
 
+  @override
   Future<List<Book>> fetchAll(String volume) async {
     if (volume.trim().length > 3) {
       final url =
@@ -25,6 +26,7 @@ class BookRepository {
     return [];
   }
 
+  @override
   Future<List<Book>> fetchCategory(String category) async {
     final url =
         "https://www.googleapis.com/books/v1/volumes?q=subject:$category&filter=partial&printType=books";
@@ -37,6 +39,7 @@ class BookRepository {
     return listBooks;
   }
 
+  @override
   Future<List<Book>> getBooksByListId(List<String> listIdBooks) async {
     List<Book> listBooks = [];
     var futures = listIdBooks.map(
@@ -52,6 +55,7 @@ class BookRepository {
     return listBooks;
   }
 
+  @override
   Future<List<Book>> getBooksRecomendados() async {
     try {
       var response = await supabase.from("recomendados").select("id_book");

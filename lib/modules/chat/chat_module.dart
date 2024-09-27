@@ -1,9 +1,10 @@
 import 'package:book_app/modules/auth/auth_module.dart';
-import 'package:book_app/modules/chat/chat_repository.dart';
+import 'package:book_app/modules/chat/repository/chat_repository.dart';
 import 'package:book_app/modules/chat/controller/chat_controller.dart';
 import 'package:book_app/modules/chat/controller/mensagens_controller.dart';
 import 'package:book_app/modules/chat/page/chat_page.dart';
 import 'package:book_app/modules/chat/page/lista_chat_page.dart';
+import 'package:book_app/modules/chat/repository/custom_chat_repository.dart';
 import 'package:book_app/modules/profiile/profile_module.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -13,7 +14,7 @@ class ChatModule extends Module {
 
   @override
   void exportedBinds(Injector i) {
-    i.add(ChatRepository.new);
+    i.add<CustomChatRepository>(ChatRepositorySupabase.new);
     i.addSingleton(ChatController.new);
     i.add(MensagemController.new);
   }

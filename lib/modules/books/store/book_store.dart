@@ -1,6 +1,7 @@
 import 'package:book_app/model/book_model.dart';
 import 'package:book_app/modules/books/repository/book_repository.dart';
 import 'package:book_app/core/status.dart';
+import 'package:book_app/modules/books/repository/custom_book_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 part 'book_store.g.dart';
@@ -8,7 +9,6 @@ part 'book_store.g.dart';
 class BookStore = _BookStoreBase with _$BookStore;
 
 abstract class _BookStoreBase with Store {
-
   @observable
   ObservableList<Book> listBooks = ObservableList.of([]);
 
@@ -32,12 +32,18 @@ abstract class _BookStoreBase with Store {
   ObservableList<Book> recomendados = ObservableList.of([]);
 
   @action
-  void setIndexCategoriaSelecionada(int value) => indexCategoriaSelecionada = value;
-
-
+  void setIndexCategoriaSelecionada(int value) =>
+      indexCategoriaSelecionada = value;
 
   @observable
-  List<String> listCategorias = ["Romance", "Fiction", "Action", "Horror", "Mistery", "Comedy"];
+  List<String> listCategorias = [
+    "Romance",
+    "Fiction",
+    "Action",
+    "Horror",
+    "Mistery",
+    "Comedy"
+  ];
   List<String> autores = [
     'Cassandra Clare',
     'Colleen Hoover',
@@ -51,36 +57,33 @@ abstract class _BookStoreBase with Store {
     'Julia Quinn',
     'John Green'
   ];
-  BookRepository service;
+  CustomBookRepository repository;
 
-  // FavoritaRepository favoritaRepository;
   @observable
   TextEditingController searchBook = TextEditingController();
 
-  _BookStoreBase(this.service){
+  _BookStoreBase(this.repository) {
     _initBookStore();
-    reaction((p0) => indexCategoriaSelecionada, (p0) async{ 
+    reaction((p0) => indexCategoriaSelecionada, (p0) async {
       await fetchBookByCategory();
     });
   }
 
-  _initBookStore() async{
-    await Future.wait<void>([
-      getRecomendados(),
-      fetchBookByCategory()
-    ]);
+  _initBookStore() async {
+    await Future.wait<void>([getRecomendados(), fetchBookByCategory()]);
   }
 
   @action
-  tornaLivroFavorito(Book book){
-    listBooks.where((element ) => element.id == book.id).first.isFavorite = !listBooks.where((element ) => element.id == book.id).first.isFavorite;
+  tornaLivroFavorito(Book book) {
+    listBooks.where((element) => element.id == book.id).first.isFavorite =
+        !listBooks.where((element) => element.id == book.id).first.isFavorite;
   }
 
   @action
-  Future<void> searchBooks(String book) async{
+  Future<void> searchBooks(String book) async {
     try {
       livrosCarregados = Status.CARREGANDO;
-      listBooksSearches = ObservableList.of(await service.fetchAll(book));
+      listBooksSearches = ObservableList.of(await repository.fetchAll(book));
       livrosCarregados = Status.SUCESSO;
     } catch (e) {
       print(e);
@@ -88,10 +91,10 @@ abstract class _BookStoreBase with Store {
     }
   }
 
- Future<void>getRecomendados() async{
+  Future<void> getRecomendados() async {
     try {
       livrosRecomendadosStatus = Status.CARREGANDO;
-      recomendados = ObservableList.of(await service.getBooksRecomendados());
+      recomendados = ObservableList.of(await repository.getBooksRecomendados());
       livrosRecomendadosStatus = Status.SUCESSO;
     } catch (e) {
       print(e);
@@ -99,10 +102,11 @@ abstract class _BookStoreBase with Store {
     }
   }
 
-  Future<void> fetchBookByCategory() async{
-     try {
+  Future<void> fetchBookByCategory() async {
+    try {
       livrosCarregados = Status.CARREGANDO;
-      listBooks = ObservableList.of(await service.fetchCategory(listCategorias[indexCategoriaSelecionada]));
+      listBooks = ObservableList.of(await repository
+          .fetchCategory(listCategorias[indexCategoriaSelecionada]));
       livrosCarregados = Status.SUCESSO;
     } catch (e) {
       print(e);

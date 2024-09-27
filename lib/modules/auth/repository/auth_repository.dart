@@ -1,5 +1,9 @@
 import 'dart:convert';
 
+import 'package:book_app/model/user_model.dart';
+import 'package:book_app/modules/auth/repository/interfaces/custom_auth_repository.dart';
+import 'package:book_app/modules/auth/repository/interfaces/custom_user_repository.dart';
+import 'package:book_app/modules/auth/repository/user_repository.dart';
 import 'package:crypto/crypto.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:mobx/mobx.dart';
@@ -8,49 +12,48 @@ enum Table {
   usuarios,
 }
 
-class AuthRepository {
+class AuthRepositorySupabase implements CustomAuthRepository {
   final supabase = Supabase.instance.client;
 
-  @observable
   User? _supabaseUser;
 
-  @observable
-  Session? _supabaseSession;
+  CustomUserRepository userRepository;
 
-  User? get user => _supabaseUser;
+  @override
+  UserModel? get user =>
+      UserModel.buildUser(id: _supabaseUser!.id, email: _supabaseUser!.email);
 
-  AuthRepository() {
+  AuthRepositorySupabase(this.userRepository) {
     _supabaseUser = supabase.auth.currentUser;
   }
 
-  Future<void> createUser({required String email, required String password}) async {
+  @override
+  Future<void> createUser(
+      {required String email, required String password}) async {
     String passEncript = md5.convert(password.codeUnits).toString();
     final AuthResponse res = await supabase.auth.signUp(
       email: email,
       password: passEncript,
     );
-    await supabase.from(Table.usuarios.name).insert({
-      'id_user': res.user!.id,
-      'email': email,
-      'password': passEncript,
-    });
-    _supabaseSession = res.session;
+    if (res.user == null) throw Exception("Erro ao criar usuário");
+    await userRepository.createUser(
+        idUser: res.user!.id, email: email, password: password);
     _supabaseUser = res.user;
   }
 
+  @override
   Future<void> signIn(String email, String password) async {
     String passEncript = md5.convert(password.codeUnits).toString();
     final response =
         await supabase.from(Table.usuarios.name).select("*").eq("email", email);
-    if (response != null) {
+    if (response.isNotEmpty) {
       final AuthResponse res = await supabase.auth
           .signInWithPassword(email: email, password: passEncript);
-
-      _supabaseSession = res.session;
       _supabaseUser = res.user;
     }
   }
 
+  @override
   Future<void> signOut() async {
     await supabase.auth.signOut();
   }

@@ -1,9 +1,7 @@
 import 'dart:developer';
-
-import 'package:book_app/model/chat_model.dart';
 import 'package:book_app/model/dto/view_chats_dto.dart';
 import 'package:book_app/model/mensagem.dart';
-import 'package:book_app/model/user_model.dart';
+import 'package:book_app/modules/chat/repository/custom_chat_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 const String CHAT_TABLE = 'chat';
@@ -11,12 +9,14 @@ const String MESSAGES_TABLE = 'mensagens';
 const String CHAT_PARTICIPANTS_TABLE = 'chat_participantes';
 const String CHAT_VIEW = 'list_chats_view';
 
-class ChatRepository {
+class ChatRepositorySupabase implements CustomChatRepository {
   final client = Supabase.instance.client;
 
+  @override
   Future<void> adicionarParticipantes(
       {required String usuario1, required usuario2}) async {}
 
+  @override
   Future<List<ChatsViewDto>> getChatsPrivadoDoUsuario(String userId) async {
     var response = await client
         .from(CHAT_PARTICIPANTS_TABLE)
@@ -44,6 +44,7 @@ class ChatRepository {
     return chats;
   }
 
+  @override
   Future<ChatsViewDto> getChatPorId(String chatId) {
     return client
         .from(CHAT_VIEW)
@@ -53,7 +54,9 @@ class ChatRepository {
         .then((value) => ChatsViewDto.fromJson(value[0]));
   }
 
-  visualizarMensagem({required String userId, required String chatId}) async {
+  @override
+  Future<void> visualizarMensagem(
+      {required String userId, required String chatId}) async {
     try {
       await client
           .from(MESSAGES_TABLE)
@@ -65,10 +68,12 @@ class ChatRepository {
     }
   }
 
-  sendMessage(Mensagem mensagem) async {
+  @override
+  Future<void> sendMessage(Mensagem mensagem) async {
     await client.from(MESSAGES_TABLE).insert(mensagem.toJson());
   }
 
+  @override
   Future<String?> getChatId(String userId, String userId2) async {
     var listaDeChatsIds = await client
         .from(CHAT_PARTICIPANTS_TABLE)
@@ -92,6 +97,7 @@ class ChatRepository {
     return null;
   }
 
+  @override
   Future<String> createChat(
       {String? nomeChat, required String usuario1, required usuario2}) async {
     final response =
@@ -106,12 +112,14 @@ class ChatRepository {
     return chatId;
   }
 
+  @override
   Future<String> iniciarConversa(
       {required String usuario1, required usuario2}) async {
     String? chatId = await getChatId(usuario1, usuario2);
     return chatId ?? await createChat(usuario1: usuario1, usuario2: usuario2);
   }
 
+  @override
   Future<List<Mensagem>> getMensagems({required String chatId}) async {
     try {
       final response =

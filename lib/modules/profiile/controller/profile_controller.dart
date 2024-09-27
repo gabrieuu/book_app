@@ -5,6 +5,7 @@ import 'package:book_app/model/book_model.dart';
 import 'package:book_app/model/post_model.dart';
 import 'package:book_app/model/user_model.dart';
 import 'package:book_app/modules/auth/controller/user_controller.dart';
+import 'package:book_app/modules/auth/repository/interfaces/custom_user_repository.dart';
 import 'package:book_app/modules/auth/repository/user_repository.dart';
 import 'package:book_app/modules/favoritas/store/favoritas_store.dart';
 import 'package:book_app/modules/posts/post_store.dart';
@@ -20,7 +21,7 @@ abstract class _ProfileControllerBase with Store {
 
   FavoritasStore favoritasStore;
 
-  UserRepository userRepository;
+  CustomUserRepository userRepository;
 
   @observable
   int quantidadeSeguidores = 0;

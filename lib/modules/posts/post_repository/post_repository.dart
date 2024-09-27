@@ -1,30 +1,31 @@
 import 'package:book_app/model/post_model.dart';
+import 'package:book_app/modules/posts/post_repository/custom_posts_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 const table = 'post';
 
-class PostRepository {
+class PostRepositorySupabase implements CustomPostsRepository {
   final supabase = Supabase.instance.client;
 
-  addPost(PostModel post) async {
+  @override
+  Future<void> addPost(PostModel post) async {
     try {
       await supabase.from(table).insert(post.toJson);
-    } catch (e) {
-      print(e);
-    }
+    } catch (e) {}
   }
 
+  @override
   Future<List<PostModel>> getPosts() async {
     try {
       PostgrestList response =
           await supabase.from('postagens').select('*, usuarios(name)');
       return response.map((e) => PostModel.fromJson(e)).toList();
     } catch (e) {
-      print(e);
       return [];
     }
   }
 
+  @override
   Future<List<PostModel>> getPostByUser(String idUser) async {
     try {
       var response = await supabase
@@ -35,11 +36,11 @@ class PostRepository {
           List<Map<String, dynamic>>.from(response);
       return data.map((e) => PostModel.fromJson(e)).toList();
     } catch (e) {
-      print(e);
       return [];
     }
   }
 
+  @override
   Future<void> curtirPost(int idPost, String idUser) async {
     var response = await supabase
         .from('curtidas')
@@ -58,11 +59,10 @@ class PostRepository {
       await supabase
           .from('curtidas')
           .insert({'id_post': idPost, 'id_user': idUser});
-    } catch (e) {
-      print(e);
-    }
+    } catch (e) {}
   }
 
+  @override
   Future<int> getQuantidadeCurtidas(int idPost) async {
     try {
       var response = await supabase
@@ -72,11 +72,11 @@ class PostRepository {
           .count(CountOption.exact);
       return response.count;
     } catch (e) {
-      print(e);
       return 0;
     }
   }
 
+  @override
   Future<bool> isCurtido(int idPost, String idUser) async {
     try {
       var response = await supabase
@@ -84,9 +84,8 @@ class PostRepository {
           .select('id_post')
           .eq('id_post', idPost)
           .eq('id_user', idUser);
-      return response.length > 0;
+      return response.isNotEmpty;
     } catch (e) {
-      print(e);
       return false;
     }
   }

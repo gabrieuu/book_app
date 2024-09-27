@@ -6,7 +6,8 @@ import 'package:book_app/model/chat_model.dart';
 import 'package:book_app/model/dto/view_chats_dto.dart';
 import 'package:book_app/model/mensagem.dart';
 import 'package:book_app/modules/auth/controller/user_controller.dart';
-import 'package:book_app/modules/chat/chat_repository.dart';
+import 'package:book_app/modules/chat/repository/chat_repository.dart';
+import 'package:book_app/modules/chat/repository/custom_chat_repository.dart';
 import 'package:mobx/mobx.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 part 'chat_controller.g.dart';
@@ -20,7 +21,7 @@ abstract class _ChatControllerBase with Store {
   @observable
   Status carregandoChats = Status.NAO_CARREGADO;
 
-  ChatRepository chatRepository;
+  CustomChatRepository chatRepository;
   UserController userController;
   StreamSubscription? chatStream;
 
