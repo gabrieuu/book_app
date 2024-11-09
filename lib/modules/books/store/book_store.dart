@@ -1,9 +1,9 @@
-import 'package:book_app/model/book_model.dart';
-import 'package:book_app/modules/books/repository/book_repository.dart';
 import 'package:book_app/core/status.dart';
+import 'package:book_app/model/book_model.dart';
 import 'package:book_app/modules/books/repository/custom_book_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
+
 part 'book_store.g.dart';
 
 class BookStore = _BookStoreBase with _$BookStore;
@@ -38,11 +38,11 @@ abstract class _BookStoreBase with Store {
   @observable
   List<String> listCategorias = [
     "Romance",
-    "Fiction",
-    "Action",
-    "Horror",
-    "Mistery",
-    "Comedy"
+    "Ficção",
+    "Ação",
+    "Terror",
+    "Misterio",
+    "Comédia"
   ];
   List<String> autores = [
     'Cassandra Clare',
@@ -106,7 +106,7 @@ abstract class _BookStoreBase with Store {
     try {
       livrosCarregados = Status.CARREGANDO;
       listBooks = ObservableList.of(await repository
-          .fetchCategory(listCategorias[indexCategoriaSelecionada]));
+          .getBooksByCategory(listCategorias[indexCategoriaSelecionada]));
       livrosCarregados = Status.SUCESSO;
     } catch (e) {
       print(e);

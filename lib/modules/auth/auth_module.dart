@@ -10,8 +10,8 @@ import 'package:flutter_modular/flutter_modular.dart';
 class AuthModule extends Module {
   @override
   void exportedBinds(Injector i) {
-    i.add<CustomAuthRepository>(AuthRepositorySupabase.new);
-    i.addInstance<CustomUserRepository>(UserRepositorySupabase());
+    i.addLazySingleton<CustomAuthRepository>(AuthRepositorySupabase.new);
+    i.addLazySingleton<CustomUserRepository>(UserRepositorySupabase.new);
     i.addLazySingleton<UserController>(UserController.new);
     i.addLazySingleton<AuthController>(AuthController.new);
   }

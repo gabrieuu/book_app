@@ -110,6 +110,7 @@ abstract class _AuthControllerBase with Store {
     return null;
   }
 
+  @action
   isAuthenticated() async {
     try {
       if (_repository.user != null) {
