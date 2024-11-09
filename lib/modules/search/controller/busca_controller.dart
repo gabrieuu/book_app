@@ -2,8 +2,10 @@ import 'package:book_app/core/status.dart';
 import 'package:book_app/model/book_model.dart';
 import 'package:book_app/model/user_model.dart';
 import 'package:book_app/modules/auth/controller/user_controller.dart';
+import 'package:book_app/modules/auth/repository/interfaces/custom_user_repository.dart';
 import 'package:book_app/modules/auth/repository/user_repository.dart';
 import 'package:book_app/modules/books/repository/book_repository.dart';
+import 'package:book_app/modules/books/repository/custom_book_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 part 'busca_controller.g.dart';
@@ -24,8 +26,8 @@ abstract class _BuscaControllerBase with Store {
   @observable
   ObservableList<Book> livrosEncontrados = ObservableList.of([]);
 
-  UserRepository userRepository;
-  BookRepository bookRepository;
+  CustomUserRepository userRepository;
+  CustomBookRepository bookRepository;
 
   @observable
   Status statusLeitoresCarregando = Status.NAO_CARREGADO;

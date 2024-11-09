@@ -14,58 +14,60 @@ class SearchPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-          appBar: AppBar(
-            automaticallyImplyLeading: false,
-            title: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              decoration: BoxDecoration(
-                color: Colors.grey[200],
-                borderRadius: BorderRadius.circular(10),
-              ),
-              child: TextField(
-                controller: controller.searchTextFieldController,
-                onChanged: (value) {
-                  if (controller.searchTextFieldController.text.isEmpty) {
-                    controller.leitoresEncrontrados.clear();
-                    controller.livrosEncontrados.clear();
-                    return;
-                  }
-                  if (value.isNotEmpty) {
-                    debouncer(() async {
-                      print('atualizou');
-                      await controller.buscar(value: value);
-                    });
-                  }
-                },
-                decoration: InputDecoration(
-                  hintText: 'Search',
-                  border: InputBorder.none,
-                  hintStyle: TextStyle(),
+    return SafeArea(
+      child: DefaultTabController(
+        length: 2,
+        child: Scaffold(
+            appBar: AppBar(
+              automaticallyImplyLeading: false,
+              title: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10),
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: TextField(
+                  controller: controller.searchTextFieldController,
+                  onChanged: (value) {
+                    if (controller.searchTextFieldController.text.isEmpty) {
+                      controller.leitoresEncrontrados.clear();
+                      controller.livrosEncontrados.clear();
+                      return;
+                    }
+                    if (value.isNotEmpty) {
+                      debouncer(() async {
+                        print('atualizou');
+                        await controller.buscar(value: value);
+                      });
+                    }
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Search',
+                    border: InputBorder.none,
+                    hintStyle: TextStyle(),
+                  ),
                 ),
               ),
             ),
-          ),
-          body: Column(
-            children: [
-              TabBar(
-                  onTap: (value) {
-                    controller.buscarPorTabBar(value);
-                  },
-                  tabs: [
-                    Tab(text: 'Livros'),
-                    Tab(text: 'Leitores'),
+            body: Column(
+              children: [
+                TabBar(
+                    onTap: (value) {
+                      controller.buscarPorTabBar(value);
+                    },
+                    tabs: [
+                      Tab(text: 'Livros'),
+                      Tab(text: 'Leitores'),
+                    ]),
+                Expanded(
+                  child: TabBarView(children: [
+                    ListBooksSearch(),
+                    ListUsers(),
                   ]),
-              Expanded(
-                child: TabBarView(children: [
-                  ListBooksSearch(),
-                  ListUsers(),
-                ]),
-              )
-            ],
-          )),
+                )
+              ],
+            )),
+      ),
     );
   }
 }

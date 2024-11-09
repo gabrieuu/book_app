@@ -22,6 +22,23 @@ class UserModel {
     );
   }
 
+  static UserModel buildUser({
+    String? id,
+    String? name,
+    String? email,
+    String? username,
+    bool? passouIntroducao,
+  }) {
+    if (id == null) throw Exception('id não pode ser nulo');
+    return UserModel(
+      id: id,
+      name: name ?? '',
+      email: email ?? '',
+      username: username ?? '',
+      passouIntroducao: passouIntroducao ?? false,
+    );
+  }
+
   static UserModel empty() {
     return UserModel(
         name: 'teste',

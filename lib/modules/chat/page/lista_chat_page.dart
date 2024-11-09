@@ -3,7 +3,7 @@ import 'dart:developer';
 
 import 'package:book_app/core/themes.dart';
 import 'package:book_app/model/user_model.dart';
-import 'package:book_app/modules/chat/chat_repository.dart';
+import 'package:book_app/modules/chat/repository/chat_repository.dart';
 import 'package:book_app/modules/chat/controller/chat_controller.dart';
 import 'package:book_app/modules/chat/widgets/chat_tile.dart';
 import 'package:book_app/modules/search/widgets/person_tile.dart';
@@ -37,7 +37,7 @@ class _ListaChatPageState extends State<ListaChatPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Bate Papo'),
+          title: const Text('Bate Papo'),
           backgroundColor: Themes.branco,
         ),
         body: Column(

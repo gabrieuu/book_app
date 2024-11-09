@@ -5,9 +5,8 @@ import 'package:book_app/core/status.dart';
 import 'package:book_app/model/mensagem.dart';
 import 'package:book_app/model/user_model.dart';
 import 'package:book_app/modules/auth/controller/user_controller.dart';
-import 'package:book_app/modules/chat/chat_repository.dart';
 import 'package:book_app/modules/chat/controller/chat_controller.dart';
-import 'package:flutter/material.dart';
+import 'package:book_app/modules/chat/repository/custom_chat_repository.dart';
 import 'package:mobx/mobx.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 part 'mensagens_controller.g.dart';
@@ -27,7 +26,7 @@ abstract class _MensagemControllerBase with Store {
   @observable
   ObservableList<Mensagem> mensagens = ObservableList.of([]);
 
-  ChatRepository chatRepository;
+  CustomChatRepository chatRepository;
   UserController userController;
 
   ChatController chatController;

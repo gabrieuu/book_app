@@ -4,18 +4,18 @@ import 'package:book_app/model/book_model.dart';
 import 'package:book_app/core/client_http/client_http.dart';
 import 'package:book_app/core/client_http/dio_client.dart';
 import 'package:book_app/modules/books/repository/book_repository.dart';
+import 'package:book_app/modules/books/repository/custom_book_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-
-class ClientHttpMock extends Mock implements ClientHttp{}
+class ClientHttpMock extends Mock implements ClientHttp {}
 
 void main() {
   final client = ClientHttpMock();
-  final service = BookRepository(client);
+  final CustomBookRepository service = BookRepositoryImpl(client);
 
-  test("deve fazer a request", () async{
-    when(()=> client.get(any())).thenAnswer((_) async => jsonDecode(json));
+  test("deve fazer a request", () async {
+    when(() => client.get(any())).thenAnswer((_) async => jsonDecode(json));
 
     List<Book> listBook = await service.fetchAll("percy_jackson");
     int index = 1;
@@ -29,19 +29,18 @@ void main() {
     print(listBook[index].volumeInfo.imageLinks!.smallThumb);
     print(listBook[index].volumeInfo.imageLinks!.thumbnail);
 
-
-    expect(listBook[index].volumeInfo.title, "Percy Jackson E Os Ladroes Do Olimpo");
+    expect(listBook[index].volumeInfo.title,
+        "Percy Jackson E Os Ladroes Do Olimpo");
   });
   final cliente = DioClient();
-  final services = BookRepository(cliente);
+  final services = BookRepositoryImpl(cliente);
 
-  test("deve fazer pegar 3 livros", () async{
+  test("deve fazer pegar 3 livros", () async {
     var list = ["lfHo7uMk7r4C", "gHe3wAEACAAJ", "V6A0zgEACAAJ"];
     var listaa = await services.fetchFavoritesBooks(list);
     listaa.forEach((e) => print(e.volumeInfo.title));
   });
 }
-
 
 const json = r"""{
   "kind": "books#volumes",
