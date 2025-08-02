@@ -8,6 +8,9 @@ class VolumeInfo {
   String publishedDate;
   String? description;
   int pageCount;
+  String isbn;
+  String language;
+  String? printType;
   List<dynamic> categories;
   ImageLinks imageLinks;
   double? averageRating;
@@ -22,6 +25,9 @@ class VolumeInfo {
     required this.pageCount,
     required this.categories,
     required this.imageLinks,
+    this.isbn = "",
+    this.language = "pt",
+    this.printType = "BOOK",
     this.averageRating,
   }) {
     _publisher = publisher;

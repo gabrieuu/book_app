@@ -39,14 +39,6 @@ class _NavigatorBottomState extends State<NavigatorBottom> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: const RouterOutlet(),
-      floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            Modular.to.pushNamed('/initial${PostPage.route}/');
-          },
-          //floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-          child: Icon(Icons.post_add, color: Colors.white),
-          backgroundColor: Themes.corPrincipalAppModoClaro,
-          shape: CircleBorder()),
       bottomNavigationBar: Observer(builder: (_) {
         return BottomNavigationBar(
           iconSize: 21,
