@@ -1,4 +1,5 @@
 import 'package:book_app/model/post_model.dart';
+import 'package:book_app/modules/books/widgets/book_postagem.dart';
 import 'package:book_app/modules/posts/post_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -27,6 +28,25 @@ class _EnhancedPostTileState extends State<EnhancedPostTile> {
     'https://picsum.photos/400/300?random=5',
   ];
 
+  // Mock book data for demonstration
+  final List<Map<String, String>> mockBooks = [
+    {
+      'title': 'Dom Casmurro',
+      'author': 'Machado de Assis',
+      'cover': 'https://via.placeholder.com/80x120/4CAF50/FFFFFF?text=DC'
+    },
+    {
+      'title': 'O Cortiço',
+      'author': 'Aluísio Azevedo',
+      'cover': 'https://via.placeholder.com/80x120/2196F3/FFFFFF?text=OC'
+    },
+    {
+      'title': '1984',
+      'author': 'George Orwell',
+      'cover': 'https://via.placeholder.com/80x120/FF5722/FFFFFF?text=1984'
+    },
+  ];
+
   @override
   void initState() {
     super.initState();
@@ -38,9 +58,11 @@ class _EnhancedPostTileState extends State<EnhancedPostTile> {
 
   @override
   Widget build(BuildContext context) {
-    final hasImage =
-        (widget.post.hashCode % 3) != 0; // 2/3 chance of having image
+    final hasImage = false;
+    final hasBook = true; // 1/4 chance of having a book
     final imageUrl = mockImages[widget.post.hashCode % mockImages.length];
+    final bookData =
+        hasBook ? mockBooks[widget.post.hashCode % mockBooks.length] : null;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -60,6 +82,7 @@ class _EnhancedPostTileState extends State<EnhancedPostTile> {
         children: [
           _buildPostHeader(),
           _buildPostContent(),
+          if (hasBook && bookData != null) BookPostagem(bookData: bookData),
           if (hasImage) _buildPostImage(imageUrl),
           _buildActionButtons(),
         ],
