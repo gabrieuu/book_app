@@ -62,11 +62,11 @@ class _NavigatorBottomState extends State<NavigatorBottom> {
               label: 'Buscar',
               backgroundColor: Colors.blue,
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.menu_book_rounded),
-              label: 'Livros',
-              backgroundColor: Colors.blue,
-            ),
+            // BottomNavigationBarItem(
+            //   icon: Icon(Icons.menu_book_rounded),
+            //   label: 'Livros',
+            //   backgroundColor: Colors.blue,
+            // ),
             BottomNavigationBarItem(
               icon: Icon(Icons.person),
               label: 'Perfil',
