@@ -7,6 +7,7 @@ import 'package:book_app/modules/auth/repository/user_repository.dart';
 import 'package:book_app/modules/books/repository/book_repository.dart';
 import 'package:book_app/modules/books/repository/custom_book_repository.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
 import 'package:mobx/mobx.dart';
 part 'busca_controller.g.dart';
 
@@ -29,10 +30,15 @@ abstract class _BuscaControllerBase with Store {
   CustomUserRepository userRepository;
   CustomBookRepository bookRepository;
 
+  Debouncer debouncer = Debouncer(delay: const Duration(milliseconds: 300));
+
   @observable
   Status statusLeitoresCarregando = Status.NAO_CARREGADO;
   @observable
   Status statusLivrosCarregando = Status.NAO_CARREGADO;
+
+  @observable
+  bool isSearching = false;
 
   _BuscaControllerBase(
       this.userController, this.userRepository, this.bookRepository);
@@ -45,6 +51,13 @@ abstract class _BuscaControllerBase with Store {
       return;
     }
     await buscar();
+  }
+
+  @action
+  void clear(){
+    livrosEncontrados = ObservableList.of([]);
+    statusLeitoresCarregando = Status.NAO_CARREGADO;
+    statusLivrosCarregando = Status.NAO_CARREGADO;
   }
 
   @action
@@ -76,6 +89,24 @@ abstract class _BuscaControllerBase with Store {
       statusLeitoresCarregando = Status.SUCESSO;
     } catch (e) {
       statusLeitoresCarregando = Status.ERRO;
+    }
+  }
+
+  void onChangeTextField(String value) {
+    if (value.isEmpty) {
+      leitoresEncrontrados.clear();
+      livrosEncontrados.clear();
+      isSearching = false;
+      return;
+    }
+
+    isSearching = true;
+
+    if (value.isNotEmpty) {
+      debouncer(() async {
+        await buscar(value: value);
+        isSearching = false;
+      });
     }
   }
 

@@ -4,11 +4,12 @@ import 'package:book_app/modules/posts/page/post_page.dart';
 import 'package:book_app/modules/posts/post_repository/custom_posts_repository.dart';
 import 'package:book_app/modules/posts/post_repository/post_repository.dart';
 import 'package:book_app/modules/posts/post_store.dart';
+import 'package:book_app/modules/search/search_module.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class PostModule extends Module {
   @override
-  List<Module> get imports => [AuthModule()];
+  List<Module> get imports => [AuthModule(), SearchModule()];
 
   @override
   void exportedBinds(Injector i) {

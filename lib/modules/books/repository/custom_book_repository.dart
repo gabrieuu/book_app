@@ -8,4 +8,5 @@ abstract class CustomBookRepository {
   Future<List<Book>> getBooksByAutor(String autor);
   Future<List<Book>> getBooksByEditora(String editora);
   Future<List<Book>> getBooksByIsbn(String isbn);
+  Future<Book?> getBookById(String id);
 }

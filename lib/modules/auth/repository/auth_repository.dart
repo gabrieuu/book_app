@@ -37,7 +37,7 @@ class AuthRepositorySupabase implements CustomAuthRepository {
     );
     if (res.user == null) throw Exception("Erro ao criar usuário");
     await userRepository.createUser(
-        idUser: res.user!.id, email: email, password: password);
+        idUser: res.user!.id, email: email, password: passEncript);
     _supabaseUser = res.user;
   }
 
@@ -46,11 +46,15 @@ class AuthRepositorySupabase implements CustomAuthRepository {
     String passEncript = md5.convert(password.codeUnits).toString();
     final response =
         await supabase.from(Table.usuarios.name).select("*").eq("email", email);
-    if (response.isNotEmpty) {
-      final AuthResponse res = await supabase.auth
-          .signInWithPassword(email: email, password: passEncript);
-      _supabaseUser = res.user;
+    if (response.isEmpty) {
+      throw Exception("Usuário não encontrado, verifique suas credenciais.");
     }
+    final AuthResponse res = await supabase.auth
+          .signInWithPassword(email: email, password: passEncript);
+
+    if (res.user == null) throw Exception("Erro ao fazer login");
+    _supabaseUser = res.user;
+
   }
 
   @override

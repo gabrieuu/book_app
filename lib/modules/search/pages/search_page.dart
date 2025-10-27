@@ -13,7 +13,6 @@ class SearchPage extends StatefulWidget {
 }
 
 class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
-  Debouncer debouncer = Debouncer(delay: Duration(milliseconds: 300));
   final BuscaController controller = Modular.get();
   late TabController _tabController;
   bool _isSearching = false;
@@ -40,9 +39,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
   }
 
   void _clearSearch() {
-    controller.searchTextFieldController.clear();
-    controller.leitoresEncrontrados.clear();
-    controller.livrosEncontrados.clear();
+    controller.clear();
     setState(() {
       _showClearButton = false;
       _isSearching = false;
@@ -103,23 +100,7 @@ class _SearchPageState extends State<SearchPage> with TickerProviderStateMixin {
                       controller: controller.searchTextFieldController,
                       onTap: () => setState(() => _isSearching = true),
                       onSubmitted: (_) => setState(() => _isSearching = false),
-                      onChanged: (value) {
-                        if (value.isEmpty) {
-                          controller.leitoresEncrontrados.clear();
-                          controller.livrosEncontrados.clear();
-                          setState(() => _isSearching = false);
-                          return;
-                        }
-
-                        setState(() => _isSearching = true);
-
-                        if (value.isNotEmpty) {
-                          debouncer(() async {
-                            await controller.buscar(value: value);
-                            if (mounted) setState(() => _isSearching = false);
-                          });
-                        }
-                      },
+                      onChanged: controller.onChangeTextField,
                       decoration: InputDecoration(
                         hintText: 'Buscar livros e leitores...',
                         hintStyle: TextStyle(

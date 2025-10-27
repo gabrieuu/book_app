@@ -1,4 +1,5 @@
 import 'package:book_app/core/status.dart';
+import 'package:book_app/model/book_model.dart';
 import 'package:book_app/modules/search/controller/busca_controller.dart';
 import 'package:book_app/modules/search/widgets/book_tile.dart';
 import 'package:flutter/material.dart';
@@ -6,10 +7,10 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class ListBooksSearch extends StatelessWidget {
-  ListBooksSearch({super.key});
+  ListBooksSearch({super.key, this.onBookSelected});
 
   BuscaController buscaController = Modular.get();
-
+  Function(Book book)? onBookSelected;
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: Observer(builder: (_) {
@@ -25,6 +26,7 @@ class ListBooksSearch extends StatelessWidget {
                 padding: const EdgeInsets.only(bottom: 10),
                 child: BookTile(
                   book: buscaController.livrosEncontrados[index],
+                  onBookSelected: onBookSelected,
                 ),
               );
             },

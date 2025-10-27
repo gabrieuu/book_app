@@ -108,6 +108,22 @@ mixin _$BuscaController on _BuscaControllerBase, Store {
     });
   }
 
+  late final _$isSearchingAtom =
+      Atom(name: '_BuscaControllerBase.isSearching', context: context);
+
+  @override
+  bool get isSearching {
+    _$isSearchingAtom.reportRead();
+    return super.isSearching;
+  }
+
+  @override
+  set isSearching(bool value) {
+    _$isSearchingAtom.reportWrite(value, super.isSearching, () {
+      super.isSearching = value;
+    });
+  }
+
   late final _$buscarPorTabBarAsyncAction =
       AsyncAction('_BuscaControllerBase.buscarPorTabBar', context: context);
 
@@ -140,6 +156,20 @@ mixin _$BuscaController on _BuscaControllerBase, Store {
     return _$buscaLivrosAsyncAction.run(() => super.buscaLivros(nome));
   }
 
+  late final _$_BuscaControllerBaseActionController =
+      ActionController(name: '_BuscaControllerBase', context: context);
+
+  @override
+  void clear() {
+    final _$actionInfo = _$_BuscaControllerBaseActionController.startAction(
+        name: '_BuscaControllerBase.clear');
+    try {
+      return super.clear();
+    } finally {
+      _$_BuscaControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
   @override
   String toString() {
     return '''
@@ -148,7 +178,8 @@ tabBarSelecionada: ${tabBarSelecionada},
 leitoresEncrontrados: ${leitoresEncrontrados},
 livrosEncontrados: ${livrosEncontrados},
 statusLeitoresCarregando: ${statusLeitoresCarregando},
-statusLivrosCarregando: ${statusLivrosCarregando}
+statusLivrosCarregando: ${statusLivrosCarregando},
+isSearching: ${isSearching}
     ''';
   }
 }

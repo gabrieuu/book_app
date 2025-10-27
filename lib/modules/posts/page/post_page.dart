@@ -1,5 +1,12 @@
+import 'dart:developer';
+
 import 'package:book_app/core/status.dart';
+import 'package:book_app/model/book_model.dart';
 import 'package:book_app/modules/posts/post_store.dart';
+import 'package:book_app/modules/posts/post_widget/new_post_book_search.dart';
+import 'package:book_app/modules/search/controller/busca_controller.dart';
+import 'package:book_app/modules/search/widgets/book_tile.dart';
+import 'package:book_app/modules/search/widgets/list_books_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -17,6 +24,9 @@ class _PostPageState extends State<PostPage> {
   final TextEditingController _textController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   PostStore store = Modular.get<PostStore>();
+  BuscaController buscaController = Modular.get<BuscaController>();
+  Book? selectedBook;
+  bool get isBookButtonPressed => selectedBook != null;
 
   @override
   void initState() {
@@ -146,6 +156,32 @@ class _PostPageState extends State<PostPage> {
               ),
             ),
           ),
+          if(selectedBook != null)
+            Stack(
+              children: [
+                BookTile(book: selectedBook!, onBookSelected: (book){                
+                },),
+                Positioned(
+                  right: 0,
+                  top: -10,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                        onPressed: (){
+                          selectedBook = null;
+                          setState(() {});
+                        }, 
+                        icon: const Icon(Icons.delete, color: Colors.red,),
+                        ),
+                      IconButton(onPressed: (){
+                        
+                      }, icon: Icon(Icons.edit, color: Colors.grey[600],))
+                    ],
+                  ),
+                ),
+              ],
+            ),
           Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
@@ -161,9 +197,40 @@ class _PostPageState extends State<PostPage> {
                     const SizedBox(width: 16),
                     _ActionButton(
                       icon: Icons.book,
-                      color: Colors.blue[600]!,
+                      color: isBookButtonPressed ? Colors.blue[600]! : Colors.black,
                       label: 'Livro',
-                      onTap: () {},
+                      onTap: () {
+                        showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                            barrierColor: Colors.transparent,
+                            builder: (context) {
+                              return Container(
+                                padding: EdgeInsets.only(
+                                  bottom: MediaQuery.of(context).viewInsets.bottom,
+                                  left: 16,
+                                  right: 16,
+                                  top: 16,
+                                ),
+                                decoration: const BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(20),
+                                    topRight: Radius.circular(20),
+                                  ),
+                                ),
+                                child: NewPostBookSearch(
+                                  onBookSelected: (book) {
+                                    selectedBook = book;
+                                    setState(() {});
+                                    Navigator.pop(context);
+                                    log('teste: ${book.volumeInfo.title}');
+                                  },
+                                ),
+                              );
+                            });
+                      },
                     ),
                   ],
                 ),

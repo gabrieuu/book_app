@@ -41,6 +41,22 @@ mixin _$AuthController on _AuthControllerBase, Store {
     });
   }
 
+  late final _$loginErrorMessageAtom =
+      Atom(name: '_AuthControllerBase.loginErrorMessage', context: context);
+
+  @override
+  String? get loginErrorMessage {
+    _$loginErrorMessageAtom.reportRead();
+    return super.loginErrorMessage;
+  }
+
+  @override
+  set loginErrorMessage(String? value) {
+    _$loginErrorMessageAtom.reportWrite(value, super.loginErrorMessage, () {
+      super.loginErrorMessage = value;
+    });
+  }
+
   late final _$erroNomeAtom =
       Atom(name: '_AuthControllerBase.erroNome', context: context);
 
@@ -264,6 +280,7 @@ mixin _$AuthController on _AuthControllerBase, Store {
     return '''
 isLogadoStatus: ${isLogadoStatus},
 loginIsLoading: ${loginIsLoading},
+loginErrorMessage: ${loginErrorMessage},
 erroNome: ${erroNome},
 erroEmail: ${erroEmail},
 erroSenha: ${erroSenha},

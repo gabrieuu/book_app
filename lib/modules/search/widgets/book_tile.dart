@@ -6,14 +6,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class BookTile extends StatelessWidget {
-  BookTile({super.key, required this.book});
+  BookTile({super.key, required this.book, this.onBookSelected});
 
   Book book;
+  Function(Book book)? onBookSelected;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {
+      onTap: onBookSelected != null 
+      ? () => onBookSelected!(book)
+      : () {
         Modular.to.pushNamed('/initial/book/details/', arguments: book);
       },
       child: Row(

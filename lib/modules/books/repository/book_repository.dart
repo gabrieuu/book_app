@@ -27,6 +27,13 @@ class BookRepositoryImpl implements CustomBookRepository {
   }
 
   @override
+  Future<Book?> getBookById(String id) {
+    return client
+        .get("https://www.googleapis.com/books/v1/volumes/$id")
+        .then((value) => Book.fromMap(value));
+  }
+
+  @override
   Future<List<Book>> getBooksByCategory(String category) async {
     final url =
         "https://www.googleapis.com/books/v1/volumes?q=subject:$category&orderBy=relevance&printType=books&maxResults=10&langRestrict=pt&key=$apiGoogleBoksKey";

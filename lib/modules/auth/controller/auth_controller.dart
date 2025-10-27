@@ -28,6 +28,9 @@ abstract class _AuthControllerBase with Store {
 
   @observable
   bool loginIsLoading = false;
+  
+  @observable
+  String? loginErrorMessage;
 
   @observable
   String erroNome = '';
@@ -137,10 +140,10 @@ abstract class _AuthControllerBase with Store {
       await _repository.signIn(email.text, password.text);
       await isAuthenticated();
       loginIsLoading = false;
-    } on AuthException catch (e) {
-      loginIsLoading = false;
+      loginErrorMessage = null;
     } catch (e) {
       log('$e');
+      loginErrorMessage = '$e';
       loginIsLoading = false;
     }
   }
@@ -151,9 +154,10 @@ abstract class _AuthControllerBase with Store {
       loginIsLoading = true;
       await _repository.createUser(email: email.text, password: password.text);
       await isAuthenticated();
+      loginErrorMessage = null;
       loginIsLoading = false;
     } catch (e) {
-      print(e);
+      loginErrorMessage = '$e';
       loginIsLoading = false;
     }
   }

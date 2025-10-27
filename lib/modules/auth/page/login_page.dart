@@ -17,9 +17,9 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final controller = Modular.get<AuthController>();
   final userController = Modular.get<UserController>();
+  
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
   }
 
@@ -272,7 +272,24 @@ class _LoginPageState extends State<LoginPage> {
                                           if (controller.isLogin) {
                                             await controller.login();
                                           } else {
-                                            await controller.createuser();
+                                            await controller.createuser().whenComplete((){
+                                              if(controller.loginErrorMessage == null){
+                                                ScaffoldMessenger.of(context).showSnackBar(
+                                                  SnackBar(
+                                                    content: Text('Usuário cadastrado com sucesso!'),
+                                                    backgroundColor: Colors.green,
+                                                  ),
+                                                );
+                                              }
+                                            });
+                                          }
+                                          if(controller.loginErrorMessage != null){
+                                            ScaffoldMessenger.of(context).showSnackBar(
+                                              SnackBar(
+                                                content: Text(controller.loginErrorMessage!),
+                                                backgroundColor: Colors.red,
+                                              ),
+                                            );
                                           }
                                         }
                                       },

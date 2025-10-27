@@ -73,6 +73,10 @@ abstract class _BookStoreBase with Store {
     await Future.wait<void>([getRecomendados(), fetchBookByCategory()]);
   }
 
+  Future<Book?> getBookById(String id) async{
+    return await repository.getBookById(id);
+  }
+
   @action
   tornaLivroFavorito(Book book) {
     listBooks.where((element) => element.id == book.id).first.isFavorite =

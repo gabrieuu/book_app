@@ -1,8 +1,9 @@
+import 'package:book_app/model/book_model.dart';
 import 'package:flutter/material.dart';
 
 class BookPostagem extends StatelessWidget {
   const BookPostagem({super.key, required this.bookData});
-  final Map<String, String> bookData;
+  final Book bookData;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -35,7 +36,7 @@ class BookPostagem extends StatelessWidget {
                   ),
                 ],
                 image: DecorationImage(
-                  image: NetworkImage(bookData['cover']!),
+                  image: NetworkImage(bookData.volumeInfo.imageLinks.thumbnail),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -66,7 +67,7 @@ class BookPostagem extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    bookData['title']!,
+                    bookData.volumeInfo.title,
                     style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
@@ -77,7 +78,7 @@ class BookPostagem extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    'por ${bookData['author']!}',
+                    'por ${bookData.volumeInfo.authors.join(', ')}',
                     style: TextStyle(
                       fontSize: 13,
                       color: Colors.grey[600],

@@ -32,11 +32,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FA),
-      appBar: AppBarWidget(
-        searchIsSelect: postStore.searchIsSelect,
-        hintText: 'Encontre uma pessoa',
-        textFieldController: postStore.searchController,
-      ),
+      appBar: AppBarWidget(),
       body: RefreshIndicator(
         onRefresh: () => postStore.init(),
         color: Theme.of(context).primaryColor,
