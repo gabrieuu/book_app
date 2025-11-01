@@ -1,6 +1,6 @@
 import 'package:book_app/core/status.dart';
 import 'package:book_app/model/comment_model.dart';
-import 'package:book_app/model/post_model.dart';
+import 'package:book_app/model/postModel/post_model.dart';
 import 'package:book_app/modules/auth/controller/user_controller.dart';
 import 'package:book_app/modules/comment_post/controller/comment_controller.dart';
 import 'package:book_app/modules/comment_post/widgets/comment_tile.dart';

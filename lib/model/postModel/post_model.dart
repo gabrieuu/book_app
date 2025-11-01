@@ -10,6 +10,7 @@ class PostModel {
   int quantidadeCurtidas;
   int quantidadeComentarios;
   bool isCurtido;
+  DateTime createdAt;
 
   PostModel(
       {required this.content,
@@ -20,7 +21,9 @@ class PostModel {
       this.images,
       this.quantidadeCurtidas = 0,
       this.quantidadeComentarios = 0,
-      this.isCurtido = false});
+      DateTime? createdAt,
+      this.isCurtido = false})
+      : createdAt = createdAt ?? DateTime.now();
 
   static PostModel fromJson(Map<dynamic, dynamic> map) {
     final post = PostModel(
@@ -30,7 +33,8 @@ class PostModel {
         autorName: map['usuarios']['name'],
         bookId: map['book_id'],
         quantidadeCurtidas: map['curtidas'] ?? 0,
-        quantidadeComentarios: map['comentarios'] ?? 0);
+        quantidadeComentarios: map['comentarios'] ?? 0,
+        createdAt: DateTime.parse(map['created_at'] ?? DateTime.now().toString()));
     return post;
   }
 

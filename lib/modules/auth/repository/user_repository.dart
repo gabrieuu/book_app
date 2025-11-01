@@ -13,6 +13,16 @@ class UserRepositorySupabase implements CustomUserRepository {
   final client = Supabase.instance.client;
 
   @override
+  Future<void> updateUser(UserModel user) async {
+    if(user.id == null) throw Exception("User ID is null");
+    await client.from(Table.usuarios.name).update({
+      'name': user.name,
+      'username': user.username,
+      'photo': user.photo,
+    }).eq('id_user', user.id!);
+  }
+
+  @override
   Future<UserModel> getUserById(String userId) async {
     final user =
         await client.from("usuarios").select("*").eq("id_user", userId);

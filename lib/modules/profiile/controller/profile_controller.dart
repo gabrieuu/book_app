@@ -1,8 +1,10 @@
+import 'dart:convert';
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:book_app/core/status.dart';
 import 'package:book_app/model/book_model.dart';
-import 'package:book_app/model/post_model.dart';
+import 'package:book_app/model/postModel/post_model.dart';
 import 'package:book_app/model/user_model.dart';
 import 'package:book_app/modules/auth/controller/user_controller.dart';
 import 'package:book_app/modules/auth/repository/interfaces/custom_user_repository.dart';
@@ -73,6 +75,12 @@ abstract class _ProfileControllerBase with Store {
       getSeguidores(userId),
       getSeguindo(userId)
     ]);
+  }
+
+  void setPhotoPerfil(File photo) {
+    List<int> imageBytes = photo.readAsBytesSync();
+    String base64Image = base64Encode(imageBytes);
+    userController.user.photo = base64Image;
   }
 
   @action

@@ -100,8 +100,8 @@ mixin _$PostStore on _PostStoreBase, Store {
       AsyncAction('_PostStoreBase.addPost', context: context);
 
   @override
-  Future<void> addPost() {
-    return _$addPostAsyncAction.run(() => super.addPost());
+  Future<void> addPost(PostModel postModel) {
+    return _$addPostAsyncAction.run(() => super.addPost(postModel));
   }
 
   late final _$curtirPostAsyncAction =

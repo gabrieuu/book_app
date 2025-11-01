@@ -1,5 +1,5 @@
 import 'package:book_app/core/status.dart';
-import 'package:book_app/model/post_model.dart';
+import 'package:book_app/model/postModel/post_model.dart';
 import 'package:book_app/modules/auth/controller/user_controller.dart';
 import 'package:book_app/modules/auth/repository/auth_repository.dart';
 import 'package:book_app/modules/posts/post_repository/custom_posts_repository.dart';
@@ -60,10 +60,10 @@ abstract class _PostStoreBase with Store {
   }
 
   @action
-  Future<void> addPost() async {
+  Future<void> addPost(PostModel postModel) async {
     situacaoPostUpload = Status.CARREGANDO;
-    final postModel = PostModel(
-        content: content.text, autorId: userController.user.id!, bookId: null);
+    // final postModel = PostModel(
+    //     content: content.text, autorId: userController.user.id!, bookId: null);
     posts.add(postModel);
     print(posts.toString());
     await repository.addPost(postModel);

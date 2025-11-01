@@ -1,4 +1,4 @@
-import 'package:book_app/model/post_model.dart';
+import 'package:book_app/model/postModel/post_model.dart';
 import 'package:book_app/modules/comment_post/controller/comment_controller.dart';
 import 'package:book_app/modules/posts/post_store.dart';
 import 'package:flutter/material.dart';

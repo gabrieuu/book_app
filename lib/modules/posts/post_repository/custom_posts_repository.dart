@@ -1,4 +1,4 @@
-import 'package:book_app/model/post_model.dart';
+import 'package:book_app/model/postModel/post_model.dart';
 
 abstract class CustomPostsRepository {
   Future<void> addPost(PostModel post);

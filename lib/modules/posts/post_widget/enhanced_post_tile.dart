@@ -1,5 +1,6 @@
 import 'package:book_app/model/book_model.dart';
-import 'package:book_app/model/post_model.dart';
+import 'package:book_app/model/images.dart';
+import 'package:book_app/model/postModel/post_model.dart';
 import 'package:book_app/modules/books/store/book_store.dart';
 import 'package:book_app/modules/books/widgets/book_postagem.dart';
 import 'package:book_app/modules/posts/post_store.dart';
@@ -36,6 +37,7 @@ class _EnhancedPostTileState extends State<EnhancedPostTile> {
   Future<void> _getImagesAndBook() async{
     if(widget.post.bookId != null){
       book = await bookStore.getBookById(widget.post.bookId!);
+      setState((){});
     }
   }
 
@@ -59,8 +61,10 @@ class _EnhancedPostTileState extends State<EnhancedPostTile> {
         children: [
           _buildPostHeader(),
           _buildPostContent(),
-          if (book != null) BookPostagem(bookData: book!),
-          if (book != null) _buildPostImage(book!.volumeInfo.imageLinks.thumbnail),
+          if (book != null) BookPostagem(bookData: book!, onTap: (){
+            Modular.to.pushNamed('/initial/book/details', arguments: book);
+          },),
+          if (book != null) _buildPostImage(widget.post.images ?? <Images>[]),
           _buildActionButtons(),
         ],
       ),
@@ -123,9 +127,9 @@ class _EnhancedPostTileState extends State<EnhancedPostTile> {
 
   Widget _buildPostContent() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Text(
-        widget.post.content ?? 'Conteúdo do post',
+        widget.post.content,
         style: const TextStyle(
           fontSize: 15,
           height: 1.4,
@@ -135,7 +139,10 @@ class _EnhancedPostTileState extends State<EnhancedPostTile> {
     );
   }
 
-  Widget _buildPostImage(String imageUrl) {
+  Widget _buildPostImage(List<Images> imageUrl) {
+    if(imageUrl.isEmpty){
+      return const SizedBox.shrink();
+    }
     return Container(
       margin: const EdgeInsets.only(top: 12),
       width: double.infinity,
@@ -145,7 +152,7 @@ class _EnhancedPostTileState extends State<EnhancedPostTile> {
           bottom: Radius.circular(0),
         ),
         child: Image.network(
-          imageUrl,
+          imageUrl.first.url,
           fit: BoxFit.cover,
           errorBuilder: (context, error, stackTrace) {
             return Container(
@@ -202,32 +209,8 @@ class _EnhancedPostTileState extends State<EnhancedPostTile> {
             label: 'Comentar',
             color: Colors.grey[600]!,
             onTap: () => _openComments(),
-          ),
-          const SizedBox(width: 24),
-          _buildActionButton(
-            icon: Icons.share_outlined,
-            count: (widget.post.hashCode % 50) + 1,
-            label: 'Compartilhar',
-            color: Colors.grey[600]!,
-            onTap: () => _sharePost(),
-          ),
-          const Spacer(),
-          InkWell(
-            onTap: () {
-              setState(() {
-                isSaved = !isSaved;
-              });
-            },
-            borderRadius: BorderRadius.circular(8),
-            child: Container(
-              padding: const EdgeInsets.all(8),
-              child: Icon(
-                isSaved ? Icons.bookmark : Icons.bookmark_border,
-                size: 24,
-                color: isSaved ? Colors.blue : Colors.grey[600]!,
-              ),
-            ),
-          ),
+          ),          
+          
         ],
       ),
     );

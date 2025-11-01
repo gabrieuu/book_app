@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:book_app/core/status.dart';
 import 'package:book_app/model/book_model.dart';
+import 'package:book_app/model/postModel/post_model.dart';
 import 'package:book_app/modules/posts/post_store.dart';
 import 'package:book_app/modules/posts/post_widget/new_post_book_search.dart';
 import 'package:book_app/modules/search/controller/busca_controller.dart';
@@ -279,7 +280,8 @@ class _PostPageState extends State<PostPage> {
   }
 
   void _createPost() async {
-    store.addPost();
+    log(_textController.text);
+    store.addPost(PostModel(content: _textController.text, autorId: store.userController.user.id!, bookId: selectedBook?.id, autorName: store.userController.user.name));
     Navigator.pop(context);
   }
 }

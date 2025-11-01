@@ -2,8 +2,9 @@ import 'package:book_app/model/book_model.dart';
 import 'package:flutter/material.dart';
 
 class BookPostagem extends StatelessWidget {
-  const BookPostagem({super.key, required this.bookData});
+  const BookPostagem({super.key, required this.bookData, this.onTap});
   final Book bookData;
+  final VoidCallback? onTap;
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -15,10 +16,7 @@ class BookPostagem extends StatelessWidget {
         border: Border.all(color: Colors.grey[200]!),
       ),
       child: InkWell(
-        onTap: () {
-          // Navigate to book details
-          // Modular.to.pushNamed('/initial/book/details/', arguments: book);
-        },
+        onTap: onTap,
         borderRadius: BorderRadius.circular(12),
         child: Row(
           children: [

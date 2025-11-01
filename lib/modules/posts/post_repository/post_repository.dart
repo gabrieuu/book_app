@@ -1,4 +1,4 @@
-import 'package:book_app/model/post_model.dart';
+import 'package:book_app/model/postModel/post_model.dart';
 import 'package:book_app/modules/posts/post_repository/custom_posts_repository.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 

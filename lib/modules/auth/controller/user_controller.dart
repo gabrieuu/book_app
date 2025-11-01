@@ -34,5 +34,10 @@ abstract class _UserControllerBase with Store {
     ObservableList.of(await repository.getUsersByName(name));
   }
 
+  void setPhotoPerfil(String photoBase64) {
+    _user!.photo = photoBase64;
+    repository.updateUser(_user!);
+  }
+
   UserModel get user => _user!;
 }

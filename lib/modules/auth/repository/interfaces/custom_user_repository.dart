@@ -11,6 +11,8 @@ abstract class CustomUserRepository {
   Future<void> alteraNomeAndUsername(
       {required String nome, required String username, required String userId});
 
+  Future<void> updateUser(UserModel user);
+
   Future<void> alteraPrimeiroAcesso(String userId);
 
   Future<void> seguirPessoa(
