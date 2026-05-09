@@ -17,22 +17,6 @@ mixin _$ProfileController on _ProfileControllerBase, Store {
           name: '_ProfileControllerBase.getAlturaTabbar'))
       .value;
 
-  late final _$userControllerAtom =
-      Atom(name: '_ProfileControllerBase.userController', context: context);
-
-  @override
-  UserController get userController {
-    _$userControllerAtom.reportRead();
-    return super.userController;
-  }
-
-  @override
-  set userController(UserController value) {
-    _$userControllerAtom.reportWrite(value, super.userController, () {
-      super.userController = value;
-    });
-  }
-
   late final _$quantidadeSeguidoresAtom = Atom(
       name: '_ProfileControllerBase.quantidadeSeguidores', context: context);
 
@@ -134,13 +118,13 @@ mixin _$ProfileController on _ProfileControllerBase, Store {
       Atom(name: '_ProfileControllerBase.myFavoritas', context: context);
 
   @override
-  ObservableList<Book> get myFavoritas {
+  ObservableList<BookModel> get myFavoritas {
     _$myFavoritasAtom.reportRead();
     return super.myFavoritas;
   }
 
   @override
-  set myFavoritas(ObservableList<Book> value) {
+  set myFavoritas(ObservableList<BookModel> value) {
     _$myFavoritasAtom.reportWrite(value, super.myFavoritas, () {
       super.myFavoritas = value;
     });
@@ -293,7 +277,6 @@ mixin _$ProfileController on _ProfileControllerBase, Store {
   @override
   String toString() {
     return '''
-userController: ${userController},
 quantidadeSeguidores: ${quantidadeSeguidores},
 quantidadeSeguindo: ${quantidadeSeguindo},
 tabBarSelecionada: ${tabBarSelecionada},

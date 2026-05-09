@@ -33,8 +33,6 @@ class HomeModule extends Module {
     r.child('/', child: (_) => NavigatorBottom(), children: [
       ChildRoute('/home',
           child: (_) => HomePage(), transition: TransitionType.fadeIn),
-      ModuleRoute('/book',
-          module: BookModule(), transition: TransitionType.fadeIn),
       ModuleRoute('/profile',
           module: ProfileModule(), transition: TransitionType.fadeIn),
       ModuleRoute('/search',

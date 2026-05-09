@@ -1,12 +1,8 @@
 import 'package:book_app/core/themes.dart';
-import 'package:book_app/modules/books/page/book_page.dart';
 import 'package:book_app/modules/chat/controller/chat_controller.dart';
 import 'package:book_app/modules/home/controller/bottom_navigator_controller.dart';
 import 'package:book_app/modules/home/page/home_page.dart';
-import 'package:book_app/modules/posts/page/post_page.dart';
-import 'package:book_app/modules/profiile/pages/profile_page.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';

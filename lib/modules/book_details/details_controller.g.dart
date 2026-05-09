@@ -13,15 +13,18 @@ mixin _$DetailsController on _DetailsControllerBase, Store {
       Atom(name: '_DetailsControllerBase.book', context: context);
 
   @override
-  Book? get book {
+  BookDetailModel get book {
     _$bookAtom.reportRead();
     return super.book;
   }
 
+  bool _bookIsInitialized = false;
+
   @override
-  set book(Book? value) {
-    _$bookAtom.reportWrite(value, super.book, () {
+  set book(BookDetailModel value) {
+    _$bookAtom.reportWrite(value, _bookIsInitialized ? super.book : null, () {
       super.book = value;
+      _bookIsInitialized = true;
     });
   }
 
@@ -41,11 +44,36 @@ mixin _$DetailsController on _DetailsControllerBase, Store {
     });
   }
 
+  late final _$statusAtom =
+      Atom(name: '_DetailsControllerBase.status', context: context);
+
+  @override
+  Status get status {
+    _$statusAtom.reportRead();
+    return super.status;
+  }
+
+  @override
+  set status(Status value) {
+    _$statusAtom.reportWrite(value, super.status, () {
+      super.status = value;
+    });
+  }
+
+  late final _$loadBookDetailsAsyncAction =
+      AsyncAction('_DetailsControllerBase.loadBookDetails', context: context);
+
+  @override
+  Future<void> loadBookDetails(String apiId) {
+    return _$loadBookDetailsAsyncAction.run(() => super.loadBookDetails(apiId));
+  }
+
   @override
   String toString() {
     return '''
 book: ${book},
-store: ${store}
+store: ${store},
+status: ${status}
     ''';
   }
 }

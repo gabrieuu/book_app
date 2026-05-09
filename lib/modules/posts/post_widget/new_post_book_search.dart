@@ -8,7 +8,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 class NewPostBookSearch extends StatefulWidget {
   NewPostBookSearch({super.key, this.onBookSelected});
 
-  Function(Book book)? onBookSelected;
+  Function(BookModel book)? onBookSelected;
 
   @override
   State<NewPostBookSearch> createState() => _NewPostBookSearchState();

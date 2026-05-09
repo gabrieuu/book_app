@@ -12,6 +12,7 @@ void main() async {
   await HiveSettings.start();
   await Hive.openBox('book');
   await Supabase.initialize(
+    debug: true,
     url: urlSupabase,
     anonKey: anonKeySupabase,
   );

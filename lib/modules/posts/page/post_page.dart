@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:book_app/app_store.dart';
 import 'package:book_app/core/status.dart';
 import 'package:book_app/model/book_model.dart';
 import 'package:book_app/model/postModel/post_model.dart';
@@ -7,7 +8,6 @@ import 'package:book_app/modules/posts/post_store.dart';
 import 'package:book_app/modules/posts/post_widget/new_post_book_search.dart';
 import 'package:book_app/modules/search/controller/busca_controller.dart';
 import 'package:book_app/modules/search/widgets/book_tile.dart';
-import 'package:book_app/modules/search/widgets/list_books_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -26,7 +26,8 @@ class _PostPageState extends State<PostPage> {
   final FocusNode _focusNode = FocusNode();
   PostStore store = Modular.get<PostStore>();
   BuscaController buscaController = Modular.get<BuscaController>();
-  Book? selectedBook;
+  AppStore appStore = Modular.get<AppStore>();
+  BookModel? selectedBook;
   bool get isBookButtonPressed => selectedBook != null;
 
   @override
@@ -226,7 +227,7 @@ class _PostPageState extends State<PostPage> {
                                     selectedBook = book;
                                     setState(() {});
                                     Navigator.pop(context);
-                                    log('teste: ${book.volumeInfo.title}');
+                                    log('teste: ${book.title}');
                                   },
                                 ),
                               );
@@ -281,7 +282,7 @@ class _PostPageState extends State<PostPage> {
 
   void _createPost() async {
     log(_textController.text);
-    store.addPost(PostModel(content: _textController.text, autorId: store.userController.user.id!, bookId: selectedBook?.id, autorName: store.userController.user.name));
+    store.addPost(PostModel(content: _textController.text, autorId: appStore.currentUser?.id ?? '', bookId: selectedBook?.apiId, autorName: appStore.currentUser?.name ?? ''));
     Navigator.pop(context);
   }
 }

@@ -1,14 +1,8 @@
-import 'dart:developer';
-
 import 'package:book_app/model/user_model.dart';
-import 'package:book_app/modules/auth/repository/interfaces/custom_auth_repository.dart';
-import 'package:book_app/modules/auth/controller/user_controller.dart';
-import 'package:book_app/modules/auth/repository/auth_repository.dart';
+import 'package:book_app/modules/auth/service/auth_service.dart';
 import 'package:book_app/modules/auth/status_login.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 part 'auth_controller.g.dart';
 
 class AuthController = _AuthControllerBase with _$AuthController;
@@ -22,7 +16,6 @@ abstract class _AuthControllerBase with Store {
   @observable
   StatusLogin isLogadoStatus = StatusLogin.NAO_CARREGADO;
 
-  UserController userController;
   GlobalKey<ScaffoldMessengerState> scaffoldKeyLoginPage =
       GlobalKey<ScaffoldMessengerState>();
 
@@ -42,13 +35,12 @@ abstract class _AuthControllerBase with Store {
   @observable
   bool passwordVisibility = false;
 
-  final CustomAuthRepository _repository;
 
-  _AuthControllerBase(this._repository, this.userController) {
-    isAuthenticated();
-  }
+  _AuthControllerBase(this._authService);
 
-  UserModel? get user => _repository.user;
+  final AuthService _authService;
+
+  UserModel? get user => _authService.currentUser;
 
   @observable
   var isLogin = true;
@@ -114,61 +106,35 @@ abstract class _AuthControllerBase with Store {
   }
 
   @action
-  isAuthenticated() async {
-    try {
-      if (_repository.user != null) {
-        await userController.getUser();
-
-        if (userController.user.passouIntroducao) {
-          Modular.to.navigate('/initial/home');
-          return;
-        }
-
-        Modular.to.navigate('/primeiro-acesso/apresentacao');
-      } else {
-        Modular.to.navigate('/auth/');
-      }
-    } catch (e) {
-      await signOut();
-    }
-  }
+  Future<void> redirectAutentication() => _authService.redirectAutentication();
 
   @action
   login() async {
-    try {
-      loginIsLoading = true;
-      await _repository.signIn(email.text, password.text);
-      await isAuthenticated();
+    loginIsLoading = true;
+    final result = await _authService.signIn(email.text, password.text);
+    if(result.isFailure){
+      loginErrorMessage = result.messageOrNull;
       loginIsLoading = false;
-      loginErrorMessage = null;
-    } catch (e) {
-      log('$e');
-      loginErrorMessage = '$e';
-      loginIsLoading = false;
+      return;
     }
+    loginIsLoading = false;
+    loginErrorMessage = null;
+   
   }
 
   @action
   createuser() async {
-    try {
-      loginIsLoading = true;
-      await _repository.createUser(email: email.text, password: password.text);
-      await isAuthenticated();
-      loginErrorMessage = null;
+    loginIsLoading = true;
+    final result = await _authService.createUser(email: email.text, password: password.text);
+    if(result.isFailure){
+      loginErrorMessage = result.messageOrNull;
       loginIsLoading = false;
-    } catch (e) {
-      loginErrorMessage = '$e';
-      loginIsLoading = false;
+      return;
     }
+    loginErrorMessage = null;
+    loginIsLoading = false;
   }
 
   @action
-  signOut() async {
-    try {
-      await _repository.signOut();
-      Modular.to.navigate('/auth/');
-    } catch (e) {
-      print('erro ao deslogar');
-    }
-  }
+  signOut() async => await _authService.signOut();
 }

@@ -1,8 +1,8 @@
 import 'package:book_app/modules/auth/auth_module.dart';
+import 'package:book_app/modules/book_details/details_module.dart';
 import 'package:book_app/modules/books/book_module.dart';
 import 'package:book_app/modules/search/controller/busca_controller.dart';
 import 'package:book_app/modules/search/pages/search_page.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class SearchModule extends Module {
@@ -17,5 +17,6 @@ class SearchModule extends Module {
   @override
   void routes(RouteManager r) {
     r.child('/', child: (_) => SearchPage());
+    r.module('/details', module: DetailsModule());
   }
 }

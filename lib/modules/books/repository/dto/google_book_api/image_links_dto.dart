@@ -1,14 +1,14 @@
-class ImageLinks {
+class GoogleBookImageLinks {
   late String _smallThumb;
   late String _thumbnail;
 
-  ImageLinks({required String smallThumb, required String thumbnail}) {
+  GoogleBookImageLinks({required String smallThumb, required String thumbnail}) {
     _smallThumb = smallThumb;
     _thumbnail = thumbnail;
   }
 
-  static ImageLinks fromMap(Map<dynamic, dynamic> map) {
-    return ImageLinks(
+  static GoogleBookImageLinks fromMap(Map<dynamic, dynamic> map) {
+    return GoogleBookImageLinks(
       smallThumb: map["smallThumbnail"] ?? "",
       thumbnail: map["thumbnail"] ?? "",
     );

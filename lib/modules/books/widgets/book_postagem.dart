@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 class BookPostagem extends StatelessWidget {
   const BookPostagem({super.key, required this.bookData, this.onTap});
-  final Book bookData;
+  final BookModel bookData;
   final VoidCallback? onTap;
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class BookPostagem extends StatelessWidget {
                   ),
                 ],
                 image: DecorationImage(
-                  image: NetworkImage(bookData.volumeInfo.imageLinks.thumbnail),
+                  image: NetworkImage(bookData.imagemUrl),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -65,7 +65,7 @@ class BookPostagem extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    bookData.volumeInfo.title,
+                    bookData.title,
                     style: const TextStyle(
                       fontSize: 15,
                       fontWeight: FontWeight.w600,
@@ -76,7 +76,7 @@ class BookPostagem extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    'por ${bookData.volumeInfo.authors.join(', ')}',
+                    'por ${bookData.author}',
                     style: TextStyle(
                       fontSize: 13,
                       color: Colors.grey[600],

@@ -1,4 +1,3 @@
-import 'package:book_app/modules/books/page/book_page.dart';
 import 'package:book_app/modules/home/page/home_page.dart';
 import 'package:book_app/modules/profiile/pages/profile_page.dart';
 import 'package:flutter_modular/flutter_modular.dart';

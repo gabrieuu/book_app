@@ -46,19 +46,10 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                       color: Colors.black, width: 0.1),
                                   image: DecorationImage(
                                       fit: BoxFit.cover,
-                                      image: (favoritasStore
-                                                  .listBooksFavorites[index]
-                                                  .volumeInfo
-                                                  .imageLinks!
-                                                  .smallThumb !=
-                                              null)
-                                          ? NetworkImage(favoritasStore
+                                      image: NetworkImage(favoritasStore
                                               .listBooksFavorites[index]
-                                              .volumeInfo
-                                              .imageLinks!
-                                              .smallThumb!)
-                                          : NetworkImage(
-                                              "http://via.placeholder.com/140x190"))),
+                                              .imagemUrl)
+                                         )),
                             ),
                             const SizedBox(
                               width: 10,
@@ -69,13 +60,13 @@ class _FavoritesPageState extends State<FavoritesPage> {
                                 children: [
                                   Text(
                                     favoritasStore.listBooksFavorites[index]
-                                        .volumeInfo.title,
+                                        .title,
                                     style:
                                         TextStyle(fontWeight: FontWeight.bold),
                                   ),
                                   Text(
                                     favoritasStore.listBooksFavorites[index]
-                                        .volumeInfo.authors[0],
+                                        .author,
                                     style: TextStyle(fontSize: 10),
                                   )
                                 ],

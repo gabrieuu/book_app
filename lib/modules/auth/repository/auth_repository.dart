@@ -1,12 +1,9 @@
-import 'dart:convert';
 
 import 'package:book_app/model/user_model.dart';
 import 'package:book_app/modules/auth/repository/interfaces/custom_auth_repository.dart';
 import 'package:book_app/modules/auth/repository/interfaces/custom_user_repository.dart';
-import 'package:book_app/modules/auth/repository/user_repository.dart';
 import 'package:crypto/crypto.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
-import 'package:mobx/mobx.dart';
 
 enum Table {
   usuarios,
@@ -14,21 +11,25 @@ enum Table {
 
 class AuthRepositorySupabase implements CustomAuthRepository {
   final supabase = Supabase.instance.client;
-
   User? _supabaseUser;
-
   CustomUserRepository userRepository;
 
   @override
-  UserModel? get user =>
-      UserModel.buildUser(id: _supabaseUser!.id, email: _supabaseUser!.email);
-
-  AuthRepositorySupabase(this.userRepository) {
+  Future<UserModel?> get user async{
     _supabaseUser = supabase.auth.currentUser;
+    if(_supabaseUser == null) return null;
+
+    final response = await supabase.from(Table.usuarios.name).select("*").eq("id_user", _supabaseUser!.id);
+    if(response.isEmpty){
+      return UserModel.buildUser(id: _supabaseUser!.id, email: _supabaseUser!.email);
+    }
+    return UserModel.fromMap(response.first);
   }
 
+  AuthRepositorySupabase(this.userRepository);
+
   @override
-  Future<void> createUser(
+  Future<UserModel> createUser(
       {required String email, required String password}) async {
     String passEncript = md5.convert(password.codeUnits).toString();
     final AuthResponse res = await supabase.auth.signUp(
@@ -39,13 +40,14 @@ class AuthRepositorySupabase implements CustomAuthRepository {
     await userRepository.createUser(
         idUser: res.user!.id, email: email, password: passEncript);
     _supabaseUser = res.user;
+    return UserModel.buildUser(id: res.user!.id, email: res.user!.email);
   }
 
   @override
-  Future<void> signIn(String email, String password) async {
+  Future<UserModel> signIn(String email, String password) async {
     String passEncript = md5.convert(password.codeUnits).toString();
     final response =
-        await supabase.from(Table.usuarios.name).select("*").eq("email", email);
+        await supabase.from(Table.usuarios.name).select("*").eq("email", email).eq("password", passEncript);
     if (response.isEmpty) {
       throw Exception("Usuário não encontrado, verifique suas credenciais.");
     }
@@ -54,7 +56,7 @@ class AuthRepositorySupabase implements CustomAuthRepository {
 
     if (res.user == null) throw Exception("Erro ao fazer login");
     _supabaseUser = res.user;
-
+    return UserModel.buildUser(id: res.user!.id, email: res.user!.email);
   }
 
   @override

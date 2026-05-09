@@ -1,4 +1,4 @@
-import 'package:book_app/modules/auth/controller/user_controller.dart';
+import 'package:book_app/app_store.dart';
 import 'package:book_app/modules/primeiro_acesso/primeiro_acesso_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -16,7 +16,7 @@ class _PrimeiroAcessoPageState extends State<PrimeiroAcessoPage> {
   final PrimeiroAcessoController controller =
       Modular.get<PrimeiroAcessoController>();
 
-  final UserController userController = Modular.get<UserController>();
+  final AppStore appStore = Modular.get<AppStore>();
   ReactionDisposer? disposer;
   @override
   void initState() {
@@ -56,7 +56,7 @@ class _PrimeiroAcessoPageState extends State<PrimeiroAcessoPage> {
                           child: Observer(builder: (_) {
                             return GestureDetector(
                               onTap: () {
-                                if(index == 2 && userController.user.username.isEmpty && userController.user.name.isEmpty){
+                                if(index == 2 && appStore.currentUser?.username.isEmpty == true && appStore.currentUser?.name.isEmpty == true){
                                   return;
                                 }
                                 controller.indexSelecionado = index;

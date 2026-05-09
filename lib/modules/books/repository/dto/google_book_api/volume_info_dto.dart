@@ -1,7 +1,6 @@
-import 'package:book_app/model/image_links_model.dart';
-import 'package:book_app/model/list_price.dart';
+import 'package:book_app/modules/books/repository/dto/google_book_api/image_links_dto.dart';
 
-class VolumeInfo {
+class GoogleBookVolumeInfo {
   String title;
   List<dynamic> authors;
   String? _publisher;
@@ -12,11 +11,11 @@ class VolumeInfo {
   String language;
   String? printType;
   List<dynamic> categories;
-  ImageLinks imageLinks;
+  GoogleBookImageLinks imageLinks;
   double? averageRating;
   //String language;
 
-  VolumeInfo({
+  GoogleBookVolumeInfo({
     required this.title,
     required this.authors,
     required String? publisher,
@@ -33,8 +32,8 @@ class VolumeInfo {
     _publisher = publisher;
   }
 
-  static VolumeInfo fromMap(Map<dynamic, dynamic> map) {
-    return VolumeInfo(
+  static GoogleBookVolumeInfo fromMap(Map<dynamic, dynamic> map) {
+    return GoogleBookVolumeInfo(
       title: map["title"] ?? "",
       authors: map["authors"] ?? [],
       publisher: map["publisher"] ?? "",
@@ -42,7 +41,7 @@ class VolumeInfo {
       description: map["description"] ?? "",
       pageCount: map["pageCount"] ?? 0,
       categories: map["categories"] ?? [],
-      imageLinks: ImageLinks.fromMap(
+      imageLinks: GoogleBookImageLinks.fromMap(
           map["imageLinks"] ?? {"smallThumbnail": "", "thumbnail": ""}),
       //language: map["language"],
     );

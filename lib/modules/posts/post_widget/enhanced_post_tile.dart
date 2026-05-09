@@ -23,7 +23,7 @@ class _EnhancedPostTileState extends State<EnhancedPostTile> {
   int commentCount = 0;
   PostStore postStore = Modular.get();
   BookStore bookStore = Modular.get();
-  Book? book;
+  BookModel? book;
 
   @override
   void initState() {

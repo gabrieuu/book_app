@@ -1,7 +1,7 @@
+import 'package:book_app/app_store.dart';
 import 'package:book_app/core/themes.dart';
 import 'package:book_app/model/dto/view_chats_dto.dart';
 import 'package:book_app/model/user_model.dart';
-import 'package:book_app/modules/auth/controller/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -10,7 +10,7 @@ class ChatTile extends StatelessWidget {
   ChatTile({super.key, required this.chatDto});
 
   final ChatsViewDto chatDto;
-  final UserController userController = Modular.get();
+  final AppStore appStore = Modular.get();
 
   @override
   Widget build(BuildContext context) {
@@ -34,7 +34,7 @@ class ChatTile extends StatelessWidget {
           Text(chatDto.lastMessage ?? ''),
           (chatDto.visualizado == false &&
                   chatDto.idDoUsuarioQueEnviouUltimaMsg !=
-                      userController.user.id!)
+                      appStore.currentUser?.id)
               ? Container(
                   height: 10,
                   width: 10,

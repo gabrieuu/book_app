@@ -1,7 +1,7 @@
+import 'package:book_app/app_store.dart';
 import 'package:book_app/core/status.dart';
 import 'package:book_app/model/comment_model.dart';
 import 'package:book_app/model/postModel/post_model.dart';
-import 'package:book_app/modules/auth/controller/user_controller.dart';
 import 'package:book_app/modules/comment_post/controller/comment_controller.dart';
 import 'package:book_app/modules/comment_post/widgets/comment_tile.dart';
 import 'package:book_app/modules/posts/post_widget/enhanced_post_tile.dart';
@@ -23,7 +23,7 @@ class CommentPage extends StatefulWidget {
 class _CommentPageState extends State<CommentPage>
     with TickerProviderStateMixin {
   CommentController controller = Modular.get();
-  UserController user = Modular.get();
+  AppStore appStore = Modular.get();
 
   late AnimationController _headerAnimationController;
   late Animation<Offset> _headerAnimation;
@@ -449,7 +449,7 @@ class _CommentPageState extends State<CommentPage>
                                 if (controller.commentInsert.text
                                     .trim()
                                     .isNotEmpty) {
-                                  await controller.addComments(user.user.id!);
+                                  await controller.addComments(appStore.currentUser?.id ?? '');
                                   _commentFocusNode.unfocus();
                                 }
                               },

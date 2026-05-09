@@ -1,9 +1,8 @@
 import 'package:book_app/core/status.dart';
 import 'package:book_app/model/postModel/post_model.dart';
-import 'package:book_app/modules/auth/controller/user_controller.dart';
-import 'package:book_app/modules/auth/repository/auth_repository.dart';
+import 'package:book_app/model/user_model.dart';
+import 'package:book_app/modules/auth/service/auth_service.dart';
 import 'package:book_app/modules/posts/post_repository/custom_posts_repository.dart';
-import 'package:book_app/modules/posts/post_repository/post_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 part 'post_store.g.dart';
@@ -22,7 +21,8 @@ abstract class _PostStoreBase with Store {
   @observable
   Status situacaoPostUpload = Status.NAO_CARREGADO;
 
-  UserController userController;
+  final AuthService _authService;
+
   @observable
   bool searchIsSelect = false;
 
@@ -31,7 +31,7 @@ abstract class _PostStoreBase with Store {
 
   final content = TextEditingController();
 
-  _PostStoreBase(this.repository, this.userController) {
+  _PostStoreBase(this.repository, this._authService) {
     init();
   }
 
@@ -87,12 +87,16 @@ abstract class _PostStoreBase with Store {
           quantidadeComentarios: post.quantidadeComentarios,
           isCurtido: !post.isCurtido);
     }
-    await repository.curtirPost(post.id!, userController.user.id!);
+    UserModel? user = _authService.currentUser;
+    if(user == null) throw Exception("Usuário não autenticado");
+    await repository.curtirPost(post.id!, user.id!);
   }
 
   @action
   Future<bool> isCurtido(int idPost) async {
-    return await repository.isCurtido(idPost, userController.user.id!);
+    UserModel? user = _authService.currentUser;
+    if(user == null) throw Exception("Usuário não autenticado");
+    return await repository.isCurtido(idPost, user.id!);
   }
 
   @action

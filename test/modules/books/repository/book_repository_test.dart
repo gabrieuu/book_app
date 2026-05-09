@@ -1,11 +1,10 @@
 import 'package:book_app/core/client_http/dio_client.dart';
-import 'package:book_app/modules/books/repository/book_repository.dart';
+import 'package:book_app/modules/books/repository/google_book_repository_impl.dart';
 import 'package:book_app/modules/books/repository/custom_book_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
-  CustomBookRepository repository = BookRepositoryImpl(DioClient());
+  BookRepository repository = GoogleBookRepositoryImpl(DioClient());
 
   test('buscar por categoria', () async {
     var response = await repository.fetchCategory('romance');

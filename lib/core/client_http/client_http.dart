@@ -1,5 +1,5 @@
 abstract class ClientHttp{
 
-  Future<dynamic> get(String url);
+  Future<dynamic> get(String url, {Map<String, dynamic>? params});
 
 }

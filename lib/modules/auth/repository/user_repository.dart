@@ -1,4 +1,5 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:book_app/model/user_model.dart';
 import 'package:book_app/modules/auth/repository/auth_repository.dart';
@@ -13,13 +14,10 @@ class UserRepositorySupabase implements CustomUserRepository {
   final client = Supabase.instance.client;
 
   @override
-  Future<void> updateUser(UserModel user) async {
-    if(user.id == null) throw Exception("User ID is null");
-    await client.from(Table.usuarios.name).update({
-      'name': user.name,
-      'username': user.username,
-      'photo': user.photo,
-    }).eq('id_user', user.id!);
+  Future<void> atualizaFotoPerfil(
+      {required File photo, required String userId}) async {
+      final fileName = '$userId/avatar_${DateTime.now().millisecondsSinceEpoch}.jpg';
+      
   }
 
   @override

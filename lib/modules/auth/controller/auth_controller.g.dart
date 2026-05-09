@@ -185,14 +185,6 @@ mixin _$AuthController on _AuthControllerBase, Store {
     });
   }
 
-  late final _$isAuthenticatedAsyncAction =
-      AsyncAction('_AuthControllerBase.isAuthenticated', context: context);
-
-  @override
-  Future isAuthenticated() {
-    return _$isAuthenticatedAsyncAction.run(() => super.isAuthenticated());
-  }
-
   late final _$loginAsyncAction =
       AsyncAction('_AuthControllerBase.login', context: context);
 
@@ -270,6 +262,17 @@ mixin _$AuthController on _AuthControllerBase, Store {
         name: '_AuthControllerBase.validarNome');
     try {
       return super.validarNome(nome);
+    } finally {
+      _$_AuthControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  Future<void> redirectAutentication() {
+    final _$actionInfo = _$_AuthControllerBaseActionController.startAction(
+        name: '_AuthControllerBase.redirectAutentication');
+    try {
+      return super.redirectAutentication();
     } finally {
       _$_AuthControllerBaseActionController.endAction(_$actionInfo);
     }

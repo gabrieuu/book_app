@@ -10,7 +10,7 @@ class ListBooksSearch extends StatelessWidget {
   ListBooksSearch({super.key, this.onBookSelected});
 
   BuscaController buscaController = Modular.get();
-  Function(Book book)? onBookSelected;
+  Function(BookModel book)? onBookSelected;
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: Observer(builder: (_) {

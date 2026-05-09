@@ -1,7 +1,6 @@
 import 'dart:developer';
 
 import 'package:book_app/core/status.dart';
-import 'package:book_app/modules/auth/controller/user_controller.dart';
 import 'package:book_app/modules/search/widgets/person_tile.dart';
 import 'package:book_app/modules/search/controller/busca_controller.dart';
 import 'package:flutter/material.dart';

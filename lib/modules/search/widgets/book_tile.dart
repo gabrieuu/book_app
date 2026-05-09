@@ -8,8 +8,8 @@ import 'package:flutter_modular/flutter_modular.dart';
 class BookTile extends StatelessWidget {
   BookTile({super.key, required this.book, this.onBookSelected});
 
-  Book book;
-  Function(Book book)? onBookSelected;
+  BookModel book;
+  Function(BookModel book)? onBookSelected;
 
   @override
   Widget build(BuildContext context) {
@@ -17,9 +17,9 @@ class BookTile extends StatelessWidget {
       onTap: onBookSelected != null 
       ? () => onBookSelected!(book)
       : () {
-        Modular.to.pushNamed('/initial/book/details/', arguments: book);
+        Modular.to.pushNamed('/initial/search/details', arguments: book);
       },
-      child: Row(
+      child: Row( 
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Expanded(
@@ -38,7 +38,7 @@ class BookTile extends StatelessWidget {
                             color: Colors.grey[200],
                             image: DecorationImage(
                                 image: NetworkImage(
-                                    book.volumeInfo.imageLinks.thumbnail),
+                                    book.imagemUrl),
                                 fit: BoxFit.cover),
                             boxShadow: [
                               BoxShadow(
@@ -76,21 +76,21 @@ class BookTile extends StatelessWidget {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          book.volumeInfo.title,
+                          book.title,
                           style: const TextStyle(
                               fontSize: 13, fontWeight: FontWeight.bold),
                           overflow: TextOverflow.ellipsis,
                         ),
                         Text(
-                          book.volumeInfo.authors.join(', '),
+                          book.author,
                           style: TextStyle(fontSize: 12),
                         ),
                         Text(
-                          book.volumeInfo.publishedDate.split('-').first,
+                          book.publisheDate ?? '',
                           style: TextStyle(fontSize: 12),
                         ),
                         Text(
-                          book.volumeInfo.publisher,
+                          book.publisher ?? '',
                           style: TextStyle(fontSize: 12),
                         ),
                       ],

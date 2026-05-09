@@ -2,7 +2,6 @@ import 'package:book_app/core/status.dart';
 import 'package:book_app/core/themes.dart';
 import 'package:book_app/model/dto/view_chats_dto.dart';
 import 'package:book_app/model/user_model.dart';
-import 'package:book_app/modules/auth/controller/user_controller.dart';
 import 'package:book_app/modules/favoritas/store/favoritas_store.dart';
 import 'package:book_app/modules/home/controller/bottom_navigator_controller.dart';
 import 'package:book_app/modules/posts/post_widget/enhanced_post_tile.dart';
@@ -27,30 +26,30 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   ProfileController controller = Modular.get();
-  UserController userController = Modular.get();
   BottomNavigatorController navigator = Modular.get();
   FavoritasStore favoritasStore = Modular.get();
 
-  bool isDonoDaConta = true;
   UserModel? user;
 
   @override
   void initState() {
     super.initState();
-    if (widget.userId != null && controller.userController.user.id != null) {
-      isDonoDaConta = (widget.userId == controller.userController.user.id);
-    }
-    setState(() {});
     _init();
   }
 
   _init() async {
     if (!isDonoDaConta) {
-      user = await userController.getUser(userId: widget.userId);
+      user = await controller.getUser(widget.userId!);
       setState(() {});
     }
     await controller.init(widget.userId);
   }
+
+  bool get isDonoDaConta {   
+    if(widget.userId == null) return true;
+    return controller.currentUser!.id == widget.userId;
+  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -63,25 +62,10 @@ class _ProfilePageState extends State<ProfilePage> {
       );
     }
 
-    if (isDonoDaConta && controller.userController.user.name.isEmpty) {
-      return Scaffold(
-        appBar: AppBar(backgroundColor: Themes.branco),
-        backgroundColor: Colors.white,
-        body: const Center(child: CircularProgressIndicator()),
-      );
-    }
+    final userName = 
+             controller.currentUser?.name ?? 'Usuário';
 
-    final userName = isDonoDaConta
-        ? (controller.userController.user.name.isNotEmpty
-            ? controller.userController.user.name
-            : 'Usuário')
-        : user?.name ?? 'Carregando...';
-
-    final userInitial = isDonoDaConta
-        ? (controller.userController.user.name.isNotEmpty
-            ? controller.userController.user.name[0]
-            : '?')
-        : (user?.name.isNotEmpty ?? false ? user!.name[0] : '?');
+    final userInitial = controller.currentUser?.name[0] ?? '?';
 
     return DefaultTabController(
       length: 2,

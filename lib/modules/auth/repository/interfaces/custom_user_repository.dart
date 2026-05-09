@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:book_app/model/user_model.dart';
 
 abstract class CustomUserRepository {
@@ -11,7 +13,8 @@ abstract class CustomUserRepository {
   Future<void> alteraNomeAndUsername(
       {required String nome, required String username, required String userId});
 
-  Future<void> updateUser(UserModel user);
+  Future<void> atualizaFotoPerfil(
+      {required File photo, required String userId});
 
   Future<void> alteraPrimeiroAcesso(String userId);
 

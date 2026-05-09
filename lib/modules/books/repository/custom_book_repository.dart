@@ -1,12 +1,13 @@
+import 'package:book_app/model/book_detail_model.dart';
 import 'package:book_app/model/book_model.dart';
 
-abstract class CustomBookRepository {
-  Future<List<Book>> fetchAll(String volume);
-  Future<List<Book>> getBooksByCategory(String category);
-  Future<List<Book>> getBooksByListId(List<String> listIdBooks);
-  Future<List<Book>> getBooksRecomendados();
-  Future<List<Book>> getBooksByAutor(String autor);
-  Future<List<Book>> getBooksByEditora(String editora);
-  Future<List<Book>> getBooksByIsbn(String isbn);
-  Future<Book?> getBookById(String id);
+abstract class BookRepository {
+  Future<List<BookModel>> fetchAll(String volume, {int? page});
+  Future<BookDetailModel> getBookById(String id);
+  Future<List<BookModel>> getBooksByCategory(String category);
+  Future<List<BookModel>> getBooksByListId(List<String> listIdBooks);
+  Future<List<BookModel>> getBooksRecomendados();
+  Future<List<BookModel>> getBooksByAutor(String autor);
+  Future<List<BookModel>> getBooksByEditora(String editora);
+  Future<List<BookModel>> getBooksByIsbn(String isbn);
 }

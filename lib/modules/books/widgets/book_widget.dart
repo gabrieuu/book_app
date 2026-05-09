@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class BookWidget extends StatelessWidget {
   const BookWidget({super.key, required this.book});
 
-  final Book book;
+  final BookModel book;
 
   @override
   Widget build(BuildContext context) {
@@ -32,10 +32,7 @@ class BookWidget extends StatelessWidget {
                 ],
                 image: DecorationImage(
                   fit: BoxFit.cover,
-                  image: (book.volumeInfo.imageLinks?.smallThumb != null)
-                      ? NetworkImage(book.volumeInfo.imageLinks!.smallThumb!)
-                      : NetworkImage(
-                          "https://via.placeholder.com/140x190/f0f0f0/666666?text=Sem+Capa"),
+                  image: NetworkImage(book.imagemUrl),
                 ),
               ),
             ),
@@ -46,7 +43,7 @@ class BookWidget extends StatelessWidget {
               width: double.infinity,
               padding: EdgeInsets.symmetric(horizontal: 4),
               child: Text(
-                book.volumeInfo.title.trim(),
+                book.title.trim(),
                 style: const TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.w600,

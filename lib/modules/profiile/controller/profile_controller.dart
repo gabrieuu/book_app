@@ -6,9 +6,8 @@ import 'package:book_app/core/status.dart';
 import 'package:book_app/model/book_model.dart';
 import 'package:book_app/model/postModel/post_model.dart';
 import 'package:book_app/model/user_model.dart';
-import 'package:book_app/modules/auth/controller/user_controller.dart';
 import 'package:book_app/modules/auth/repository/interfaces/custom_user_repository.dart';
-import 'package:book_app/modules/auth/repository/user_repository.dart';
+import 'package:book_app/modules/auth/service/auth_service.dart';
 import 'package:book_app/modules/favoritas/store/favoritas_store.dart';
 import 'package:book_app/modules/posts/post_store.dart';
 import 'package:flutter/material.dart';
@@ -18,9 +17,6 @@ part 'profile_controller.g.dart';
 class ProfileController = _ProfileControllerBase with _$ProfileController;
 
 abstract class _ProfileControllerBase with Store {
-  @observable
-  UserController userController;
-
   FavoritasStore favoritasStore;
 
   CustomUserRepository userRepository;
@@ -35,6 +31,7 @@ abstract class _ProfileControllerBase with Store {
   @observable
   PostStore postStore;
 
+  final AuthService _authService;
   @observable
   bool isSeguindo = false;
 
@@ -42,7 +39,7 @@ abstract class _ProfileControllerBase with Store {
   ObservableList<PostModel> myPosts = ObservableList.of([]);
 
   @observable
-  ObservableList<Book> myFavoritas = ObservableList.of([]);
+  ObservableList<BookModel> myFavoritas = ObservableList.of([]);
 
   GlobalKey<ScaffoldState> globalkey = GlobalKey<ScaffoldState>();
 
@@ -58,11 +55,23 @@ abstract class _ProfileControllerBase with Store {
   @observable
   Status situacaoFavoritos = Status.NAO_CARREGADO;
 
+  UserModel get _user {
+    UserModel? user = _authService.currentUser;
+    if (user == null) {
+      throw Exception("Usuário não autenticado");
+    }
+    return user;
+  }
+
+  UserModel? get currentUser => _authService.currentUser;
+
+  Future<UserModel> getUser(String userId) async=>  await userRepository.getUserById(userId);
+
   _ProfileControllerBase(
-      {required this.userController,
-      required this.postStore,
-      required this.favoritasStore,
-      required this.userRepository});
+      this._authService,
+      this.postStore,
+      this.favoritasStore,
+      this.userRepository);
 
   @action
   Future<void> init(String? userId) async {
@@ -80,26 +89,26 @@ abstract class _ProfileControllerBase with Store {
   void setPhotoPerfil(File photo) {
     List<int> imageBytes = photo.readAsBytesSync();
     String base64Image = base64Encode(imageBytes);
-    userController.user.photo = base64Image;
+    _user.photoUrl = base64Image;
   }
 
   @action
   Future<void> getSeguidores(String? userId) async {
     listSeguidores =
-        await userRepository.getSeguidores(userId ?? userController.user.id!);
+        await userRepository.getSeguidores(userId ?? _user.id!);
   }
 
   @action
   Future<void> getSeguindo(String? userId) async {
     listSeguindo =
-        await userRepository.getSeguindo(userId ?? userController.user.id!);
+        await userRepository.getSeguindo(userId ?? _user.id!);
   }
 
   @action
   Future<void> getIsSeguindo(String? userId) async {
     if (userId == null) return;
     isSeguindo =
-        await userRepository.getIsSeguindo(userController.user.id!, userId);
+        await userRepository.getIsSeguindo(_user.id!, userId);
   }
 
   @action
@@ -107,7 +116,7 @@ abstract class _ProfileControllerBase with Store {
     try {
       situacaoPost = Status.CARREGANDO;
       myPosts = ObservableList.of(
-          await postStore.getPostsByUser(userId ?? userController.user.id!));
+          await postStore.getPostsByUser(userId ?? _user.id!));
       situacaoPost = Status.SUCESSO;
     } catch (e) {
       situacaoPost = Status.ERRO;
@@ -132,7 +141,7 @@ abstract class _ProfileControllerBase with Store {
     try {
       isSeguindo = !isSeguindo;
       await userRepository.seguirPessoa(
-          userIdSeguidor: userController.user.id!,
+          userIdSeguidor: _user.id!,
           userIdSeguida: pessoaIdSeguida);
     } catch (e) {
       quantidadeSeguidores--;
@@ -143,13 +152,13 @@ abstract class _ProfileControllerBase with Store {
   @action
   Future<void> getQuantidadeSeguidores(String? userId) async {
     quantidadeSeguidores = await userRepository
-        .getQuantidadeSeguidores(userId ?? userController.user.id!);
+        .getQuantidadeSeguidores(userId ?? _user.id!);
   }
 
   @action
   Future<void> getQuantidadeSeguindo(String? userId) async {
     quantidadeSeguindo = await userRepository
-        .getQuantidadeSeguindo(userId ?? userController.user.id!);
+        .getQuantidadeSeguindo(userId ?? _user.id!);
   }
 
   @computed

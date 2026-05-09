@@ -9,22 +9,6 @@ part of 'busca_controller.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$BuscaController on _BuscaControllerBase, Store {
-  late final _$userControllerAtom =
-      Atom(name: '_BuscaControllerBase.userController', context: context);
-
-  @override
-  UserController get userController {
-    _$userControllerAtom.reportRead();
-    return super.userController;
-  }
-
-  @override
-  set userController(UserController value) {
-    _$userControllerAtom.reportWrite(value, super.userController, () {
-      super.userController = value;
-    });
-  }
-
   late final _$tabBarSelecionadaAtom =
       Atom(name: '_BuscaControllerBase.tabBarSelecionada', context: context);
 
@@ -62,13 +46,13 @@ mixin _$BuscaController on _BuscaControllerBase, Store {
       Atom(name: '_BuscaControllerBase.livrosEncontrados', context: context);
 
   @override
-  ObservableList<Book> get livrosEncontrados {
+  ObservableList<BookModel> get livrosEncontrados {
     _$livrosEncontradosAtom.reportRead();
     return super.livrosEncontrados;
   }
 
   @override
-  set livrosEncontrados(ObservableList<Book> value) {
+  set livrosEncontrados(ObservableList<BookModel> value) {
     _$livrosEncontradosAtom.reportWrite(value, super.livrosEncontrados, () {
       super.livrosEncontrados = value;
     });
@@ -173,7 +157,6 @@ mixin _$BuscaController on _BuscaControllerBase, Store {
   @override
   String toString() {
     return '''
-userController: ${userController},
 tabBarSelecionada: ${tabBarSelecionada},
 leitoresEncrontrados: ${leitoresEncrontrados},
 livrosEncontrados: ${livrosEncontrados},

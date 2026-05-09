@@ -13,13 +13,13 @@ mixin _$BookStore on _BookStoreBase, Store {
       Atom(name: '_BookStoreBase.listBooks', context: context);
 
   @override
-  ObservableList<Book> get listBooks {
+  ObservableList<BookModel> get listBooks {
     _$listBooksAtom.reportRead();
     return super.listBooks;
   }
 
   @override
-  set listBooks(ObservableList<Book> value) {
+  set listBooks(ObservableList<BookModel> value) {
     _$listBooksAtom.reportWrite(value, super.listBooks, () {
       super.listBooks = value;
     });
@@ -29,13 +29,13 @@ mixin _$BookStore on _BookStoreBase, Store {
       Atom(name: '_BookStoreBase.listBooksSearches', context: context);
 
   @override
-  ObservableList<Book> get listBooksSearches {
+  ObservableList<BookModel> get listBooksSearches {
     _$listBooksSearchesAtom.reportRead();
     return super.listBooksSearches;
   }
 
   @override
-  set listBooksSearches(ObservableList<Book> value) {
+  set listBooksSearches(ObservableList<BookModel> value) {
     _$listBooksSearchesAtom.reportWrite(value, super.listBooksSearches, () {
       super.listBooksSearches = value;
     });
@@ -128,13 +128,13 @@ mixin _$BookStore on _BookStoreBase, Store {
       Atom(name: '_BookStoreBase.recomendados', context: context);
 
   @override
-  ObservableList<Book> get recomendados {
+  ObservableList<BookModel> get recomendados {
     _$recomendadosAtom.reportRead();
     return super.recomendados;
   }
 
   @override
-  set recomendados(ObservableList<Book> value) {
+  set recomendados(ObservableList<BookModel> value) {
     _$recomendadosAtom.reportWrite(value, super.recomendados, () {
       super.recomendados = value;
     });
@@ -195,7 +195,7 @@ mixin _$BookStore on _BookStoreBase, Store {
   }
 
   @override
-  dynamic tornaLivroFavorito(Book book) {
+  dynamic tornaLivroFavorito(BookModel book) {
     final _$actionInfo = _$_BookStoreBaseActionController.startAction(
         name: '_BookStoreBase.tornaLivroFavorito');
     try {

@@ -1,5 +1,4 @@
 import 'package:book_app/modules/auth/controller/auth_controller.dart';
-import 'package:book_app/modules/auth/controller/user_controller.dart';
 import 'package:book_app/modules/auth/repository/auth_repository.dart';
 import 'package:book_app/shared/person_info_drawer.dart';
 import 'package:book_app/modules/favoritas/page/favorites_page.dart';

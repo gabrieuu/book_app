@@ -1,3 +1,4 @@
+import 'package:book_app/app_store.dart';
 import 'package:book_app/modules/auth/widgets/text_field_widget.dart';
 import 'package:book_app/modules/primeiro_acesso/primeiro_acesso_controller.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,7 @@ class SegundaTela extends StatelessWidget {
 
   final PrimeiroAcessoController controller = Modular.get();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
+  final AppStore appStore = Modular.get<AppStore>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +37,7 @@ class SegundaTela extends StatelessWidget {
                     ),
                     Flexible(
                       child: Text(
-                        (controller.userController.user.name.isEmpty && controller.userController.user.username.isEmpty) ? 'Para continuar,\nvamos criar um nome e um username.' : 'Ja temos seu nome e username!\n\nClique em continuar',
+                        (appStore.currentUser?.name.isEmpty == true && appStore.currentUser?.username.isEmpty == true) ? 'Para continuar,\nvamos criar um nome e um username.' : 'Ja temos seu nome e username!\n\nClique em continuar',
                         style: TextStyle(
                             color: Colors.white,
                             fontSize: 25,
@@ -48,7 +49,7 @@ class SegundaTela extends StatelessWidget {
               ),
             ),
             Observer(builder: (_) {
-              return (controller.userController.user.name.isEmpty && controller.userController.user.username.isEmpty) 
+              return (appStore.currentUser?.name.isEmpty == true && appStore.currentUser?.username.isEmpty == true) 
               ? Expanded(
               flex: 2,
               child: Form(
@@ -106,7 +107,7 @@ class SegundaTela extends StatelessWidget {
                   width: 200,
                   child: ElevatedButton(
                     onPressed: () {
-                      if(controller.userController.user.name.isNotEmpty && controller.userController.user.username.isNotEmpty){
+                      if(appStore.currentUser?.name.isNotEmpty == true && appStore.currentUser?.username.isNotEmpty == true){
                         controller.proximoIndex();
                         return;
                       }

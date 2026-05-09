@@ -4,14 +4,14 @@ class UserModel {
   String email;
   String username;
   bool passouIntroducao;
-  String? photo;
+  String? photoUrl;
 
   UserModel(
       {this.id,
       required this.name,
       required this.email,
       this.username = '',
-      this.photo,
+      this.photoUrl,
       required this.passouIntroducao});
 
   static UserModel fromMap(Map<String, dynamic> map) {
@@ -21,7 +21,7 @@ class UserModel {
       email: map["email"] ?? '',
       username: map["username"] ?? '',
       passouIntroducao: map["passou_introducao"] ?? false,
-      photo: map["photo"],
+      photoUrl: map["photo_url"],
     );
   }
 

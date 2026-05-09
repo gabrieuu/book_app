@@ -4,7 +4,7 @@ import 'dart:developer';
 import 'package:book_app/core/status.dart';
 import 'package:book_app/model/mensagem.dart';
 import 'package:book_app/model/user_model.dart';
-import 'package:book_app/modules/auth/controller/user_controller.dart';
+import 'package:book_app/modules/auth/service/auth_service.dart';
 import 'package:book_app/modules/chat/controller/chat_controller.dart';
 import 'package:book_app/modules/chat/repository/custom_chat_repository.dart';
 import 'package:mobx/mobx.dart';
@@ -23,11 +23,12 @@ abstract class _MensagemControllerBase with Store {
   @observable
   bool isChatOpen = false;
 
+  final AuthService _authService;
+
   @observable
   ObservableList<Mensagem> mensagens = ObservableList.of([]);
 
   CustomChatRepository chatRepository;
-  UserController userController;
 
   ChatController chatController;
   UserModel? user;
@@ -38,7 +39,7 @@ abstract class _MensagemControllerBase with Store {
   StreamSubscription<List<Map<String, dynamic>>>? chatStream;
   Timer? _debounce;
   _MensagemControllerBase(
-      this.chatRepository, this.userController, this.chatController) {
+      this.chatRepository, this.chatController, this._authService) {
     chatStream = Supabase.instance.client
         .from('mensagens')
         .stream(primaryKey: ['id']).listen((data) async {
@@ -86,8 +87,10 @@ abstract class _MensagemControllerBase with Store {
   Future<void> getAllMessages(String id) async {
     try {
       carregandoMensagens = Status.CARREGANDO;
+      UserModel? user = _authService.currentUser;
+      if(user == null) throw Exception("Usuário não autenticado");
       idChat = await chatRepository.iniciarConversa(
-          usuario1: userController.user.id!, usuario2: id);
+          usuario1: user.id!, usuario2: id);
       mensagens =
           ObservableList.of(await chatRepository.getMensagems(chatId: idChat!));
       mensagens.sort((a, b) => b.dataEnviada!.compareTo(a.dataEnviada!));
@@ -100,8 +103,10 @@ abstract class _MensagemControllerBase with Store {
 
   Future<void> sendMessage(String conteudo) async {
     try {
+      UserModel? user = _authService.currentUser;
+      if(user == null) throw Exception("Usuário não autenticado");
       await chatRepository.sendMessage(Mensagem(
-          chatId: idChat!, userId: userController.user.id!, content: conteudo));
+          chatId: idChat!, userId: user.id!, content: conteudo));
     } catch (e) {
       log('erro ao enviar mensagem');
     }

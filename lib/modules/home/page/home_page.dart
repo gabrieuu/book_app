@@ -1,13 +1,9 @@
+import 'package:book_app/app_store.dart';
 import 'package:book_app/core/status.dart';
-import 'package:book_app/modules/auth/controller/user_controller.dart';
-import 'package:book_app/modules/comment_post/controller/comment_controller.dart';
 import 'package:book_app/modules/posts/page/post_page.dart';
-import 'package:book_app/modules/search/widgets/list_users_search.dart';
 import 'package:book_app/shared/appbar.dart';
-import 'package:book_app/shared/menu_drawer.dart';
 import 'package:book_app/modules/posts/post_store.dart';
 import 'package:book_app/modules/posts/post_widget/post_shimmer_widget.dart';
-import 'package:book_app/modules/posts/post_widget/post_tile.dart';
 import 'package:book_app/modules/posts/post_widget/enhanced_post_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
@@ -26,7 +22,6 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   PostStore postStore = Modular.get();
   Debouncer debouncer = Debouncer(delay: const Duration(milliseconds: 500));
-  final userController = Modular.get<UserController>();
 
   @override
   Widget build(BuildContext context) {

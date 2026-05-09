@@ -1,10 +1,10 @@
 import 'dart:async';
 import 'dart:developer';
 
+import 'package:book_app/app_store.dart';
 import 'package:book_app/model/dto/view_chats_dto.dart';
 import 'package:book_app/model/mensagem.dart';
 import 'package:book_app/model/user_model.dart';
-import 'package:book_app/modules/auth/controller/user_controller.dart';
 import 'package:book_app/modules/chat/controller/chat_controller.dart';
 import 'package:book_app/modules/chat/controller/mensagens_controller.dart';
 import 'package:book_app/modules/chat/widgets/text_bar.dart';
@@ -24,10 +24,9 @@ class ChatPage extends StatefulWidget {
 }
 
 class _ChatPageState extends State<ChatPage> {
-  final UserController userController = Modular.get();
   final MensagemController mensagemController = Modular.get();
   final ChatController chatController = Modular.get();
-
+  final AppStore appStore = Modular.get();
   @override
   void initState() {
     super.initState();
@@ -74,11 +73,11 @@ class _ChatPageState extends State<ChatPage> {
                   return Padding(
                     padding: const EdgeInsets.only(top: 16.0),
                     child: Row(
-                      mainAxisAlignment: (data.userId == userController.user.id)
+                      mainAxisAlignment: (data.userId == appStore.currentUser?.id)
                           ? MainAxisAlignment.end
                           : MainAxisAlignment.start,
                       children: [
-                        if (!(data.userId == userController.user.id)) ...[
+                        if (!(data.userId == appStore.currentUser?.id)) ...[
                           const CircleAvatar(
                             radius: 12,
                             backgroundImage: NetworkImage(
@@ -86,8 +85,8 @@ class _ChatPageState extends State<ChatPage> {
                           ),
                           const SizedBox(width: 16.0 / 2),
                         ],
-                        messageContaint(data, userController.user.id!, context),
-                        if (data.userId == userController.user.id)
+                        messageContaint(data, appStore.currentUser?.id ?? '', context),
+                        if (data.userId == appStore.currentUser?.id)
                           MessageStatusDot(
                               status: data.visualizado == true
                                   ? MessageStatus.visualizado

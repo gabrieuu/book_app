@@ -1,11 +1,7 @@
 import 'package:book_app/modules/auth/controller/auth_controller.dart';
-import 'package:book_app/modules/auth/controller/user_controller.dart';
-import 'package:book_app/modules/auth/repository/auth_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:get/get.dart';
-import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -16,7 +12,6 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final controller = Modular.get<AuthController>();
-  final userController = Modular.get<UserController>();
   
   @override
   void initState() {

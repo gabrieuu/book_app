@@ -31,12 +31,12 @@ class FavoritaRepositorySupabase implements CustomFavoritaRepository {
   }
 
   @override
-  Future<bool> isFavorita({required Book book, required String userId}) async {
+  Future<bool> isFavorita({required BookModel book, required String userId}) async {
     List response = await supabase
         .from("favoritos")
         .select("book_id")
         .eq('id_user', userId)
-        .eq('id_favoritos', '$userId${book.id}');
+        .eq('id_favoritos', '$userId${book.apiId}');
     if (response.isNotEmpty) return true;
     return false;
   }

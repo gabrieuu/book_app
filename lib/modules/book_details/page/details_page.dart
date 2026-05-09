@@ -1,22 +1,20 @@
-import 'dart:developer';
 import 'dart:ui';
 
-import 'package:auto_size_text/auto_size_text.dart';
-import 'package:book_app/core/themes.dart';
+import 'package:book_app/core/status.dart';
 import 'package:book_app/model/book_model.dart';
 import 'package:book_app/modules/book_details/details_controller.dart';
+import 'package:book_app/modules/book_details/widget/author_tile_widget.dart';
 import 'package:book_app/modules/favoritas/store/favoritas_store.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
 
 class DetailsPage extends StatefulWidget {
   DetailsPage({super.key, required this.book});
 
-  Book book;
+  final BookModel book;
   static String route = '/details';
   @override
   State<DetailsPage> createState() => _DetailsPageState();
@@ -28,6 +26,7 @@ class _DetailsPageState extends State<DetailsPage>
   bool isFavorita = false;
   FavoritasStore favoritasStore = Modular.get();
   bool expandableText = false;
+  late final PageController _coverCarouselController;
   late AnimationController _fadeController;
   late AnimationController _slideController;
   late Animation<double> _fadeAnimation;
@@ -36,12 +35,16 @@ class _DetailsPageState extends State<DetailsPage>
   @override
   void initState() {
     super.initState();
-    detailsController.book = widget.book;
-    _initDetails();
+    _coverCarouselController = PageController(viewportFraction: 0.72);
     _initAnimations();
+    _loadBookDetails();
   }
 
-  _initAnimations() {
+  Future<void> _loadBookDetails() async {
+    await detailsController.loadBookDetails(widget.book.apiId);
+  }
+
+  void _initAnimations() {
     _fadeController = AnimationController(
       duration: const Duration(milliseconds: 800),
       vsync: this,
@@ -69,14 +72,10 @@ class _DetailsPageState extends State<DetailsPage>
 
   @override
   void dispose() {
+    _coverCarouselController.dispose();
     _fadeController.dispose();
     _slideController.dispose();
     super.dispose();
-  }
-
-  _initDetails() {
-    isFavorita = favoritasStore.isFavorita(widget.book);
-    setState(() {});
   }
 
   @override
@@ -91,17 +90,26 @@ class _DetailsPageState extends State<DetailsPage>
               position: _slideAnimation,
               child: FadeTransition(
                 opacity: _fadeAnimation,
-                child: Column(
-                  children: [
-                    _buildBookInfo(),
-                    _buildActionButtons(),
-                    _buildBookStats(),
-                    _buildQuickInfo(),
-                    _buildDescription(),
-                    _buildBookDetails(),
-                    const SizedBox(height: 100),
-                  ],
-                ),
+                child: Observer(builder: (_) {
+                  if (detailsController.status == Status.CARREGANDO) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (detailsController.status == Status.SUCESSO) {
+                  return Column(
+                    children: [
+                      _buildBookInfo(),
+                      _buildActionButtons(),
+                      _buildBookStats(),
+                      // _buildQuickInfo(),
+                      _buildDescription(),
+                      _buildBookDetails(),
+                      _buildAuthorTile(),
+                      const SizedBox(height: 100),
+                    ],
+                  );
+                  }
+                  return const SizedBox();
+                }),
               ),
             ),
           ),
@@ -111,13 +119,167 @@ class _DetailsPageState extends State<DetailsPage>
   }
 
   Widget _buildSliverAppBar() {
-    return SliverAppBar(
-      expandedHeight: 400,
-      floating: false,
-      pinned: true,
-      backgroundColor: Colors.white,
-      elevation: 0,
-      leading: Container(
+    return Observer(builder: (_) {
+      final status = detailsController.status;
+
+      return SliverAppBar(
+        expandedHeight: 400,
+        floating: false,
+        pinned: true,
+        backgroundColor: Colors.white,
+        elevation: 0,
+        leading: _buildBackButton(),
+        actions: _buildActions(),
+        flexibleSpace: FlexibleSpaceBar(
+          background: _buildAppBarContent(status),
+        ),
+      );
+    });
+  }
+
+  Widget _buildAppBarContent(Status status) {
+    if (status == Status.CARREGANDO || status == Status.NAO_CARREGADO) {
+      return const Center(child: CircularProgressIndicator());
+    }
+
+    if (status == Status.ERRO) {
+      return const Center(child: Text('Erro ao carregar'));
+    }
+
+    final book = detailsController.book;
+
+    return Stack(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: NetworkImage(
+                book.coversUrls.isNotEmpty
+                    ? book.coversUrls.first
+                    : 'https://via.placeholder.com/300x400',
+              ),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Colors.black.withOpacity(0.3),
+                    Colors.black.withOpacity(0.7),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ),
+        Center(
+          child: Container(
+            margin: const EdgeInsets.only(top: 80),
+            child: _buildCoverCarousel(book),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCoverCarousel(dynamic book) {
+    final coverUrls = book.coversUrls.isNotEmpty
+        ? book.coversUrls
+        : ['https://via.placeholder.com/300x400'];
+
+    return SizedBox(
+      height: 270,
+      child: PageView.builder(
+        controller: _coverCarouselController,
+        itemCount: coverUrls.length,
+        itemBuilder: (context, index) {
+          final coverUrl = coverUrls[index];
+
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Center(
+              child: Hero(
+                tag: 'book_${book.hashCode}_$index',
+                child: Container(
+                  width: 180,
+                  height: 270,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(16),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.3),
+                        blurRadius: 20,
+                        offset: const Offset(0, 10),
+                      ),
+                    ],
+                    image: DecorationImage(
+                      image: NetworkImage(coverUrl),
+                      fit: BoxFit.contain,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildBackButton() {
+    return Container(
+      margin: const EdgeInsets.all(8),
+      decoration: BoxDecoration(
+        color: Colors.white.withOpacity(0.9),
+        shape: BoxShape.circle,
+      ),
+      child: IconButton(
+        onPressed: () => Navigator.pop(context),
+        icon: const Icon(Icons.arrow_back, color: Colors.black87),
+      ),
+    );
+  }
+
+  List<Widget> _buildActions() {
+    return [
+      Container(
+        margin: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.white.withOpacity(0.9),
+          shape: BoxShape.circle,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 8,
+              offset: const Offset(0, 2),
+            ),
+          ],
+        ),
+        child: Observer(
+          builder: (_) => IconButton(
+            onPressed: () {
+              // if (isFavorita) {
+              //   favoritasStore.removeFavorita(detailsController.book!);
+              // } else {
+              //   favoritasStore.addFavorite(book: detailsController.book!);
+              // }
+              // setState(() {
+              //   isFavorita = favoritasStore.isFavorita(detailsController.book!);
+              // });
+            },
+            icon: Icon(
+              isFavorita ? Icons.favorite : Icons.favorite_border,
+              color: isFavorita ? Colors.red[400] : Colors.black87,
+            ),
+          ),
+        ),
+      ),
+      Container(
         margin: const EdgeInsets.all(8),
         decoration: BoxDecoration(
           color: Colors.white.withOpacity(0.9),
@@ -131,126 +293,11 @@ class _DetailsPageState extends State<DetailsPage>
           ],
         ),
         child: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: const Icon(Icons.arrow_back, color: Colors.black87),
+          onPressed: () {},
+          icon: const Icon(Icons.share, color: Colors.black87),
         ),
       ),
-      actions: [
-        Container(
-          margin: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.9),
-            shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: Observer(
-            builder: (_) => IconButton(
-              onPressed: () {
-                if (isFavorita) {
-                  favoritasStore.removeFavorita(widget.book);
-                } else {
-                  favoritasStore.addFavorite(book: widget.book);
-                }
-                setState(() {
-                  isFavorita = favoritasStore.isFavorita(widget.book);
-                });
-              },
-              icon: Icon(
-                isFavorita ? Icons.favorite : Icons.favorite_border,
-                color: isFavorita ? Colors.red[400] : Colors.black87,
-              ),
-            ),
-          ),
-        ),
-        Container(
-          margin: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.9),
-            shape: BoxShape.circle,
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withOpacity(0.1),
-                blurRadius: 8,
-                offset: const Offset(0, 2),
-              ),
-            ],
-          ),
-          child: IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.share, color: Colors.black87),
-          ),
-        ),
-      ],
-      flexibleSpace: FlexibleSpaceBar(
-        background: Stack(
-          children: [
-            // Background with book cover blur
-            Container(
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: NetworkImage(
-                    widget.book.volumeInfo.imageLinks?.thumbnail ??
-                        'https://via.placeholder.com/400x600',
-                  ),
-                  fit: BoxFit.cover,
-                ),
-              ),
-              child: BackdropFilter(
-                filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
-                child: Container(
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        Colors.black.withOpacity(0.3),
-                        Colors.black.withOpacity(0.7),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            // Book cover
-            Center(
-              child: Container(
-                margin: const EdgeInsets.only(top: 80),
-                child: Hero(
-                  tag: 'book_${widget.book.id}',
-                  child: Container(
-                    width: 180,
-                    height: 270,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(16),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.3),
-                          blurRadius: 20,
-                          offset: const Offset(0, 10),
-                        ),
-                      ],
-                      image: DecorationImage(
-                        image: NetworkImage(
-                          widget.book.volumeInfo.imageLinks?.thumbnail ??
-                              'https://via.placeholder.com/180x270',
-                        ),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
+    ];
   }
 
   Widget _buildBookInfo() {
@@ -259,13 +306,13 @@ class _DetailsPageState extends State<DetailsPage>
       child: Column(
         children: [
           // Rating
-          if (widget.book.volumeInfo.averageRating != null)
+          if (detailsController.book.averageRating != null)
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 RatingBarIndicator(
                   rating:
-                      widget.book.volumeInfo.averageRating?.toDouble() ?? 0.0,
+                      detailsController.book.averageRating?.toDouble() ?? 0.0,
                   itemBuilder: (context, index) => const Icon(
                     Icons.star,
                     color: Colors.amber,
@@ -276,7 +323,7 @@ class _DetailsPageState extends State<DetailsPage>
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  '(${widget.book.volumeInfo.averageRating ?? 0})',
+                  '(${detailsController.book.averageRating ?? 0})',
                   style: TextStyle(
                     color: Colors.grey[600],
                     fontSize: 14,
@@ -287,7 +334,7 @@ class _DetailsPageState extends State<DetailsPage>
           const SizedBox(height: 16),
           // Title
           Text(
-            widget.book.volumeInfo.title,
+            detailsController.book.title,
             style: const TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
@@ -298,21 +345,20 @@ class _DetailsPageState extends State<DetailsPage>
           ),
           const SizedBox(height: 8),
           // Authors
-          if (widget.book.volumeInfo.authors != null)
-            Text(
-              widget.book.volumeInfo.authors!.join(', '),
-              style: TextStyle(
-                fontSize: 18,
-                color: Colors.blue[600],
-                fontWeight: FontWeight.w600,
-              ),
-              textAlign: TextAlign.center,
+          Text(
+            widget.book.author,
+            style: TextStyle(
+              fontSize: 18,
+              color: Colors.blue[600],
+              fontWeight: FontWeight.w600,
             ),
+            textAlign: TextAlign.center,
+          ),
           const SizedBox(height: 4),
           // Publisher
-          if (widget.book.volumeInfo.publisher != null)
+          if (detailsController.book.publisher != null)
             Text(
-              widget.book.volumeInfo.publisher!,
+              detailsController.book.publisher!,
               style: TextStyle(
                 fontSize: 14,
                 color: Colors.grey[600],
@@ -406,21 +452,21 @@ class _DetailsPageState extends State<DetailsPage>
         children: [
           _buildStatItem(
             Icons.calendar_today,
-            widget.book.volumeInfo.publishedDate?.split('-').first ?? 'N/A',
+            detailsController.book.publisheDate.split('-')[0],
             'Ano',
             Colors.blue[600]!,
           ),
           _buildVerticalDivider(),
-          _buildStatItem(
-            Icons.book,
-            '${widget.book.volumeInfo.pageCount ?? 0}',
-            'Páginas',
-            Colors.green[600]!,
-          ),
+          // _buildStatItem(
+          //   Icons.book,
+          //   '${detailsController.book!.volumeInfo.pageCount ?? 0}',
+          //   'Páginas',
+          //   Colors.green[600]!,
+          // ),
           _buildVerticalDivider(),
           _buildStatItem(
             Icons.language,
-            // widget.book.volumeInfo.language?.toUpperCase() ??
+            // detailsController.book!.volumeInfo.language?.toUpperCase() ??
             'N/A',
             'Idioma',
             Colors.orange[600]!,
@@ -470,47 +516,45 @@ class _DetailsPageState extends State<DetailsPage>
     );
   }
 
-  Widget _buildQuickInfo() {
-    return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 24),
-      child: Row(
-        children: [
-          if (widget.book.volumeInfo.categories != null &&
-              widget.book.volumeInfo.categories!.isNotEmpty)
-            Expanded(
-              child: Wrap(
-                spacing: 8,
-                runSpacing: 8,
-                children:
-                    widget.book.volumeInfo.categories!.take(3).map((category) {
-                  return Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                    decoration: BoxDecoration(
-                      color: Colors.blue[50],
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: Colors.blue[200]!),
-                    ),
-                    child: Text(
-                      category,
-                      style: TextStyle(
-                        color: Colors.blue[700],
-                        fontSize: 12,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  );
-                }).toList(),
-              ),
-            ),
-        ],
-      ),
-    );
-  }
+  // Widget _buildQuickInfo() {
+  //   return Container(
+  //     margin: const EdgeInsets.symmetric(horizontal: 24),
+  //     child: Row(
+  //       children: [
+  //         if (detailsController.book!.volumeInfo.categories != null &&
+  //             detailsController.book!.volumeInfo.categories!.isNotEmpty)
+  //           Expanded(
+  //             child: Wrap(
+  //               spacing: 8,
+  //               runSpacing: 8,
+  //               children:
+  //                   detailsController.book!.volumeInfo.categories!.take(3).map((category) {
+  //                 return Container(
+  //                   padding:
+  //                       const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+  //                   decoration: BoxDecoration(
+  //                     color: Colors.blue[50],
+  //                     borderRadius: BorderRadius.circular(20),
+  //                     border: Border.all(color: Colors.blue[200]!),
+  //                   ),
+  //                   child: Text(
+  //                     category,
+  //                     style: TextStyle(
+  //                       color: Colors.blue[700],
+  //                       fontSize: 12,
+  //                       fontWeight: FontWeight.w600,
+  //                     ),
+  //                   ),
+  //                 );
+  //               }).toList(),
+  //             ),
+  //           ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _buildDescription() {
-    if (widget.book.volumeInfo.description == null) return const SizedBox();
-
     return Container(
       margin: const EdgeInsets.all(24),
       padding: const EdgeInsets.all(20),
@@ -555,7 +599,7 @@ class _DetailsPageState extends State<DetailsPage>
                   duration: const Duration(milliseconds: 300),
                   height: expandableText ? null : 120,
                   child: Html(
-                    data: widget.book.volumeInfo.description!,
+                    data: detailsController.book.description,
                     style: {
                       "body": Style(
                         fontSize: FontSize(15),
@@ -638,24 +682,23 @@ class _DetailsPageState extends State<DetailsPage>
             ],
           ),
           const SizedBox(height: 20),
+          // _buildDetailRow(
+          //     'ISBN',
+          //     detailsController.book!.volumeInfo.isbn?.isNotEmpty == true
+          //         ? detailsController.book!.volumeInfo.isbn
+          //         : 'N/A'),
           _buildDetailRow(
-              'ISBN',
-              widget.book.volumeInfo.isbn?.isNotEmpty == true
-                  ? widget.book.volumeInfo.isbn
-                  : 'N/A'),
-          _buildDetailRow('Editora', widget.book.volumeInfo.publisher ?? 'N/A'),
-          _buildDetailRow('Data de Publicação',
-              widget.book.volumeInfo.publishedDate ?? 'N/A'),
-          _buildDetailRow('Idioma',
-              widget.book.volumeInfo.language?.toUpperCase() ?? 'N/A'),
-          if (widget.book.volumeInfo.printType != null)
-            _buildDetailRow('Tipo', widget.book.volumeInfo.printType!),
+              'Editora', detailsController.book.publisher ?? 'N/A'),
+          _buildDetailRow(
+              'Data de Publicação', detailsController.book.publisheDate),
+          // _buildDetailRow('Idioma',
+          //     detailsController.book!.language?.toUpperCase() ?? 'N/A'),
         ],
       ),
     );
   }
 
-  Widget _buildDetailRow(String label, String value) {
+  Widget _buildDetailRow(String label, String? value) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),
       child: Row(
@@ -674,7 +717,7 @@ class _DetailsPageState extends State<DetailsPage>
           ),
           Expanded(
             child: Text(
-              value,
+              value ?? 'N/A',
               style: const TextStyle(
                 color: Color(0xFF2D3748),
                 fontSize: 14,
@@ -683,6 +726,17 @@ class _DetailsPageState extends State<DetailsPage>
           ),
         ],
       ),
+    );
+  }
+
+  Widget _buildAuthorTile() {
+    if (detailsController.book.authorId == null ||
+        detailsController.book.authorId!.isEmpty) {
+      return const SizedBox.shrink();
+    }
+
+    return AuthorTileWidget(
+      authorId: detailsController.book.authorId!,
     );
   }
 }

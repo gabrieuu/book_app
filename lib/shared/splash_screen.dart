@@ -16,7 +16,8 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   void initState() {
-    authController.isAuthenticated();
+    authController.redirectAutentication();
+    super.initState();
   }
 
   @override

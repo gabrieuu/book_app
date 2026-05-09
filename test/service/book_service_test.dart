@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:book_app/model/book_model.dart';
 import 'package:book_app/core/client_http/client_http.dart';
 import 'package:book_app/core/client_http/dio_client.dart';
-import 'package:book_app/modules/books/repository/book_repository.dart';
+import 'package:book_app/modules/books/repository/google_book_repository_impl.dart';
 import 'package:book_app/modules/books/repository/custom_book_repository.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -12,7 +12,7 @@ class ClientHttpMock extends Mock implements ClientHttp {}
 
 void main() {
   final client = ClientHttpMock();
-  final CustomBookRepository service = BookRepositoryImpl(client);
+  final BookRepository service = GoogleBookRepositoryImpl(client);
 
   test("deve fazer a request", () async {
     when(() => client.get(any())).thenAnswer((_) async => jsonDecode(json));
@@ -33,7 +33,7 @@ void main() {
         "Percy Jackson E Os Ladroes Do Olimpo");
   });
   final cliente = DioClient();
-  final services = BookRepositoryImpl(cliente);
+  final services = GoogleBookRepositoryImpl(cliente);
 
   test("deve fazer pegar 3 livros", () async {
     var list = ["lfHo7uMk7r4C", "gHe3wAEACAAJ", "V6A0zgEACAAJ"];

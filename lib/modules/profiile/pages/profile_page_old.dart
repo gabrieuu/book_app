@@ -1,8 +1,8 @@
+import 'package:book_app/app_store.dart';
 import 'package:book_app/core/status.dart';
 import 'package:book_app/core/themes.dart';
 import 'package:book_app/model/dto/view_chats_dto.dart';
 import 'package:book_app/model/user_model.dart';
-import 'package:book_app/modules/auth/controller/user_controller.dart';
 import 'package:book_app/modules/favoritas/store/favoritas_store.dart';
 import 'package:book_app/modules/home/controller/bottom_navigator_controller.dart';
 import 'package:book_app/modules/posts/post_widget/enhanced_post_tile.dart';
@@ -30,8 +30,8 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   ProfileController controller = Modular.get();
-  UserController userController = Modular.get();
   BottomNavigatorController navigator = Modular.get();
+  AppStore appStore = Modular.get();
   FavoritasStore favoritasStore = Modular.get();
 
   bool isDonoDaConta = true;
@@ -40,8 +40,8 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   void initState() {
     super.initState();
-    if (widget.userId != null && controller.userController.user.id != null) {
-      isDonoDaConta = (widget.userId == controller.userController.user.id);
+    if (widget.userId != null && appStore.currentUser?.id != null) {
+      isDonoDaConta = (widget.userId == appStore.currentUser?.id);
     }
     setState(() {});
     _init();
@@ -49,7 +49,7 @@ class _ProfilePageState extends State<ProfilePage> {
 
   _init() async {
     if (!isDonoDaConta) {
-      user = await userController.getUser(userId: widget.userId);
+      // user = await userController.getUser(userId: widget.userId);
       setState(() {});
     }
     await controller.init(widget.userId);
@@ -71,7 +71,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
 
     // Verificar se o usuário logado está carregado
-    if (isDonoDaConta && controller.userController.user.name.isEmpty) {
+    if (isDonoDaConta && appStore.currentUser?.name == null) {
       return Scaffold(
         appBar: AppBar(
           backgroundColor: Themes.branco,
@@ -114,9 +114,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 backgroundColor: Colors.grey,
                                 child: Text(
                                   isDonoDaConta
-                                      ? (controller.userController.user.name.isNotEmpty 
-                                          ? controller.userController.user.name[0] 
-                                          : '?')
+                                      ? appStore.currentUser?.name[0] ?? '?' 
                                       : (user?.name.isNotEmpty ?? false 
                                           ? user!.name[0] 
                                           : '?'),
@@ -136,10 +134,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               if (isDonoDaConta) SizedBox(width: 45),
                               Text(
                                 isDonoDaConta
-                                    ? (controller.userController.user.name.isNotEmpty 
-                                        ? controller.userController.user.name 
-                                        : 'Usuário')
-                                    : user?.name ?? 'Carregando...',
+                                        ? appStore.currentUser?.name ?? 'Carregando...' 
+                                        : 'Usuário',
                                 style: TextStyle(
                                     fontSize: 20, fontWeight: FontWeight.bold),
                               ),

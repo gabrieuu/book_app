@@ -1,24 +1,30 @@
-import 'package:book_app/model/sale_info.dart';
-import 'package:book_app/model/volume_info_model.dart';
+class BookModel {
+  String apiId;
+  String imagemUrl;
+  String title;
+  String author;
+  String? publisheDate;
+  String? publisher;
+  double? averageRating;
 
-class Book {
-  String id;
-  String etag;
-  VolumeInfo volumeInfo;
-  SaleInfo saleInfo;
-  bool isFavorite = false;
+  BookModel(
+      {required this.apiId,
+      required this.imagemUrl,
+      required this.title,
+      required this.author,
+      this.publisheDate,
+      this.publisher,
+      this.averageRating});
 
-  Book(
-      {required this.id,
-      required this.etag,
-      required this.volumeInfo,
-      required this.saleInfo});
-
-  static Book fromMap(Map<dynamic, dynamic> map) {
-    return Book(
-        id: map["id"],
-        etag: map["etag"],
-        volumeInfo: VolumeInfo.fromMap(map["volumeInfo"]),
-        saleInfo: SaleInfo.fromMap(map["saleInfo"]));
+  static BookModel fromOpenLibrary(Map<String, dynamic> json) {
+    return BookModel(
+        apiId: json['key'] ?? '',
+        imagemUrl: json['cover_i'] != null
+            ? 'https://covers.openlibrary.org/b/id/${json['cover_i']}-L.jpg'
+            : 'https://via.placeholder.com/300x400',
+        title: json['title'] ?? '',
+        author: json['author_name']?.first ?? '',
+        publisheDate: json['first_publish_year']?.toString(),
+        );
   }
 }

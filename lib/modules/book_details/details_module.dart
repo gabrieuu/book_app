@@ -10,7 +10,7 @@ class DetailsModule extends Module {
 
   @override
   void binds(Injector i) {
-    i.addSingleton(DetailsController.new);
+    i.addLazySingleton<DetailsController>(DetailsController.new);
   }
 
   @override

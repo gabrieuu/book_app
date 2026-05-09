@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:book_app/modules/auth/controller/user_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
@@ -17,16 +16,14 @@ class _EditarPerfilWidgetState extends State<EditarPerfilWidget> {
   final _usernameController = TextEditingController();
   final _bioController = TextEditingController();
   final _emailController = TextEditingController();
-  final UserController userController = Modular.get();
   final File? imageEscolhida = null;
   bool _isLoading = false;
 
   initState() {
     super.initState();
-    final user = userController.user;
-    _nomeController.text = user.name ?? '';
-    _usernameController.text = user.username ?? '';
-    _emailController.text = user.email ?? '';
+    _nomeController.text = '';
+    _usernameController.text = '';
+    _emailController.text = '';
   }
 
   @override
@@ -202,12 +199,10 @@ class _EditarPerfilWidgetState extends State<EditarPerfilWidget> {
                 ),
               ],
             ),
-            child: (imageEscolhida != null || userController.user.photo != null) 
+            child: (imageEscolhida != null) 
             ? CircleAvatar(
               radius: 60,
-              backgroundImage: imageEscolhida != null 
-                ? FileImage(imageEscolhida!) as ImageProvider
-                : const NetworkImage('https://picsum.photos/200'),
+              backgroundImage: FileImage(imageEscolhida!) as ImageProvider
             ) 
             
             :const CircleAvatar(

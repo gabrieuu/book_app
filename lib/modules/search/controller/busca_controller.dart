@@ -1,10 +1,9 @@
 import 'package:book_app/core/status.dart';
 import 'package:book_app/model/book_model.dart';
 import 'package:book_app/model/user_model.dart';
-import 'package:book_app/modules/auth/controller/user_controller.dart';
 import 'package:book_app/modules/auth/repository/interfaces/custom_user_repository.dart';
 import 'package:book_app/modules/auth/repository/user_repository.dart';
-import 'package:book_app/modules/books/repository/book_repository.dart';
+import 'package:book_app/modules/books/repository/google_book_repository_impl.dart';
 import 'package:book_app/modules/books/repository/custom_book_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get_rx/src/rx_workers/utils/debouncer.dart';
@@ -16,8 +15,6 @@ class BuscaController = _BuscaControllerBase with _$BuscaController;
 abstract class _BuscaControllerBase with Store {
   TextEditingController searchTextFieldController = TextEditingController();
 
-  @observable
-  UserController userController;
 
   @observable
   int tabBarSelecionada = 0;
@@ -25,10 +22,10 @@ abstract class _BuscaControllerBase with Store {
   @observable
   ObservableList<UserModel> leitoresEncrontrados = ObservableList.of([]);
   @observable
-  ObservableList<Book> livrosEncontrados = ObservableList.of([]);
+  ObservableList<BookModel> livrosEncontrados = ObservableList.of([]);
 
   CustomUserRepository userRepository;
-  CustomBookRepository bookRepository;
+  BookRepository bookRepository;
 
   Debouncer debouncer = Debouncer(delay: const Duration(milliseconds: 300));
 
@@ -40,8 +37,7 @@ abstract class _BuscaControllerBase with Store {
   @observable
   bool isSearching = false;
 
-  _BuscaControllerBase(
-      this.userController, this.userRepository, this.bookRepository);
+  _BuscaControllerBase( this.userRepository, this.bookRepository);
 
   @action
   Future<void> buscarPorTabBar(int value) async {

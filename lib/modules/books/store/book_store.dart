@@ -1,4 +1,5 @@
 import 'package:book_app/core/status.dart';
+import 'package:book_app/model/author_model.dart';
 import 'package:book_app/model/book_model.dart';
 import 'package:book_app/modules/books/repository/custom_book_repository.dart';
 import 'package:flutter/material.dart';
@@ -10,10 +11,10 @@ class BookStore = _BookStoreBase with _$BookStore;
 
 abstract class _BookStoreBase with Store {
   @observable
-  ObservableList<Book> listBooks = ObservableList.of([]);
+  ObservableList<BookModel> listBooks = ObservableList.of([]);
 
   @observable
-  ObservableList<Book> listBooksSearches = ObservableList.of([]);
+  ObservableList<BookModel> listBooksSearches = ObservableList.of([]);
 
   @observable
   int indexActionChipSelect = 0;
@@ -29,7 +30,7 @@ abstract class _BookStoreBase with Store {
   int indexCategoriaSelecionada = 0;
 
   @observable
-  ObservableList<Book> recomendados = ObservableList.of([]);
+  ObservableList<BookModel> recomendados = ObservableList.of([]);
 
   @action
   void setIndexCategoriaSelecionada(int value) =>
@@ -57,7 +58,7 @@ abstract class _BookStoreBase with Store {
     'Julia Quinn',
     'John Green'
   ];
-  CustomBookRepository repository;
+  BookRepository repository;
 
   @observable
   TextEditingController searchBook = TextEditingController();
@@ -73,14 +74,20 @@ abstract class _BookStoreBase with Store {
     await Future.wait<void>([getRecomendados(), fetchBookByCategory()]);
   }
 
-  Future<Book?> getBookById(String id) async{
-    return await repository.getBookById(id);
+  Future<BookModel?> getBookById(String id) async{
+    final data = await repository.getBookById(id);
+    if(data == null) return null;
+    return BookModel(
+     apiId: id,
+      title: data.title,
+      imagemUrl: data.coversUrls[0],
+      author: ''
+    );
   }
 
   @action
-  tornaLivroFavorito(Book book) {
-    listBooks.where((element) => element.id == book.id).first.isFavorite =
-        !listBooks.where((element) => element.id == book.id).first.isFavorite;
+  tornaLivroFavorito(BookModel book) {
+    
   }
 
   @action

@@ -1,3 +1,4 @@
+import 'package:book_app/app_store.dart';
 import 'package:book_app/modules/auth/auth_module.dart';
 import 'package:book_app/modules/books/book_module.dart';
 import 'package:book_app/modules/comment_post/comment_module.dart';
@@ -23,6 +24,7 @@ class AppModule extends Module {
   void binds(Injector i) {
     i.addLazySingleton<BottomNavigatorController>(
         BottomNavigatorController.new);
+    i.addLazySingleton<AppStore>(AppStore.new);
   }
 
   @override
