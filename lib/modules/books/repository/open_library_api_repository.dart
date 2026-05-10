@@ -1,4 +1,4 @@
-import 'package:book_app/core/client_http/client_http.dart';
+import 'package:book_app/infra/client_http/client_http.dart';
 import 'package:book_app/model/book_detail_model.dart';
 import 'package:book_app/model/book_model.dart';
 import 'package:book_app/modules/books/repository/custom_book_repository.dart';

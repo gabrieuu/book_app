@@ -1,3 +1,4 @@
+import 'package:book_app/core/core_module.dart';
 import 'package:book_app/modules/auth/auth_module.dart';
 import 'package:book_app/modules/books/book_module.dart';
 import 'package:book_app/modules/chat/chat_module.dart';
@@ -20,7 +21,7 @@ class HomeModule extends Module {
   @override
   // TODO: implement imports
   List<Module> get imports => [
-        AuthModule(),
+        CoreModule(),
         BookModule(),
         ProfileModule(),
         PostModule(),

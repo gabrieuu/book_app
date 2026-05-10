@@ -1,3 +1,4 @@
+import 'package:book_app/core/core_module.dart';
 import 'package:book_app/modules/auth/auth_module.dart';
 import 'package:book_app/modules/books/book_module.dart';
 import 'package:book_app/modules/favoritas/repository/custom_favorita_repository.dart';
@@ -7,7 +8,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 class FavoritasModule extends Module {
   @override
-  List<Module> get imports => [BookModule(), AuthModule()];
+  List<Module> get imports => [CoreModule(), BookModule(), AuthModule()];
 
   @override
   void exportedBinds(Injector i) {

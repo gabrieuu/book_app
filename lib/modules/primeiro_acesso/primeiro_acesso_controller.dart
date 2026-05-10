@@ -1,11 +1,7 @@
-import 'package:book_app/core/snackbar.dart';
 import 'package:book_app/model/user_model.dart';
+import 'package:book_app/modules/auth/repository/interfaces/custom_auth_repository.dart';
 import 'package:book_app/modules/auth/repository/interfaces/custom_user_repository.dart';
-import 'package:book_app/modules/auth/repository/user_repository.dart';
 import 'package:book_app/modules/auth/service/auth_service.dart';
-import 'package:book_app/modules/primeiro_acesso/telas_de_apresentacao/primeira_tela.dart';
-import 'package:book_app/modules/primeiro_acesso/telas_de_apresentacao/segunda_tela.dart';
-import 'package:book_app/modules/primeiro_acesso/telas_de_apresentacao/terceira_tela.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -20,7 +16,7 @@ abstract class _PrimeiroAcessoControllerBase with Store {
   @observable
   int indexSelecionado = 0;
 
-  CustomUserRepository userRepository;
+  final CustomAuthRepository userRepository;
   final AuthService _authService;
   final TextEditingController nome = TextEditingController();
 
@@ -73,15 +69,15 @@ abstract class _PrimeiroAcessoControllerBase with Store {
   @action
   Future<void> alteraNomeAndUsername() async {
     try {
-      UserModel? user = _authService.currentUser;
-      if(user == null) throw Exception("Usuário não autenticado");
+      if(_authService.currentUser == null) throw Exception("Usuário não autenticado");
 
-      await userRepository.alteraNomeAndUsername(
+      await userRepository.updateNameAndUsername(
           nome: nome.text,
-          username: username.text,
-          userId: user.id!);
+          username: username.text);
+
       _authService.currentUser!.name = nome.text;
       _authService.currentUser!.username = username.text;
+      
       OneContext().showSnackBar(builder: (_) {
         return const SnackBar(
           content: Text('Nome e Username alterados com sucesso!'),
@@ -102,19 +98,6 @@ abstract class _PrimeiroAcessoControllerBase with Store {
   }
 
   Future<void> completaIntroducao() async {
-    try {
-      UserModel? user = _authService.currentUser;
-      if(user == null) throw Exception("Usuário não autenticado");
-      await userRepository.alteraPrimeiroAcesso(user.id!);
-      Modular.to.navigate('/initial');
-    } catch (e) {
-      OneContext().showSnackBar(builder: (_) {
-        return const SnackBar(
-          content: Text('Erro ao completar introdução!'),
-          backgroundColor: Colors.red,
-          duration: Duration(seconds: 3),
-        );
-      });
-    }
+    Modular.to.navigate('/initial/home');
   }
 }

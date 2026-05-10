@@ -1,5 +1,6 @@
-import 'package:book_app/core/client_http/client_http.dart';
-import 'package:book_app/core/client_http/dio_client.dart';
+import 'package:book_app/core/core_module.dart';
+import 'package:book_app/infra/client_http/client_http.dart';
+import 'package:book_app/infra/client_http/dio_client.dart';
 import 'package:book_app/modules/books/repository/custom_book_repository.dart';
 import 'package:book_app/modules/books/repository/open_library_api_repository.dart';
 import 'package:book_app/modules/books/store/book_store.dart';
@@ -7,9 +8,13 @@ import 'package:book_app/modules/book_details/details_module.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 class BookModule extends Module {
+  
+  @override
+  // TODO: implement imports
+  List<Module> get imports => [CoreModule()];
+
   @override
   void exportedBinds(Injector i) {
-    i.addLazySingleton<ClientHttp>(() => DioClient());
     i.addLazySingleton<BookRepository>(OpenLibraryApiRepository.new);
     i.addLazySingleton(BookStore.new);
   }

@@ -104,11 +104,12 @@ abstract class _ProfileControllerBase with Store {
         await userRepository.getSeguindo(userId ?? _user.id!);
   }
 
+  /// NOT WORKING
   @action
   Future<void> getIsSeguindo(String? userId) async {
-    if (userId == null) return;
-    isSeguindo =
-        await userRepository.getIsSeguindo(_user.id!, userId);
+    // if (userId == null) return;
+    // isSeguindo =
+    //     await userRepository.getIsSeguindo(_user.id!, userId);
   }
 
   @action
@@ -136,13 +137,14 @@ abstract class _ProfileControllerBase with Store {
     }
   }
 
+  /// NOT WORKING
   @action
   seguirPessoa(String pessoaIdSeguida) async {
     try {
       isSeguindo = !isSeguindo;
-      await userRepository.seguirPessoa(
-          userIdSeguidor: _user.id!,
-          userIdSeguida: pessoaIdSeguida);
+      // await userRepository.seguirPessoa(
+      //     userIdSeguidor: _user.id!,
+      //     userIdSeguida: pessoaIdSeguida);
     } catch (e) {
       quantidadeSeguidores--;
     }

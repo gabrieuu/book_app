@@ -17,7 +17,7 @@ class NavigatorBottom extends StatefulWidget {
 class _NavigatorBottomState extends State<NavigatorBottom> {
   BottomNavigatorController controller = Modular.get();
   late ReactionDisposer atualizaIndex;
-  ChatController chatController = Modular.get();
+  
   @override
   void initState() {
     super.initState();

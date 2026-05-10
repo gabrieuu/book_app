@@ -19,8 +19,8 @@ class AuthService {
 
   Future<Result<bool>> signIn(String email, String password) async {
     try {
-      final user = await _repository.signIn(email, password);
-      _currentUser = user;
+      await _repository.signIn(email, password);
+      _currentUser = await _repository.user;
       Modular.to.navigate('/initial/home');
       return Result.success(true);
     } catch (e) {
@@ -31,8 +31,8 @@ class AuthService {
   Future<Result<bool>> createUser(
       {required String email, required String password}) async {
     try {
-      final user = await _repository.createUser(email: email, password: password);
-      _currentUser = user;
+      await _repository.register(email: email, password: password);
+      _currentUser = await _repository.user;
       return Result.success(true);
     } catch (e) {
       return Result.failure(e.toString());
@@ -40,7 +40,6 @@ class AuthService {
   }
 
   Future<void> signOut() async {
-    if(_repository.user == null) return;
     await _repository.signOut();
     Modular.to.navigate('/auth');
   }
@@ -48,7 +47,6 @@ class AuthService {
   Future<void> redirectAutentication() async {
     try {
       final isAutenticated = await isAuthenticated();
-
 
       if(!isAutenticated) {
         Modular.to.navigate('/auth');
@@ -59,13 +57,13 @@ class AuthService {
         await _initializeCurrentUser();
       }
 
-      if (_currentUser!.passouIntroducao) {
-        Modular.to.navigate('/initial/home');
-        return;
+      UserModel user = _currentUser!;
+
+      if(user.username.isEmpty){
+        Modular.to.navigate('/primeiro-acesso/apresentacao');
       }
 
-      Modular.to.navigate('/primeiro-acesso/apresentacao');
-      return;
+      Modular.to.navigate('/initial/home');
     } catch (e) {
       await _repository.signOut();
       Modular.to.navigate('/auth');
@@ -73,6 +71,6 @@ class AuthService {
   }
 
   Future<bool> isAuthenticated() async {
-    return _repository.user != null;
+    return _repository.isAutenticated();
   }
 }

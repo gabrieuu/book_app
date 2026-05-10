@@ -13,15 +13,21 @@ class PrimeiroAcessoPage extends StatefulWidget {
 }
 
 class _PrimeiroAcessoPageState extends State<PrimeiroAcessoPage> {
-  final PrimeiroAcessoController controller =
-      Modular.get<PrimeiroAcessoController>();
+  late final PrimeiroAcessoController controller;
 
   final AppStore appStore = Modular.get<AppStore>();
   ReactionDisposer? disposer;
   @override
   void initState() {
-    Modular.to.navigate('/primeiro-acesso/apresentacao');
-    disposer = reaction((_) => controller.indexSelecionado, (index){
+    controller = Modular.get<PrimeiroAcessoController>();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Modular.to.navigate(
+        '/primeiro-acesso/apresentacao',
+      );
+    });
+    
+    disposer = reaction((_) => controller.indexSelecionado, (index) {
       controller.navegaEntreAsTelas();
     });
     super.initState();
@@ -56,11 +62,14 @@ class _PrimeiroAcessoPageState extends State<PrimeiroAcessoPage> {
                           child: Observer(builder: (_) {
                             return GestureDetector(
                               onTap: () {
-                                if(index == 2 && appStore.currentUser?.username.isEmpty == true && appStore.currentUser?.name.isEmpty == true){
+                                if (index == 2 &&
+                                    appStore.currentUser?.username.isEmpty ==
+                                        true &&
+                                    appStore.currentUser?.name.isEmpty ==
+                                        true) {
                                   return;
                                 }
                                 controller.indexSelecionado = index;
-                                
                               },
                               child: Container(
                                 height: 10,

@@ -1,3 +1,4 @@
+import 'package:book_app/core/core_module.dart';
 import 'package:book_app/modules/auth/auth_module.dart';
 import 'package:book_app/modules/comment_post/page/comment_page.dart';
 import 'package:book_app/modules/posts/page/post_page.dart';
@@ -9,7 +10,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 
 class PostModule extends Module {
   @override
-  List<Module> get imports => [AuthModule(), SearchModule()];
+  List<Module> get imports => [CoreModule()];
 
   @override
   void exportedBinds(Injector i) {
